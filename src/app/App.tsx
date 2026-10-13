@@ -121,7 +121,7 @@ function Shell({ path, tab, lesson, children }: { path: string; tab: string; les
       <a className="skip" href="#main" onClick={e => { e.preventDefault(); document.getElementById('main')?.focus(); }}>Bỏ qua điều hướng</a>
       <header className="topbar">
         <button id="menu-toggle" className="icon-btn only-mobile" aria-label={open ? 'Đóng menu' : 'Mở menu'} aria-controls="lesson-sidebar" aria-expanded={open} onClick={() => setOpen(!open)}><Icon name={open ? 'close' : 'menu'} /></button>
-        <a href="#/" className="brand"><span className="logo" aria-hidden="true">AI</span><span>Mô phỏng AI<small>Học bằng thực nghiệm</small></span></a>
+        <a href="#/" className="brand"><span className="logo" aria-hidden="true"><Icon name="brain" size={17} /></span><span>Simulation ML<small>AI Y tế & Y sinh Studio</small></span></a>
         <nav className="crumbs" aria-label="Vị trí">
           {group && <><span>{group.title}</span><Icon name="chevron" size={14} /></>}
           {lesson && <span className="cur">{lesson.title.split(':')[0]}</span>}
