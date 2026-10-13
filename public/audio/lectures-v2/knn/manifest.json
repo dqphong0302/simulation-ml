@@ -1,0 +1,177 @@
+{
+  "lessonId": "KNN",
+  "voice": "clone-duyenhamy",
+  "version": "2026.10-expanded",
+  "scenes": [
+    {
+      "id": "s1",
+      "audio": "/audio/knn/s1.mp3",
+      "duration": 6.16,
+      "pauseForInteraction": true,
+      "prompt": "Bạn đoán điểm mới thuộc nhóm nào? Chọn rồi bấm Tiếp tục.",
+      "caption": "Có một điểm mới xuất hiện. Mình chưa biết nó thuộc nhóm xanh hay nhóm cam. Bạn thử đoán nhé.",
+      "preset": {
+        "k": 3,
+        "scale": false,
+        "step": 0,
+        "query": [
+          115,
+          28
+        ]
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/knn/s2.mp3",
+      "duration": 6.4,
+      "caption": "KNN sẽ nhìn những điểm gần nhất. Với k bằng ba, mình chọn ba người hàng xóm gần điểm này nhất.",
+      "preset": {
+        "k": 3,
+        "scale": false,
+        "step": 2,
+        "query": [
+          115,
+          28
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/knn/s3.mp3",
+      "duration": 5.28,
+      "caption": "Hai điểm thuộc nhóm xanh, một điểm thuộc nhóm cam. Theo đa số, nhóm xanh thắng.",
+      "preset": {
+        "k": 3,
+        "scale": false,
+        "step": 3,
+        "query": [
+          115,
+          28
+        ]
+      }
+    },
+    {
+      "id": "s4",
+      "audio": "/audio/knn/s4.mp3",
+      "duration": 4.72,
+      "pauseForInteraction": true,
+      "interactiveK": true,
+      "prompt": "Kéo thanh trượt k lên 7 và quan sát, rồi bấm Tiếp tục để nghe đáp án.",
+      "caption": "Nếu tăng k lên bảy thì sao? Bạn kéo thanh trượt trước khi xem đáp án nhé.",
+      "preset": {
+        "k": 3,
+        "scale": false,
+        "step": 3,
+        "query": [
+          115,
+          28
+        ]
+      }
+    },
+    {
+      "id": "s5",
+      "audio": "/audio/knn/s5.mp3",
+      "duration": 8.64,
+      "caption": "Với k bằng bảy, năm láng giềng thuộc nhóm cam, nên kết quả đổi sang nhóm cam. Cùng một điểm, chỉ đổi k, đã có thể ra nhãn khác.",
+      "preset": {
+        "k": 7,
+        "scale": false,
+        "step": 3,
+        "query": [
+          115,
+          28
+        ]
+      }
+    },
+    {
+      "id": "s6",
+      "audio": "/audio/knn/s6.mp3",
+      "duration": 10.08,
+      "caption": "Khoảng cách còn phụ thuộc thang đo. Một biến có số quá lớn có thể lấn át biến còn lại. Khi chuẩn hóa, với k bằng ba, kết quả cũng chuyển sang nhóm cam.",
+      "preset": {
+        "k": 3,
+        "scale": true,
+        "step": 3,
+        "query": [
+          115,
+          28
+        ]
+      }
+    },
+    {
+      "id": "s7",
+      "audio": "/audio/knn/s7.mp3",
+      "duration": 6.48,
+      "caption": "k lớn hơn không phải lúc nào cũng tốt hơn. Hãy dùng kết quả validation để giải thích lựa chọn của bạn.",
+      "preset": {
+        "k": 3,
+        "scale": false,
+        "step": 3,
+        "query": [
+          115,
+          28
+        ]
+      }
+    },
+    {
+      "id": "extended-1",
+      "audio": "/audio/lectures-v2/knn/e82fdd627abb49ec.mp3",
+      "duration": 11.6,
+      "caption": "Mình lấy một ví dụ nhỏ riêng: từ điểm một, hai đến điểm bốn, sáu, chênh lệch hai trục là ba và bốn. Khoảng cách Euclid bằng năm. Đây là phép đo dùng để xếp hạng láng giềng.",
+      "teaching": true,
+      "preset": {
+        "title": "Tính thử khoảng cách",
+        "bullets": [
+          "Hai điểm (1,2) và (4,6)",
+          "Khoảng cách Euclid = √(3² + 4²) = 5",
+          "Đây là ví dụ riêng, không phải tọa độ trên mô phỏng trước"
+        ]
+      }
+    },
+    {
+      "id": "extended-2",
+      "audio": "/audio/lectures-v2/knn/bf2ebb685153c276.mp3",
+      "duration": 12,
+      "caption": "Em có thể thử nhiều giá trị k trên validation. Nhưng test phải được giữ riêng để đánh giá cuối. Chuẩn hóa cũng chỉ học từ train; nếu dùng cả test để tính thang đo, kết quả đã bị rò rỉ.",
+      "teaching": true,
+      "preset": {
+        "title": "Quy trình chọn k không nhìn trộm",
+        "bullets": [
+          "Chia train, validation, test trước",
+          "Fit chuẩn hóa trên train; chọn k bằng validation",
+          "Chỉ đánh giá cuối trên test"
+        ]
+      }
+    },
+    {
+      "id": "extended-3",
+      "audio": "/audio/lectures-v2/knn/4a4a27fb7bd7e5dc.mp3",
+      "duration": 11.52,
+      "caption": "KNN tin rằng gần nhau thì giống nhau. Giả định này yếu đi khi có nhiều biến không liên quan hoặc thang đo chưa phù hợp. Tăng k có thể giảm nhạy nhiễu nhưng cũng làm mất cấu trúc cục bộ.",
+      "teaching": true,
+      "preset": {
+        "title": "KNN dễ nhầm khi nào?",
+        "bullets": [
+          "Biến không liên quan làm khoảng cách kém ý nghĩa",
+          "Ngoại lệ và lệch lớp ảnh hưởng bỏ phiếu",
+          "k nhỏ nhạy nhiễu; k lớn có thể làm mờ ranh giới"
+        ]
+      }
+    },
+    {
+      "id": "extended-4",
+      "audio": "/audio/lectures-v2/knn/716f7b40c5732b7f.mp3",
+      "duration": 12.88,
+      "caption": "Hãy chuyển sang thực hành, so ba giá trị k và để ý có chuẩn hóa hay không. Chọn k dựa trên validation, không chỉ vì một điểm được đoán đúng, và nghĩ xem lựa chọn đó còn hạn chế gì.",
+      "teaching": true,
+      "preset": {
+        "title": "Tổng kết: từ đoán đến giải thích",
+        "bullets": [
+          "So k = 1, 3, 7 trên cùng cách chia",
+          "Để ý có chuẩn hóa hay không",
+          "Chọn k bằng validation và nêu hạn chế"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "lessonId": "VAE",
+  "voice": "clone-duyenhamy",
+  "scenes": [
+    {
+      "id": "s1",
+      "audio": "/audio/guide/vae/s1.mp3",
+      "duration": 10.88,
+      "caption": "VAE không mã hóa mỗi điểm thành một số cố định, mà thành một phân phối có trung bình và độ lệch. Mình lấy mẫu từ phân phối đó bằng thủ thuật reparameterization.",
+      "preset": {
+        "title": "Mã hóa thành phân phối",
+        "bullets": [
+          "Mỗi điểm thành trung bình và độ lệch",
+          "Lấy mẫu z bằng reparameterization"
+        ],
+        "icon": "🎲"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/vae/s2.mp3",
+      "duration": 8.0,
+      "caption": "Loss gồm lỗi tái dựng và một thành phần KL kéo không gian ẩn về phân phối chuẩn. Hệ số beta cân bằng hai thành phần này.",
+      "preset": {
+        "title": "Hai thành phần của loss",
+        "bullets": [
+          "Lỗi tái dựng",
+          "KL kéo latent về phân phối chuẩn"
+        ],
+        "icon": "⚖️"
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/vae/s3.mp3",
+      "duration": 8.24,
+      "caption": "Nhờ không gian ẩn gọn gàng, ta có thể lấy z ngẫu nhiên rồi giải mã để sinh mẫu mới. Hãy thử thay beta và quan sát đánh đổi.",
+      "preset": {
+        "title": "Sinh mẫu mới",
+        "bullets": [
+          "Lấy z từ phân phối chuẩn rồi giải mã",
+          "Beta lớn sinh dễ hơn nhưng dựng lại kém hơn"
+        ],
+        "icon": "🌱"
+      }
+    }
+  ]
+}

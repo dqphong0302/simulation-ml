@@ -1,0 +1,142 @@
+{
+  "lessonId": "LOGREG",
+  "voice": "clone-duyenhamy",
+  "version": "2026.10-expanded",
+  "scenes": [
+    {
+      "id": "s1",
+      "audio": "/audio/logistic/s1.mp3",
+      "duration": 7.84,
+      "caption": "Hồi quy logistic không trả về nhãn ngay, mà trả về một xác suất từ không đến một. Ta cần chọn một ngưỡng để quyết định.",
+      "preset": {
+        "threshold": 0.5,
+        "showRoc": false
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/logistic/s2.mp3",
+      "duration": 6.88,
+      "caption": "Với ngưỡng không phẩy năm, mô hình bắt đúng hai mươi hai trên hai mươi lăm ca thuộc nhóm cam, và báo nhầm bốn ca.",
+      "preset": {
+        "threshold": 0.5,
+        "showRoc": false
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/logistic/s3.mp3",
+      "duration": 7.44,
+      "caption": "Nếu hạ ngưỡng xuống không phẩy hai, bạn đoán số ca bị bỏ sót sẽ tăng hay giảm? Còn số ca báo nhầm thì sao?",
+      "preset": {
+        "threshold": 0.5,
+        "showRoc": false
+      },
+      "pauseForInteraction": true,
+      "prompt": "Chọn dự đoán của bạn rồi bấm Tiếp tục."
+    },
+    {
+      "id": "s4",
+      "audio": "/audio/logistic/s4.mp3",
+      "duration": 8,
+      "caption": "Với ngưỡng không phẩy hai, chỉ còn bỏ sót một ca, nhưng số ca báo nhầm tăng lên tám. Recall tăng, còn precision giảm.",
+      "preset": {
+        "threshold": 0.2,
+        "showRoc": false
+      }
+    },
+    {
+      "id": "s5",
+      "audio": "/audio/logistic/s5.mp3",
+      "duration": 5.92,
+      "caption": "Ngược lại, với ngưỡng không phẩy tám, mô hình chỉ báo nhầm ba ca, nhưng bỏ sót tới chín ca.",
+      "preset": {
+        "threshold": 0.8,
+        "showRoc": false
+      }
+    },
+    {
+      "id": "s6",
+      "audio": "/audio/logistic/s6.mp3",
+      "duration": 4.88,
+      "caption": "Bây giờ bạn kéo thanh trượt ngưỡng và quan sát bảng nhầm lẫn thay đổi thế nào.",
+      "preset": {
+        "threshold": 0.5,
+        "showRoc": true
+      },
+      "pauseForInteraction": true,
+      "interactive": "threshold",
+      "prompt": "Kéo ngưỡng, quan sát bảng nhầm lẫn và điểm trên ROC, rồi bấm Tiếp tục."
+    },
+    {
+      "id": "s7",
+      "audio": "/audio/logistic/s7.mp3",
+      "duration": 11.36,
+      "caption": "Không có ngưỡng nào tốt nhất cho mọi tình huống. Nếu bỏ sót ca bệnh nguy hiểm hơn báo nhầm, ta thường chấp nhận ngưỡng thấp hơn. Hãy chọn ngưỡng trên validation và giải thích lý do.",
+      "preset": {
+        "threshold": 0.5,
+        "showRoc": true
+      }
+    },
+    {
+      "id": "extended-1",
+      "audio": "/audio/lectures-v2/logreg/fac40b83fec6b869.mp3",
+      "duration": 12.24,
+      "caption": "Logistic biến điểm tuyến tính thành giá trị giữa không và một bằng sigmoid. Khi điểm bằng không, giá trị là không phẩy năm. Thay ngưỡng phân loại chỉ đổi quyết định, không phải huấn luyện lại các trọng số.",
+      "teaching": true,
+      "preset": {
+        "title": "Từ điểm tuyến tính đến xác suất",
+        "bullets": [
+          "z = w·x + b; p = 1 / (1 + e^(−z))",
+          "z = 0 → p = 0,5",
+          "Ngưỡng biến p thành nhãn, không thay trọng số"
+        ]
+      }
+    },
+    {
+      "id": "extended-2",
+      "audio": "/audio/lectures-v2/logreg/ede4dbc69b45075e.mp3",
+      "duration": 12.08,
+      "caption": "Nếu bắt đúng tám mẫu, báo nhầm hai và bỏ sót bốn, precision là tám phần mười, còn recall là tám phần mười hai. Hai chỉ số trả lời hai câu hỏi khác nhau, nên không thể dùng thay thế tùy ý.",
+      "teaching": true,
+      "preset": {
+        "title": "Tính precision và recall",
+        "bullets": [
+          "TP = 8, FP = 2, FN = 4",
+          "Precision = 8 / 10 = 0,8",
+          "Recall = 8 / 12 ≈ 0,667"
+        ]
+      }
+    },
+    {
+      "id": "extended-3",
+      "audio": "/audio/lectures-v2/logreg/5aa3532f097dda23.mp3",
+      "duration": 12.8,
+      "caption": "AUC tóm tắt khả năng xếp hạng qua nhiều ngưỡng, nhưng không chọn một ngưỡng phù hợp thay mình. Một mô hình có AUC tốt vẫn cần kiểm tra hiệu chỉnh xác suất và đánh đổi các loại lỗi.",
+      "teaching": true,
+      "preset": {
+        "title": "AUC chưa chọn ngưỡng thay bạn",
+        "bullets": [
+          "ROC khảo sát nhiều ngưỡng",
+          "AUC phản ánh khả năng xếp hạng",
+          "Xác suất và ngưỡng cần đánh giá theo bối cảnh"
+        ]
+      }
+    },
+    {
+      "id": "extended-4",
+      "audio": "/audio/lectures-v2/logreg/a59aa6d67d534cfb.mp3",
+      "duration": 11.84,
+      "caption": "Hãy so ba ngưỡng, đọc bảng nhầm lẫn rồi tự hỏi mình muốn giảm loại lỗi nào hơn. Đây là bài thực hành nguyên lý trên dữ liệu học tập, không phải cơ sở để đưa ra quyết định lâm sàng.",
+      "teaching": true,
+      "preset": {
+        "title": "Tổng kết: chọn ngưỡng có lý do",
+        "bullets": [
+          "So ít nhất 3 ngưỡng trên cùng xác suất",
+          "Đọc confusion matrix, precision và recall",
+          "Ưu tiên loại lỗi nào? Đây chỉ là bài học mô phỏng"
+        ]
+      }
+    }
+  ]
+}

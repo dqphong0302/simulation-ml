@@ -1,0 +1,124 @@
+{
+  "lessonId": "KMEANS",
+  "voice": "clone-duyenhamy",
+  "version": "2026.10-expanded",
+  "scenes": [
+    {
+      "id": "extended-1",
+      "audio": "/audio/lectures-v2/kmeans/b4cc95ab243b8c0c.mp3",
+      "duration": 10.88,
+      "caption": "K means tìm các nhóm điểm gần nhau mà không cần nhãn cho trước. Nhưng nhóm toán học không tự động là nhóm có ý nghĩa thực tế. Mình cần kiểm tra và diễn giải sau khi phân cụm.",
+      "teaching": true,
+      "preset": {
+        "title": "Phân cụm khác phân loại thế nào?",
+        "bullets": [
+          "Không có nhãn đúng để học trực tiếp",
+          "K là số cụm do người dùng chọn",
+          "Gần nhau theo khoảng cách chưa chắc cùng ý nghĩa"
+        ]
+      }
+    },
+    {
+      "id": "s1",
+      "audio": "/audio/guide/kmeans/s1.mp3",
+      "duration": 8.88,
+      "caption": "K-means là học không giám sát. Thuật toán không biết nhãn, nó chỉ cố chia dữ liệu thành k cụm sao cho các điểm trong cùng cụm ở gần nhau.",
+      "preset": {
+        "title": "Phân cụm khi không có nhãn",
+        "bullets": [
+          "K-means tự chia dữ liệu thành k nhóm",
+          "Không dùng nhãn để học"
+        ],
+        "icon": "🎯"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/kmeans/s2.mp3",
+      "duration": 8.96,
+      "caption": "Mỗi vòng có hai bước. Gán từng điểm vào tâm gần nhất, rồi dời tâm về trung bình của các điểm trong cụm. Lặp lại cho tới khi không điểm nào đổi cụm.",
+      "preset": {
+        "title": "Hai bước lặp lại",
+        "bullets": [
+          "Gán mỗi điểm vào tâm gần nhất",
+          "Dời tâm về trung bình của cụm"
+        ],
+        "icon": "🔁"
+      }
+    },
+    {
+      "id": "extended-2",
+      "audio": "/audio/lectures-v2/kmeans/bb2016d6cabf2d32.mp3",
+      "duration": 10.96,
+      "caption": "Với bốn điểm một, hai, tám và chín, chọn tâm ban đầu là một và chín. Sau bước gán nhóm, trung bình hai nhóm là một phẩy năm và tám phẩy năm. Đó là bước cập nhật tâm.",
+      "teaching": true,
+      "preset": {
+        "title": "Một vòng cập nhật nhỏ",
+        "bullets": [
+          "Dữ liệu một chiều: 1, 2, 8, 9",
+          "Tâm ban đầu: 1 và 9 → nhóm {1,2}, {8,9}",
+          "Tâm mới: 1,5 và 8,5"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/kmeans/s3.mp3",
+      "duration": 10,
+      "caption": "Khi tăng k, tổng khoảng cách tới tâm luôn giảm. Hãy tìm điểm mà đường cong bắt đầu thoải, giống khuỷu tay. Và nhớ rằng cụm tìm được chưa chắc trùng với nhóm bệnh.",
+      "preset": {
+        "title": "Chọn k bằng đồ thị khuỷu tay",
+        "bullets": [
+          "Inertia luôn giảm khi k tăng",
+          "Chọn chỗ đường cong bắt đầu thoải"
+        ],
+        "icon": "📉"
+      }
+    },
+    {
+      "id": "extended-3",
+      "audio": "/audio/lectures-v2/kmeans/9ed6a378c871dd83.mp3",
+      "duration": 11.6,
+      "caption": "Hãy tăng số cụm rồi đổi khởi tạo. Tổng sai số thường giảm khi tăng số cụm, nhưng điều đó chưa chứng minh mô hình tốt hơn. Hãy tìm sự cân bằng giữa độ gọn và khả năng diễn giải.",
+      "teaching": true,
+      "preset": {
+        "title": "Thử K và khởi tạo",
+        "bullets": [
+          "Chạy K = 2, 3, 4 trên cùng dữ liệu",
+          "Lặp lại với các khởi tạo khác nhau",
+          "Quan sát tâm, phân cụm và tổng sai số"
+        ]
+      }
+    },
+    {
+      "id": "extended-4",
+      "audio": "/audio/lectures-v2/kmeans/cb0e1537f2582b8a.mp3",
+      "duration": 10.48,
+      "caption": "K means thích các cụm tương đối gọn quanh tâm. Với hai vòng tròn lồng nhau, khoảng cách đến tâm có thể gây nhầm. Chuẩn hóa và xem hình dạng dữ liệu trước khi tin vào kết quả.",
+      "teaching": true,
+      "preset": {
+        "title": "Khi K-means dễ thất bại",
+        "bullets": [
+          "Nhạy với thang đo và ngoại lệ",
+          "Khó với cụm cong, mật độ hoặc kích thước rất khác",
+          "Elbow không phải lúc nào cũng rõ"
+        ]
+      }
+    },
+    {
+      "id": "extended-5",
+      "audio": "/audio/lectures-v2/kmeans/433f560b1ae8fee1.mp3",
+      "duration": 14.08,
+      "caption": "Chọn số cụm cần có bằng chứng: hình phân cụm với vài giá trị K và đường elbow. Nếu đường elbow không có góc gãy rõ, hãy chấp nhận điều đó. Một nhận định trung thực về sự không chắc chắn tốt hơn một kết luận ép buộc.",
+      "teaching": true,
+      "preset": {
+        "title": "Tổng kết: chọn K cần bằng chứng",
+        "bullets": [
+          "Thử ít nhất 3 giá trị K",
+          "Xem đường elbow nếu có",
+          "Nghĩ về ảnh hưởng của khởi tạo"
+        ]
+      }
+    }
+  ]
+}

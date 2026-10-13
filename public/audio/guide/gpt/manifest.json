@@ -1,0 +1,48 @@
+{
+  "lessonId": "GPT",
+  "voice": "clone-duyenhamy",
+  "scenes": [
+    {
+      "id": "s1",
+      "audio": "/audio/guide/gpt/s1.mp3",
+      "duration": 11.28,
+      "caption": "Ở bài này, bạn tự huấn luyện một khối Transformer rất nhỏ. Mỗi âm tiết thành một vector, cộng thông tin vị trí, đi qua attention và mạng truyền thẳng để dự đoán âm tiết tiếp theo.",
+      "preset": {
+        "title": "Một Transformer nhỏ xíu",
+        "bullets": [
+          "Embedding và vị trí",
+          "Attention, mạng truyền thẳng, lớp đầu ra"
+        ],
+        "icon": "🤖"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/gpt/s2.mp3",
+      "duration": 9.12,
+      "caption": "Khi huấn luyện, loss giảm dần vì mô hình nhớ được các mẫu câu trong corpus. Bạn có thể thay corpus, chiều ẩn và learning rate để so sánh.",
+      "preset": {
+        "title": "Học dự đoán âm tiết tiếp theo",
+        "bullets": [
+          "Loss giảm khi mô hình nhớ được mẫu câu",
+          "Thử thay corpus và learning rate"
+        ],
+        "icon": "📉"
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/gpt/s3.mp3",
+      "duration": 11.12,
+      "caption": "Khi sinh văn bản, temperature thấp cho kết quả ổn định, temperature cao cho kết quả đa dạng hơn. Hãy nhớ mô hình này chỉ học vài câu, nó không hiểu y khoa như một mô hình lớn.",
+      "preset": {
+        "title": "Sinh văn bản và temperature",
+        "bullets": [
+          "Temperature thấp an toàn, cao đa dạng",
+          "Mô hình nhỏ không hiểu y khoa"
+        ],
+        "icon": "✍️"
+      }
+    }
+  ]
+}

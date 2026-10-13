@@ -1,0 +1,124 @@
+{
+  "lessonId": "COMPARE",
+  "voice": "clone-duyenhamy",
+  "version": "2026.10-expanded",
+  "scenes": [
+    {
+      "id": "extended-1",
+      "audio": "/audio/lectures-v2/compare/da728cc328e164d3.mp3",
+      "duration": 10.96,
+      "caption": "Muốn so mô hình, trước hết phải tạo một cuộc thi công bằng. Cùng dữ liệu, cùng cách chia và cùng chỉ số. Nếu mỗi mô hình được xem một tập kiểm tra khác nhau, kết quả khó so sánh.",
+      "teaching": true,
+      "preset": {
+        "title": "Một cuộc so sánh công bằng",
+        "bullets": [
+          "Cùng dữ liệu và cách chia",
+          "Cùng tiêu chí đánh giá",
+          "Tiền xử lý chỉ học từ train"
+        ]
+      }
+    },
+    {
+      "id": "s1",
+      "audio": "/audio/guide/compare/s1.mp3",
+      "duration": 9.68,
+      "caption": "Muốn so sánh mô hình, mọi thứ khác phải giống nhau: cùng dữ liệu, cùng cách chia, cùng cách chuẩn hóa. Siêu tham số được chọn trên tập validation.",
+      "preset": {
+        "title": "So sánh công bằng",
+        "bullets": [
+          "Cùng dữ liệu, cùng cách chia, cùng chuẩn hóa",
+          "Chọn siêu tham số bằng validation"
+        ],
+        "icon": "⚖️"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/compare/s2.mp3",
+      "duration": 8.8,
+      "caption": "Khi một nhãn hiếm hơn, độ chính xác một mình có thể gây hiểu lầm. Hãy xem thêm recall, precision, F1 và đường ROC.",
+      "preset": {
+        "title": "Nhìn nhiều chỉ số",
+        "bullets": [
+          "Accuracy chưa đủ khi nhãn lệch",
+          "Xem recall, precision, F1 và AUC"
+        ],
+        "icon": "📊"
+      }
+    },
+    {
+      "id": "extended-2",
+      "audio": "/audio/lectures-v2/compare/6325465d48c15a82.mp3",
+      "duration": 11.28,
+      "caption": "Trong một trăm mẫu có chín mươi âm tính, mô hình luôn đoán âm vẫn đạt chín mươi phần trăm accuracy. Nhưng nó bỏ sót toàn bộ mẫu dương. Đây là lý do phải xem bảng nhầm lẫn.",
+      "teaching": true,
+      "preset": {
+        "title": "Accuracy có thể đánh lừa",
+        "bullets": [
+          "100 mẫu gồm 90 âm và 10 dương",
+          "Luôn đoán âm: accuracy 90%",
+          "Recall lớp dương = 0%"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/compare/s3.mp3",
+      "duration": 9.2,
+      "caption": "Sau khi chọn mô hình trên validation, mới đánh giá một lần trên tập test. Nếu dùng test để chọn lại, con số đó không còn khách quan.",
+      "preset": {
+        "title": "Test chỉ dùng một lần",
+        "bullets": [
+          "Chọn mô hình trên validation",
+          "Đánh giá cuối trên test, không chọn lại"
+        ],
+        "icon": "🧪"
+      }
+    },
+    {
+      "id": "extended-3",
+      "audio": "/audio/lectures-v2/compare/7b69c326215458e4.mp3",
+      "duration": 11.6,
+      "caption": "Một lần chia dữ liệu có thể thuận lợi cho một mô hình. Nếu có thể, hãy lặp lại với các seed và ghi mức dao động. Tuy nhiên, không liên tục nhìn test để điều chỉnh lựa chọn.",
+      "teaching": true,
+      "preset": {
+        "title": "Lặp lại thay vì chốt một lần",
+        "bullets": [
+          "Chạy nhiều seed nếu phòng thực hành hỗ trợ",
+          "Ghi trung bình và mức dao động",
+          "Chọn tham số bằng validation, giữ test riêng"
+        ]
+      }
+    },
+    {
+      "id": "extended-4",
+      "audio": "/audio/lectures-v2/compare/8c12c9f54409ad94.mp3",
+      "duration": 11.12,
+      "caption": "Mô hình tốt nhất phụ thuộc điều mình cần ưu tiên. Có bài cần giảm bỏ sót, có bài cần tốc độ. Với dữ liệu nhỏ, một chênh lệch rất nhỏ chưa đủ để khẳng định mô hình nào vượt trội.",
+      "teaching": true,
+      "preset": {
+        "title": "Tốt nhất theo tiêu chí nào?",
+        "bullets": [
+          "Recall, precision, thời gian có thể đánh đổi",
+          "Không có mô hình thắng mọi bài toán",
+          "Mẫu nhỏ làm kết luận kém chắc chắn"
+        ]
+      }
+    },
+    {
+      "id": "extended-5",
+      "audio": "/audio/lectures-v2/compare/8f7e2deff067ae63.mp3",
+      "duration": 10.64,
+      "caption": "Chọn mô hình cần dựa trên dữ liệu: cùng cách chia, cùng chỉ số, và một tiêu chí ưu tiên rõ ràng. Hãy nghĩ thêm về tình huống mà lựa chọn này có thể không còn phù hợp.",
+      "teaching": true,
+      "preset": {
+        "title": "Tổng kết: chọn mô hình bằng dữ liệu",
+        "bullets": [
+          "So chỉ số của ít nhất 3 mô hình",
+          "Cùng cách chia, cùng cấu hình đánh giá",
+          "Nêu tiêu chí, lựa chọn và hạn chế"
+        ]
+      }
+    }
+  ]
+}

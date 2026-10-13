@@ -1,0 +1,124 @@
+{
+  "lessonId": "SVM",
+  "voice": "clone-duyenhamy",
+  "version": "2026.10-expanded",
+  "scenes": [
+    {
+      "id": "extended-1",
+      "audio": "/audio/lectures-v2/svm/b90c2f1b5a77eee9.mp3",
+      "duration": 11.76,
+      "caption": "SVM không chỉ tìm đường chia hai nhóm mà còn quan tâm khoảng đệm quanh đường đó. Những điểm quan trọng gần lề được gọi là support vectors. Thang đo đầu vào ảnh hưởng trực tiếp đến bài toán.",
+      "teaching": true,
+      "preset": {
+        "title": "Ranh giới có khoảng đệm",
+        "bullets": [
+          "SVM tìm ranh giới với lề phù hợp",
+          "Support vectors chi phối ranh giới",
+          "Chuẩn hóa quan trọng với khoảng cách và kernel"
+        ]
+      }
+    },
+    {
+      "id": "s1",
+      "audio": "/audio/guide/svm/s1.mp3",
+      "duration": 9.52,
+      "caption": "SVM tìm đường phân cách sao cho khoảng trống giữa hai nhóm là rộng nhất. Những điểm nằm sát lề gọi là support vector, chúng quyết định ranh giới.",
+      "preset": {
+        "title": "Đường phân cách có lề rộng nhất",
+        "bullets": [
+          "SVM tìm ranh giới cách xa hai nhóm nhất",
+          "Support vector là các điểm nằm sát lề"
+        ],
+        "icon": "🛣️"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/svm/s2.mp3",
+      "duration": 10,
+      "caption": "Tham số C điều chỉnh mức phạt khi phân loại sai. C lớn cố phân loại đúng mọi điểm nên dễ khớp nhiễu. C nhỏ chấp nhận vài lỗi để có lề rộng hơn.",
+      "preset": {
+        "title": "Tham số C",
+        "bullets": [
+          "C lớn phạt nặng điểm sai",
+          "C nhỏ cho lề rộng hơn, chấp nhận vài lỗi"
+        ],
+        "icon": "🎚️"
+      }
+    },
+    {
+      "id": "extended-2",
+      "audio": "/audio/lectures-v2/svm/cd3bc8ca98931537.mp3",
+      "duration": 11.6,
+      "caption": "Hãy coi C là mức nghiêm khắc với vi phạm lề. C lớn yêu cầu mô hình cố xử lý các vi phạm mạnh hơn, nhưng có thể bám nhiễu. Không có một giá trị C tốt cho mọi bộ dữ liệu.",
+      "teaching": true,
+      "preset": {
+        "title": "C nhỏ và C lớn",
+        "bullets": [
+          "C nhỏ: chấp nhận vi phạm lề nhiều hơn",
+          "C lớn: phạt vi phạm mạnh hơn",
+          "Lựa chọn phải kiểm tra trên validation"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/svm/s3.mp3",
+      "duration": 11.76,
+      "caption": "Với kernel RBF hay đa thức, ranh giới có thể cong mà không cần tự tạo biến mới. Hãy thử dữ liệu hai vòng tròn, và xem gamma lớn làm ranh giới uốn sát từng điểm như thế nào.",
+      "preset": {
+        "title": "Kernel tạo ranh giới cong",
+        "bullets": [
+          "RBF và đa thức cho ranh giới phi tuyến",
+          "Gamma lớn làm ranh giới uốn sát từng điểm"
+        ],
+        "icon": "🌀"
+      }
+    },
+    {
+      "id": "extended-3",
+      "audio": "/audio/lectures-v2/svm/474c871ea02cd560.mp3",
+      "duration": 11.36,
+      "caption": "Trên dữ liệu cong, kernel RBF có thể linh hoạt hơn đường thẳng. Nhưng gamma quá lớn có thể tạo những vùng quyết định rất cục bộ. Hãy nhìn cả đồ thị lẫn kết quả validation.",
+      "teaching": true,
+      "preset": {
+        "title": "Thử tuyến tính và RBF",
+        "bullets": [
+          "Giữ nguyên dữ liệu, split và chuẩn hóa",
+          "So ranh giới thẳng với ranh giới cong",
+          "Với RBF, xem đồng thời C và gamma"
+        ]
+      }
+    },
+    {
+      "id": "extended-4",
+      "audio": "/audio/lectures-v2/svm/14c4bc23b6e0fa79.mp3",
+      "duration": 13.6,
+      "caption": "Điểm số quyết định của SVM không tự động là xác suất. Khi trình bày kết quả, hãy gọi đúng tên đại lượng đang xem. Nếu dữ liệu lệch lớp, cần kiểm tra lỗi từng lớp thay vì chỉ nhìn accuracy.",
+      "teaching": true,
+      "preset": {
+        "title": "Đừng nhầm điểm số với xác suất",
+        "bullets": [
+          "Decision score không mặc nhiên là xác suất",
+          "Kernel linh hoạt vẫn có thể overfit",
+          "Accuracy cao có thể che lỗi lớp ít gặp"
+        ]
+      }
+    },
+    {
+      "id": "extended-5",
+      "audio": "/audio/lectures-v2/svm/59d27acc779891bc.mp3",
+      "duration": 11.44,
+      "caption": "Chọn hai cấu hình tạo ranh giới khác nhau và tự giải thích nguyên nhân. So sánh phải dựa trên cùng tập đánh giá. Một ranh giới uốn lượn đẹp không phải bằng chứng cho khả năng tổng quát hóa.",
+      "teaching": true,
+      "preset": {
+        "title": "Tổng kết: vì sao biên có hình dạng đó?",
+        "bullets": [
+          "So hai ranh giới từ hai cấu hình",
+          "Để ý C, kernel và gamma",
+          "Đánh đổi giữa đơn giản và linh hoạt"
+        ]
+      }
+    }
+  ]
+}

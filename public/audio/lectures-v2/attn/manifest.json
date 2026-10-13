@@ -1,0 +1,124 @@
+{
+  "lessonId": "ATTN",
+  "voice": "clone-duyenhamy",
+  "version": "2026.10-expanded",
+  "scenes": [
+    {
+      "id": "extended-1",
+      "audio": "/audio/lectures-v2/attn/226f7c6160df2794.mp3",
+      "duration": 12.88,
+      "caption": "Attention giúp một vị trí tổng hợp thông tin từ các vị trí khác. Query và key tạo điểm tương thích; trọng số sau chuẩn hóa dùng để trộn các value. Mỗi token có thể chú ý theo một cách khác.",
+      "teaching": true,
+      "preset": {
+        "title": "Một token nên nhìn vào đâu?",
+        "bullets": [
+          "Query đặt câu hỏi; key dùng để so khớp",
+          "Value mang nội dung được tổng hợp",
+          "Mỗi query có một phân bố trọng số"
+        ]
+      }
+    },
+    {
+      "id": "s1",
+      "audio": "/audio/guide/attn/s1.mp3",
+      "duration": 10.08,
+      "caption": "Trong attention, mỗi token tạo ra một câu hỏi gọi là query, so khớp với key của các token khác, rồi lấy về thông tin từ value theo mức độ phù hợp.",
+      "preset": {
+        "title": "Mỗi token nhìn các token khác",
+        "bullets": [
+          "Query hỏi, key được so khớp",
+          "Value là thông tin được lấy về"
+        ],
+        "icon": "👀"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/attn/s2.mp3",
+      "duration": 8.72,
+      "caption": "Điểm so khớp được chia cho căn bậc hai số chiều, rồi đi qua softmax để thành trọng số. Mỗi hàng trọng số cộng lại bằng một.",
+      "preset": {
+        "title": "Softmax thành trọng số",
+        "bullets": [
+          "Chia điểm cho căn bậc hai của d",
+          "Mỗi hàng trọng số cộng lại bằng một"
+        ],
+        "icon": "🧮"
+      }
+    },
+    {
+      "id": "extended-2",
+      "audio": "/audio/lectures-v2/attn/ef19713f3816fe11.mp3",
+      "duration": 12.08,
+      "caption": "Nếu hai trọng số là không phẩy hai lăm và không phẩy bảy lăm, còn hai value là hai và sáu, đầu ra bằng năm. Đây là trung bình có trọng số, không phải chọn duy nhất một token.",
+      "teaching": true,
+      "preset": {
+        "title": "Trộn value bằng trọng số",
+        "bullets": [
+          "Trọng số: 0,25 và 0,75",
+          "Value một chiều: 2 và 6",
+          "Đầu ra = 0,25 × 2 + 0,75 × 6 = 5"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/attn/s3.mp3",
+      "duration": 11.2,
+      "caption": "Khi mô hình sinh văn bản, một token không được nhìn token phía sau. Causal mask che các vị trí tương lai. Trọng số ở trang này là ngẫu nhiên, chỉ để minh họa phép tính.",
+      "preset": {
+        "title": "Causal mask",
+        "bullets": [
+          "Che các token tương lai",
+          "Dùng khi mô hình sinh văn bản từ trái sang phải"
+        ],
+        "icon": "🚧"
+      }
+    },
+    {
+      "id": "extended-3",
+      "audio": "/audio/lectures-v2/attn/f7663f6cc41cdad4.mp3",
+      "duration": 11.92,
+      "caption": "Với sinh văn bản từ trái sang phải, token hiện tại không được nhìn tương lai. Causal mask che những vị trí đó trước softmax. Hãy xem trọng số ở phần bị che trở về không như thế nào.",
+      "teaching": true,
+      "preset": {
+        "title": "Thử causal mask",
+        "bullets": [
+          "Không mask: có thể nhìn các vị trí khác",
+          "Causal mask: không nhìn token tương lai",
+          "Quan sát các ô bị che và tổng mỗi hàng"
+        ]
+      }
+    },
+    {
+      "id": "extended-4",
+      "audio": "/audio/lectures-v2/attn/69bb254fb2b0f366.mp3",
+      "duration": 11.76,
+      "caption": "Hệ số căn bậc hai giúp kiểm soát độ lớn điểm số khi số chiều tăng. Bản đồ attention hữu ích để quan sát, nhưng một ô đậm không tự chứng minh đó là nguyên nhân duy nhất của câu trả lời.",
+      "teaching": true,
+      "preset": {
+        "title": "Đọc bản đồ chú ý thận trọng",
+        "bullets": [
+          "Chia điểm QKᵀ cho √dₖ trước softmax",
+          "Tổng trọng số theo hàng bằng 1 khi hợp lệ",
+          "Attention không phải giải thích nhân quả đầy đủ"
+        ]
+      }
+    },
+    {
+      "id": "extended-5",
+      "audio": "/audio/lectures-v2/attn/83a64553c6094d87.mp3",
+      "duration": 10.48,
+      "caption": "Hãy chọn một query và theo dõi toàn bộ đường đi từ điểm số đến đầu ra. So bản đồ attention trước và sau mask, rồi tự giải thích vì sao các trọng số thay đổi.",
+      "teaching": true,
+      "preset": {
+        "title": "Tổng kết: theo dấu một query",
+        "bullets": [
+          "Chọn một hàng attention",
+          "Ghi điểm số, mask và trọng số",
+          "Giải thích đầu ra từ tổ hợp các value"
+        ]
+      }
+    }
+  ]
+}

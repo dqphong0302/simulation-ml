@@ -1,0 +1,48 @@
+{
+  "lessonId": "MLP",
+  "voice": "clone-duyenhamy",
+  "scenes": [
+    {
+      "id": "s1",
+      "audio": "/audio/guide/mlp/s1.mp3",
+      "duration": 9.68,
+      "caption": "Một neuron nhân mỗi đầu vào với trọng số, cộng thêm bias, rồi đưa qua hàm kích hoạt như sigmoid hay tanh. Nhiều neuron xếp thành lớp tạo thành mạng.",
+      "preset": {
+        "title": "Một neuron làm gì",
+        "bullets": [
+          "Nhân trọng số, cộng bias",
+          "Đưa qua hàm kích hoạt"
+        ],
+        "icon": "🔵"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/mlp/s2.mp3",
+      "duration": 10.32,
+      "caption": "Mạng học bằng cách tính sai số ở đầu ra, rồi lan truyền gradient ngược qua từng lớp để điều chỉnh trọng số. Learning rate quyết định mỗi bước đi xa bao nhiêu.",
+      "preset": {
+        "title": "Học bằng lan truyền ngược",
+        "bullets": [
+          "Tính loss ở đầu ra",
+          "Gradient đi ngược để cập nhật trọng số"
+        ],
+        "icon": "🔁"
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/mlp/s3.mp3",
+      "duration": 11.36,
+      "caption": "Không có lớp ẩn, mạng chỉ vẽ được ranh giới thẳng. Hãy thử dữ liệu hai vòng tròn, và theo dõi khi nào loss train giảm nhưng validation tăng, đó là overfitting.",
+      "preset": {
+        "title": "Lớp ẩn tạo ranh giới cong",
+        "bullets": [
+          "Không có lớp ẩn chỉ là đường thẳng",
+          "Theo dõi loss train và validation"
+        ],
+        "icon": "🌀"
+      }
+    }
+  ]
+}

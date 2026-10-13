@@ -1,0 +1,48 @@
+{
+  "lessonId": "COMPARE",
+  "voice": "clone-duyenhamy",
+  "scenes": [
+    {
+      "id": "s1",
+      "audio": "/audio/guide/compare/s1.mp3",
+      "duration": 9.68,
+      "caption": "Muốn so sánh mô hình, mọi thứ khác phải giống nhau: cùng dữ liệu, cùng cách chia, cùng cách chuẩn hóa. Siêu tham số được chọn trên tập validation.",
+      "preset": {
+        "title": "So sánh công bằng",
+        "bullets": [
+          "Cùng dữ liệu, cùng cách chia, cùng chuẩn hóa",
+          "Chọn siêu tham số bằng validation"
+        ],
+        "icon": "⚖️"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/compare/s2.mp3",
+      "duration": 8.8,
+      "caption": "Khi một nhãn hiếm hơn, độ chính xác một mình có thể gây hiểu lầm. Hãy xem thêm recall, precision, F1 và đường ROC.",
+      "preset": {
+        "title": "Nhìn nhiều chỉ số",
+        "bullets": [
+          "Accuracy chưa đủ khi nhãn lệch",
+          "Xem recall, precision, F1 và AUC"
+        ],
+        "icon": "📊"
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/compare/s3.mp3",
+      "duration": 9.2,
+      "caption": "Sau khi chọn mô hình trên validation, mới đánh giá một lần trên tập test. Nếu dùng test để chọn lại, con số đó không còn khách quan.",
+      "preset": {
+        "title": "Test chỉ dùng một lần",
+        "bullets": [
+          "Chọn mô hình trên validation",
+          "Đánh giá cuối trên test, không chọn lại"
+        ],
+        "icon": "🧪"
+      }
+    }
+  ]
+}

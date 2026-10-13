@@ -1,0 +1,48 @@
+{
+  "lessonId": "RAG",
+  "voice": "clone-duyenhamy",
+  "scenes": [
+    {
+      "id": "s1",
+      "audio": "/audio/guide/rag/s1.mp3",
+      "duration": 9.2,
+      "caption": "RAG giúp mô hình trả lời dựa trên tài liệu của bạn. Tài liệu được chia thành các đoạn nhỏ, rồi hệ thống tìm những đoạn liên quan nhất với câu hỏi.",
+      "preset": {
+        "title": "Trả lời dựa trên tài liệu",
+        "bullets": [
+          "Chia tài liệu thành các đoạn",
+          "Tìm đoạn liên quan nhất với câu hỏi"
+        ],
+        "icon": "📚"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/rag/s2.mp3",
+      "duration": 10.64,
+      "caption": "Có hai cách tìm. BM25 so khớp từ khóa và chạy ngay trên máy. Tìm theo embedding hiểu ý nghĩa tốt hơn, nhưng nội dung các đoạn sẽ được gửi tới dịch vụ embedding.",
+      "preset": {
+        "title": "Hai cách tìm kiếm",
+        "bullets": [
+          "BM25 theo từ khóa, chạy ngay trên máy",
+          "Embedding theo ý nghĩa, cần API"
+        ],
+        "icon": "🔎"
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/rag/s3.mp3",
+      "duration": 10.32,
+      "caption": "Câu trả lời nên kèm mã đoạn nguồn. Trang này kiểm tra mã đó có thật trong context, nhưng có mã nguồn chưa có nghĩa là nội dung đúng. Hãy mở đoạn gốc để đối chiếu.",
+      "preset": {
+        "title": "Dẫn nguồn và kiểm tra",
+        "bullets": [
+          "Mỗi ý kèm mã đoạn như D1 C2",
+          "Mở đoạn gốc để đối chiếu"
+        ],
+        "icon": "🏷️"
+      }
+    }
+  ]
+}

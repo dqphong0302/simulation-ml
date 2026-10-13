@@ -1,0 +1,124 @@
+{
+  "lessonId": "RAG",
+  "voice": "clone-duyenhamy",
+  "version": "2026.10-expanded",
+  "scenes": [
+    {
+      "id": "extended-1",
+      "audio": "/audio/lectures-v2/rag/3e52b445c6c2b482.mp3",
+      "duration": 12,
+      "caption": "RAG tìm những đoạn liên quan rồi đưa chúng vào yêu cầu sinh. Nếu tìm sai, câu trả lời có thể sai dù mô hình viết rất hay. Vì thế mình cần kiểm tra cả bằng chứng truy xuất lẫn câu trả lời cuối.",
+      "teaching": true,
+      "preset": {
+        "title": "Tìm trước, trả lời sau",
+        "bullets": [
+          "Tài liệu → chia đoạn → truy xuất → context → sinh",
+          "Truy xuất và sinh là hai khâu cần đánh giá riêng",
+          "RAG không bảo đảm loại bỏ bịa thông tin"
+        ]
+      }
+    },
+    {
+      "id": "s1",
+      "audio": "/audio/guide/rag/s1.mp3",
+      "duration": 9.2,
+      "caption": "RAG giúp mô hình trả lời dựa trên tài liệu của bạn. Tài liệu được chia thành các đoạn nhỏ, rồi hệ thống tìm những đoạn liên quan nhất với câu hỏi.",
+      "preset": {
+        "title": "Trả lời dựa trên tài liệu",
+        "bullets": [
+          "Chia tài liệu thành các đoạn",
+          "Tìm đoạn liên quan nhất với câu hỏi"
+        ],
+        "icon": "📚"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/rag/s2.mp3",
+      "duration": 10.64,
+      "caption": "Có hai cách tìm. BM25 so khớp từ khóa và chạy ngay trên máy. Tìm theo embedding hiểu ý nghĩa tốt hơn, nhưng nội dung các đoạn sẽ được gửi tới dịch vụ embedding.",
+      "preset": {
+        "title": "Hai cách tìm kiếm",
+        "bullets": [
+          "BM25 theo từ khóa, chạy ngay trên máy",
+          "Embedding theo ý nghĩa, cần API"
+        ],
+        "icon": "🔎"
+      }
+    },
+    {
+      "id": "extended-2",
+      "audio": "/audio/lectures-v2/rag/0e8b593b4de97dd3.mp3",
+      "duration": 12.96,
+      "caption": "Nếu tài liệu chỉ ghi hạn nộp là thứ Sáu, mình có thể trả lời câu hỏi về hạn nộp. Nhưng câu hỏi về điểm tối đa chưa có bằng chứng. Trích dẫn đúng đoạn không cho phép suy thêm nội dung không tồn tại.",
+      "teaching": true,
+      "preset": {
+        "title": "Ví dụ có và thiếu bằng chứng",
+        "bullets": [
+          "Đoạn A: “Hạn nộp bài là thứ Sáu”",
+          "Hỏi hạn nộp: đoạn A hỗ trợ trả lời",
+          "Hỏi điểm tối đa: phải nói thiếu dữ kiện"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/rag/s3.mp3",
+      "duration": 10.32,
+      "caption": "Câu trả lời nên kèm mã đoạn nguồn. Trang này kiểm tra mã đó có thật trong context, nhưng có mã nguồn chưa có nghĩa là nội dung đúng. Hãy mở đoạn gốc để đối chiếu.",
+      "preset": {
+        "title": "Dẫn nguồn và kiểm tra",
+        "bullets": [
+          "Mỗi ý kèm mã đoạn như D1 C2",
+          "Mở đoạn gốc để đối chiếu"
+        ],
+        "icon": "🏷️"
+      }
+    },
+    {
+      "id": "extended-3",
+      "audio": "/audio/lectures-v2/rag/2849e828fa74a3c6.mp3",
+      "duration": 10.96,
+      "caption": "Đoạn quá ngắn có thể thiếu ngữ cảnh, còn lấy quá nhiều đoạn có thể đưa thêm nhiễu. Hãy kiểm tra nội dung từng đoạn lấy về, không chỉ nhìn điểm tương đồng hoặc số lượng trích dẫn.",
+      "teaching": true,
+      "preset": {
+        "title": "Thử chunk size và top-k",
+        "bullets": [
+          "Giữ tài liệu và câu hỏi cố định",
+          "Đổi độ dài đoạn hoặc số đoạn lấy về",
+          "Xem đoạn nào hỗ trợ trực tiếp câu trả lời"
+        ]
+      }
+    },
+    {
+      "id": "extended-4",
+      "audio": "/audio/lectures-v2/rag/aba0877cf75f6999.mp3",
+      "duration": 13.28,
+      "caption": "Một mã trích dẫn tồn tại chưa chứng minh câu trả lời được tài liệu hỗ trợ. Cũng phải đề phòng chỉ dẫn độc hại trong tài liệu. Khi dùng API embedding hoặc sinh, hãy hiểu nội dung nào được gửi cho nhà cung cấp.",
+      "teaching": true,
+      "preset": {
+        "title": "Dẫn nguồn chưa đủ",
+        "bullets": [
+          "Mã nguồn hợp lệ nhưng nội dung vẫn có thể không hỗ trợ",
+          "Tài liệu là dữ liệu, không phải chỉ lệnh đáng tin",
+          "Embedding/API có thể gửi nội dung ra ngoài trình duyệt"
+        ]
+      }
+    },
+    {
+      "id": "extended-5",
+      "audio": "/audio/lectures-v2/rag/f4d11c743e245478.mp3",
+      "duration": 12,
+      "caption": "Hãy kiểm tra từng khẳng định quan trọng với nguồn được dẫn. Thêm một câu hỏi mà tài liệu không trả lời được để xem hệ thống có thừa nhận thiếu dữ kiện hay không. Đây là phần quan trọng của đánh giá RAG.",
+      "teaching": true,
+      "preset": {
+        "title": "Tổng kết: kiểm toán một câu trả lời",
+        "bullets": [
+          "Xem câu hỏi, các đoạn truy xuất và đầu ra",
+          "Đối chiếu từng khẳng định với đoạn nguồn",
+          "Thử một câu không có đáp án trong tài liệu"
+        ]
+      }
+    }
+  ]
+}

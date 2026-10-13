@@ -1,0 +1,48 @@
+{
+  "lessonId": "FOREST",
+  "voice": "clone-duyenhamy",
+  "scenes": [
+    {
+      "id": "s1",
+      "audio": "/audio/guide/forest/s1.mp3",
+      "duration": 11.92,
+      "caption": "Một cây quyết định dễ bị thay đổi nhiều khi dữ liệu thay đổi một chút. Rừng ngẫu nhiên trồng nhiều cây, mỗi cây học trên một mẫu lấy lại ngẫu nhiên và chỉ xét vài biến ở mỗi lần chia.",
+      "preset": {
+        "title": "Nhiều cây tốt hơn một cây",
+        "bullets": [
+          "Mỗi cây học trên mẫu bootstrap",
+          "Mỗi lần chia chỉ xét vài biến ngẫu nhiên"
+        ],
+        "icon": "🌲"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/forest/s2.mp3",
+      "duration": 8.64,
+      "caption": "Kết quả cuối là trung bình dự đoán của các cây. Nhờ trung bình hóa, mô hình ổn định hơn và thường ít overfitting hơn một cây đơn lẻ.",
+      "preset": {
+        "title": "Trung bình hóa để ổn định",
+        "bullets": [
+          "Lấy trung bình xác suất của các cây",
+          "Giảm phương sai so với một cây"
+        ],
+        "icon": "🗳️"
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/forest/s3.mp3",
+      "duration": 9.36,
+      "caption": "Hãy thay số cây và độ sâu, rồi đổi seed để xem kết quả có ổn định không. Trên tập validation nhỏ, rừng không phải lúc nào cũng thắng.",
+      "preset": {
+        "title": "Thử nghiệm của bạn",
+        "bullets": [
+          "Thay số cây và độ sâu",
+          "Đổi seed để kiểm tra độ ổn định"
+        ],
+        "icon": "🔬"
+      }
+    }
+  ]
+}

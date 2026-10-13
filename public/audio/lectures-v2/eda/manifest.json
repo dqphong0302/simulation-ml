@@ -1,0 +1,127 @@
+{
+  "lessonId": "EDA",
+  "voice": "clone-duyenhamy",
+  "version": "2026.10-expanded",
+  "scenes": [
+    {
+      "id": "eda-1",
+      "audio": "/audio/lectures-v2/eda/9cd99fcf66b3b756.mp3",
+      "duration": 17.94,
+      "caption": "Trước khi dạy máy học, mình cần hiểu dữ liệu đang có gì. Hàng trăm giá trị glucose rất khó đọc, nhưng vài con số như số mẫu, trung bình, median và độ lệch chuẩn giúp mình nắm được bức tranh chung ngay. Thống kê mô tả chỉ mô tả dữ liệu, chưa dự đoán điều gì.",
+      "teaching": true,
+      "preset": {
+        "title": "Thống kê mô tả là gì?",
+        "bullets": [
+          "Tóm tắt dữ liệu bằng vài con số và biểu đồ",
+          "Làm trước mọi mô hình",
+          "Chỉ mô tả, chưa suy luận hay dự đoán"
+        ]
+      }
+    },
+    {
+      "id": "eda-2",
+      "audio": "/audio/lectures-v2/eda/e7aaad3658cee79e.mp3",
+      "duration": 17.78,
+      "caption": "Trung bình là tổng chia cho số mẫu, còn median là giá trị đứng giữa khi sắp xếp. Chỉ cần vài giá trị rất lớn, trung bình đã bị kéo lên, trong khi median gần như đứng yên. Vì vậy với các biến lệch như insulin hay thu nhập, median thường đáng tin hơn.",
+      "teaching": true,
+      "preset": {
+        "title": "Trung tâm: trung bình và median",
+        "bullets": [
+          "Trung bình: tổng chia số mẫu",
+          "Median: giá trị đứng giữa khi sắp xếp",
+          "Lệch xa nhau → phân bố lệch hoặc có ngoại lai"
+        ]
+      }
+    },
+    {
+      "id": "eda-3",
+      "audio": "/audio/lectures-v2/eda/f9d0521f174da7eb.mp3",
+      "duration": 17.78,
+      "caption": "Hai lớp học có cùng điểm trung bình vẫn có thể rất khác nhau: một lớp đồng đều, một lớp chênh lệch lớn. Độ lệch chuẩn và khoảng tứ phân vị cho biết dữ liệu trải rộng đến đâu. Biểu đồ hộp gói gọn Q1, median, Q3 và các điểm ngoại lai trong một hình.",
+      "teaching": true,
+      "preset": {
+        "title": "Độ phân tán: độ lệch chuẩn và IQR",
+        "bullets": [
+          "Độ lệch chuẩn σ: dữ liệu cách trung bình bao xa",
+          "IQR = Q3 − Q1: độ rộng của 50% ở giữa",
+          "Biểu đồ hộp gói gọn Q1, median, Q3, ngoại lai"
+        ]
+      }
+    },
+    {
+      "id": "eda-4",
+      "audio": "/audio/lectures-v2/eda/9f78a4f9c0c949b9.mp3",
+      "duration": 15.62,
+      "caption": "Hãy luôn vẽ histogram trước khi kết luận. Phân bố có thể đối xứng, lệch về một phía, hoặc có hai đỉnh. Hai đỉnh thường báo hiệu dữ liệu đang trộn hai nhóm khác nhau, còn phân bố lệch mạnh gợi ý mình nên cân nhắc biến đổi log ở bước sau.",
+      "teaching": true,
+      "preset": {
+        "title": "Hình dạng phân bố",
+        "bullets": [
+          "Histogram cho thấy dữ liệu tập trung ở đâu",
+          "Đối xứng, lệch phải, hai đỉnh",
+          "Hình dạng gợi ý cách xử lý ở bước sau"
+        ]
+      }
+    },
+    {
+      "id": "eda-5",
+      "audio": "/audio/lectures-v2/eda/98806d20728d7e43.mp3",
+      "duration": 15.3,
+      "caption": "Với biến phân loại như giới tính hay khu vực, trung bình không có nghĩa. Mình đếm số lần xuất hiện của từng mức và xem tỷ lệ phần trăm. Những mức quá hiếm cần chú ý, vì khi chia train và test, chúng có thể chỉ xuất hiện ở một phía.",
+      "teaching": true,
+      "preset": {
+        "title": "Biến phân loại: đếm tần suất",
+        "bullets": [
+          "Đếm số lần xuất hiện của từng mức",
+          "Vẽ biểu đồ cột, xem tỷ lệ phần trăm",
+          "Mức quá hiếm cần chú ý khi chia dữ liệu"
+        ]
+      }
+    },
+    {
+      "id": "eda-6",
+      "audio": "/audio/lectures-v2/eda/acdfcf8f2a6cfe58.mp3",
+      "duration": 15.94,
+      "caption": "Biểu đồ phân tán đặt hai biến lên hai trục, mỗi điểm là một mẫu. Hệ số tương quan r gần một nghĩa là hai biến cùng tăng, gần trừ một là một tăng một giảm, còn gần không là không có quan hệ tuyến tính. Nhớ rằng tương quan không phải là nhân quả.",
+      "teaching": true,
+      "preset": {
+        "title": "Quan hệ hai biến: tương quan",
+        "bullets": [
+          "Biểu đồ phân tán: mỗi điểm là một mẫu",
+          "Hệ số Pearson r từ −1 đến 1",
+          "Tương quan không phải nhân quả"
+        ]
+      }
+    },
+    {
+      "id": "eda-7",
+      "audio": "/audio/lectures-v2/eda/56b75783415690d5.mp3",
+      "duration": 16.74,
+      "caption": "Khi tô histogram theo nhóm, ví dụ có và không có tiểu đường, mình thấy glucose tách hai nhóm rõ hơn huyết áp. Biến tách nhóm tốt thường có ích cho mô hình. Đồng thời hãy xem tỷ lệ các nhóm, vì dữ liệu mất cân bằng khiến accuracy dễ gây hiểu lầm.",
+      "teaching": true,
+      "preset": {
+        "title": "So sánh theo nhóm",
+        "bullets": [
+          "Tách thống kê theo cột đích",
+          "Histogram chồng nhau theo nhóm",
+          "Biến tách nhóm tốt thường có ích cho mô hình"
+        ]
+      }
+    },
+    {
+      "id": "eda-8",
+      "audio": "/audio/lectures-v2/eda/6e078b3b7162e582.mp3",
+      "duration": 19.14,
+      "caption": "Cuối cùng là kiểm tra chất lượng: ô thiếu, dòng trùng lặp, cột giống mã định danh, giá trị không hợp lý như số không ở glucose, ngoại lai và phân bố lệch mạnh. Hãy ghi lại những phát hiện này để xử lý ở bài tiền xử lý. Bây giờ, mời bạn sang phần thực hành và tải CSV của mình lên.",
+      "teaching": true,
+      "preset": {
+        "title": "Kiểm tra chất lượng dữ liệu",
+        "bullets": [
+          "Ô thiếu, dòng trùng, cột giống mã ID",
+          "Giá trị 0 vô lý, ngoại lai, lệch mạnh",
+          "Ghi lại để xử lý ở bài Tiền xử lý"
+        ]
+      }
+    }
+  ]
+}

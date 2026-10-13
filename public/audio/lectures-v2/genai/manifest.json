@@ -1,0 +1,124 @@
+{
+  "lessonId": "GENAI",
+  "voice": "clone-duyenhamy",
+  "version": "2026.10-expanded",
+  "scenes": [
+    {
+      "id": "extended-1",
+      "audio": "/audio/lectures-v2/genai/a75dd0cfc2eca8c3.mp3",
+      "duration": 13.12,
+      "caption": "Em tự cấu hình endpoint, model và key. Yêu cầu đi trực tiếp từ trình duyệt đến nhà cung cấp, nên nội dung gửi sẽ được bên đó xử lý. Tuyệt đối không dán key vào ảnh chụp màn hình hay tài liệu chia sẻ.",
+      "teaching": true,
+      "preset": {
+        "title": "Một yêu cầu gửi đi gồm những gì?",
+        "bullets": [
+          "Endpoint, model và key do sinh viên nhập",
+          "Trình duyệt gọi thẳng nhà cung cấp",
+          "Không dán key vào tài liệu hay ảnh chụp màn hình"
+        ]
+      }
+    },
+    {
+      "id": "s1",
+      "audio": "/audio/guide/genai/s1.mp3",
+      "duration": 8.8,
+      "caption": "Ở bài này, trình duyệt gọi trực tiếp tới mô hình bạn chọn. Bạn nhập địa chỉ, tên mô hình và key. Key chỉ nằm trong bộ nhớ, tải lại trang là mất.",
+      "preset": {
+        "title": "Kết nối mô hình bên ngoài",
+        "bullets": [
+          "Nhập base URL, model và key của bạn",
+          "Key chỉ nằm trong bộ nhớ phiên"
+        ],
+        "icon": "🔌"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/genai/s2.mp3",
+      "duration": 10.72,
+      "caption": "Trước khi gửi, hãy xem payload cuối cùng: system prompt, context và câu hỏi được tách riêng. Nội dung này sẽ rời khỏi máy bạn và có thể phát sinh phí.",
+      "preset": {
+        "title": "Xem payload trước khi gửi",
+        "bullets": [
+          "System prompt, context và câu hỏi tách riêng",
+          "Key luôn được che"
+        ],
+        "icon": "📦"
+      }
+    },
+    {
+      "id": "extended-2",
+      "audio": "/audio/lectures-v2/genai/492c6384042bc0b9.mp3",
+      "duration": 12.8,
+      "caption": "Mình cung cấp một thông tin tự tạo về giờ thực hành, rồi hỏi lại đúng nội dung đó. So sánh có và không có context giúp thấy tác dụng của ngữ cảnh, nhưng vẫn phải kiểm tra mô hình có bám thông tin hay không.",
+      "teaching": true,
+      "preset": {
+        "title": "Ví dụ custom context",
+        "bullets": [
+          "Context: “Buổi thực hành bắt đầu lúc 8 giờ”",
+          "Hỏi: “Buổi thực hành bắt đầu lúc nào?”",
+          "So với cùng câu hỏi khi bỏ context"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/genai/s3.mp3",
+      "duration": 8.64,
+      "caption": "Hãy hỏi cùng một câu, một lần có context, một lần không có. So sánh hai câu trả lời và nhận xét context đã thay đổi điều gì.",
+      "preset": {
+        "title": "So sánh có và không có context",
+        "bullets": [
+          "Cùng câu hỏi, bật tắt custom context",
+          "Đối chiếu câu trả lời và ghi nhận xét"
+        ],
+        "icon": "🆚"
+      }
+    },
+    {
+      "id": "extended-3",
+      "audio": "/audio/lectures-v2/genai/3a274bc6cfcdc251.mp3",
+      "duration": 13.2,
+      "caption": "Hãy giữ nguyên model và câu hỏi, chỉ thay context. Với ngữ cảnh thiếu thông tin, một phản hồi tốt nên nêu giới hạn thay vì bịa. Em kiểm tra điều này bằng nội dung thực tế, không chỉ bằng giọng văn tự tin.",
+      "teaching": true,
+      "preset": {
+        "title": "Thiết kế một thí nghiệm nhỏ",
+        "bullets": [
+          "Giữ model và câu hỏi cố định",
+          "So không context, context đúng và context thiếu",
+          "Ghi đầu ra, tham số và khả năng từ chối khi thiếu dữ kiện"
+        ]
+      }
+    },
+    {
+      "id": "extended-4",
+      "audio": "/audio/lectures-v2/genai/feceaf75d251d43c.mp3",
+      "duration": 14.48,
+      "caption": "Custom context là nội dung trong yêu cầu, không phải huấn luyện lại mô hình. Nếu kết nối lỗi CORS, đó có thể là chính sách nhà cung cấp. Đừng giải quyết bằng cách đưa key lên một proxy công cộng không tin cậy.",
+      "teaching": true,
+      "preset": {
+        "title": "Dữ liệu và lỗi kết nối",
+        "bullets": [
+          "Không gửi hồ sơ người bệnh hoặc thông tin riêng tư",
+          "CORS có thể ngăn trình duyệt gọi API",
+          "Context không làm thay đổi trọng số mô hình"
+        ]
+      }
+    },
+    {
+      "id": "extended-5",
+      "audio": "/audio/lectures-v2/genai/ca74cb582660a39c.mp3",
+      "duration": 11.76,
+      "caption": "Một thí nghiệm tốt cần đủ thông tin để người khác hiểu, nhưng không bao giờ để lộ khóa truy cập. Hãy tìm một câu trả lời bám đúng ngữ cảnh và một hạn chế, rồi giải thích dựa trên dữ kiện em đã cung cấp.",
+      "teaching": true,
+      "preset": {
+        "title": "Tổng kết: có bằng chứng, không lộ key",
+        "bullets": [
+          "Xem lại prompt, context và đầu ra",
+          "Nhận xét độ bám context của câu trả lời",
+          "Không để lộ key hay thông tin nhạy cảm"
+        ]
+      }
+    }
+  ]
+}

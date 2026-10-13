@@ -1,0 +1,48 @@
+{
+  "lessonId": "LINREG",
+  "voice": "clone-duyenhamy",
+  "scenes": [
+    {
+      "id": "s1",
+      "audio": "/audio/guide/linreg/s1.mp3",
+      "duration": 8.08,
+      "caption": "Không phải bài toán nào cũng là phân loại. Hồi quy tuyến tính dự đoán một con số, bằng cách khớp một đường thẳng qua dữ liệu.",
+      "preset": {
+        "title": "Dự đoán một con số",
+        "bullets": [
+          "Hồi quy dự đoán giá trị liên tục",
+          "Khớp đường thẳng y bằng a nhân x cộng b"
+        ],
+        "icon": "📈"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/linreg/s2.mp3",
+      "duration": 9.76,
+      "caption": "Để biết đường thẳng tốt đến đâu, ta đo sai số bình phương trung bình và căn của nó. R bình phương cho biết biến x giải thích được bao nhiêu phần biến thiên của y.",
+      "preset": {
+        "title": "Đo sai số",
+        "bullets": [
+          "MSE và RMSE đo sai số trung bình",
+          "R bình phương cho biết phần biến thiên được giải thích"
+        ],
+        "icon": "📏"
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/linreg/s3.mp3",
+      "duration": 9.36,
+      "caption": "Hệ số dốc chỉ mô tả mối liên hệ trong dữ liệu này, không chứng minh x gây ra y. Hãy so sánh kết quả trên train và validation trước khi kết luận.",
+      "preset": {
+        "title": "Tương quan không phải nhân quả",
+        "bullets": [
+          "Hệ số dốc chỉ mô tả liên hệ trong dữ liệu",
+          "So sánh train và validation"
+        ],
+        "icon": "🧩"
+      }
+    }
+  ]
+}

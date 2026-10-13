@@ -1,0 +1,124 @@
+{
+  "lessonId": "GENCON",
+  "voice": "clone-duyenhamy",
+  "version": "2026.10-expanded",
+  "scenes": [
+    {
+      "id": "extended-1",
+      "audio": "/audio/lectures-v2/gencon/01b7279dbc79ad4e.mp3",
+      "duration": 13.68,
+      "caption": "Token, sampling và embedding không phải ba tên cho cùng một việc. Token chia đầu vào thành đơn vị xử lý; sampling chọn bước sinh; embedding biểu diễn nội dung bằng vector để mô hình tính toán hoặc so sánh.",
+      "teaching": true,
+      "preset": {
+        "title": "Ba khái niệm, ba vai trò",
+        "bullets": [
+          "Token: đơn vị xử lý văn bản",
+          "Sampling: chọn token tiếp theo",
+          "Embedding: biểu diễn thành vector"
+        ]
+      }
+    },
+    {
+      "id": "s1",
+      "audio": "/audio/guide/gencon/s1.mp3",
+      "duration": 9.04,
+      "caption": "Mô hình ngôn ngữ không đọc từng chữ như người. Văn bản được cắt thành các token, và cùng một câu có thể thành số token khác nhau ở mỗi mô hình.",
+      "preset": {
+        "title": "Token là gì",
+        "bullets": [
+          "Văn bản được cắt thành các token",
+          "Số token phụ thuộc tokenizer của từng mô hình"
+        ],
+        "icon": "🔤"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/gencon/s2.mp3",
+      "duration": 13.76,
+      "caption": "Mô hình cho mỗi token một điểm, softmax biến thành xác suất. Temperature thấp làm phân phối nhọn, ổn định. Temperature cao làm phân phối phẳng, đa dạng. Top-p chỉ giữ nhóm token có xác suất cao.",
+      "preset": {
+        "title": "Temperature và top-p",
+        "bullets": [
+          "Temperature thấp nhọn, cao phẳng",
+          "Top-p chỉ giữ nhóm token xác suất cao"
+        ],
+        "icon": "🌡️"
+      }
+    },
+    {
+      "id": "extended-2",
+      "audio": "/audio/lectures-v2/gencon/a96e29ad22b49d80.mp3",
+      "duration": 11.28,
+      "caption": "Khi hạ temperature, các lựa chọn vốn có điểm cao thường được ưu tiên mạnh hơn. Khi tăng, việc chọn có thể đa dạng hơn. Nhưng không mức temperature nào tự xác minh câu trả lời đúng sự thật.",
+      "teaching": true,
+      "preset": {
+        "title": "Temperature đổi phân bố",
+        "bullets": [
+          "Temperature thấp thường làm phân bố tập trung hơn",
+          "Temperature cao thường làm phân bố phẳng hơn",
+          "Temperature không kiểm chứng sự thật"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/gencon/s3.mp3",
+      "duration": 9.76,
+      "caption": "Embedding biến văn bản thành vector. Những ý gần nghĩa có vector gần hướng nhau, nên độ tương tự cosine cao. Đây là nền tảng của tìm kiếm ngữ nghĩa trong RAG.",
+      "preset": {
+        "title": "Embedding và độ tương tự",
+        "bullets": [
+          "Ý gần nghĩa thì vector gần hướng",
+          "Cosine cao nghĩa là giống nhau"
+        ],
+        "icon": "🧲"
+      }
+    },
+    {
+      "id": "extended-3",
+      "audio": "/audio/lectures-v2/gencon/f54a2511edb3013d.mp3",
+      "duration": 11.52,
+      "caption": "Hãy dùng cùng một đầu vào và chỉ đổi một tham số. So không chỉ độ khác nhau mà cả lỗi và sự lặp lại. Một lần sinh chưa đủ đại diện vì quá trình lấy mẫu có yếu tố ngẫu nhiên.",
+      "teaching": true,
+      "preset": {
+        "title": "Thử cùng prompt nhiều lần",
+        "bullets": [
+          "Giữ prompt, đổi temperature hoặc top-p",
+          "Mỗi lần chỉ đổi một tham số",
+          "Ghi độ đa dạng, lặp lại và lỗi nội dung"
+        ]
+      }
+    },
+    {
+      "id": "extended-4",
+      "audio": "/audio/lectures-v2/gencon/73b91724617329fd.mp3",
+      "duration": 12.16,
+      "caption": "Bộ tách token minh họa có thể không giống tokenizer của dịch vụ thật. Tương tự, độ giống cosine chỉ là một thước đo trong không gian vector, không phải xác suất câu trả lời chính xác.",
+      "teaching": true,
+      "preset": {
+        "title": "Giới hạn của ví dụ nhỏ",
+        "bullets": [
+          "Tokenizer minh họa có thể khác tokenizer nhà cung cấp",
+          "Cosine similarity không phải xác suất đúng",
+          "Embedding gần nhau không bảo đảm đồng nghĩa mọi ngữ cảnh"
+        ]
+      }
+    },
+    {
+      "id": "extended-5",
+      "audio": "/audio/lectures-v2/gencon/edf1dc5704bf2f18.mp3",
+      "duration": 9.84,
+      "caption": "Hãy phân biệt rõ kết quả nào đến từ mô phỏng và kết quả nào từ API thật. Sau đó tách điều em thực sự quan sát được khỏi điều mới chỉ là suy đoán.",
+      "teaching": true,
+      "preset": {
+        "title": "Tổng kết: tách quan sát khỏi kết luận",
+        "bullets": [
+          "Xem lại bảng tham số và các đầu ra",
+          "Một nhận xét về token hoặc embedding",
+          "Phân biệt phần mô phỏng và phần gọi API thật"
+        ]
+      }
+    }
+  ]
+}

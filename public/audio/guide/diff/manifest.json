@@ -1,0 +1,48 @@
+{
+  "lessonId": "DIFF",
+  "voice": "clone-duyenhamy",
+  "scenes": [
+    {
+      "id": "s1",
+      "audio": "/audio/guide/diff/s1.mp3",
+      "duration": 7.44,
+      "caption": "Mô hình diffusion bắt đầu bằng việc thêm nhiễu vào ảnh qua rất nhiều bước nhỏ, cho tới khi ảnh gần như chỉ còn nhiễu.",
+      "preset": {
+        "title": "Thêm nhiễu từng bước",
+        "bullets": [
+          "Ảnh dần biến thành nhiễu",
+          "Công thức có hệ số tín hiệu và hệ số nhiễu"
+        ],
+        "icon": "🌫️"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/diff/s2.mp3",
+      "duration": 9.28,
+      "caption": "Đại lượng alpha bar cho biết phần tín hiệu còn lại. Nhờ công thức đóng, ta có thể nhảy thẳng tới bất kỳ bước t nào mà không cần thêm nhiễu từng bước.",
+      "preset": {
+        "title": "Tín hiệu giảm theo thời gian",
+        "bullets": [
+          "Alpha bar giảm dần khi t tăng",
+          "Có thể nhảy thẳng tới bước t"
+        ],
+        "icon": "📉"
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/diff/s3.mp3",
+      "duration": 8.56,
+      "caption": "Mô hình diffusion thật học cách khử nhiễu ngược lại để sinh ảnh mới. Trang này chỉ minh họa phần thêm nhiễu, không có mô hình khử nhiễu.",
+      "preset": {
+        "title": "Mô hình học cách đảo ngược",
+        "bullets": [
+          "Mạng thật học khử nhiễu từng bước",
+          "Trang này chỉ minh họa quá trình thêm nhiễu"
+        ],
+        "icon": "🔙"
+      }
+    }
+  ]
+}

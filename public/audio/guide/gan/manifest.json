@@ -1,0 +1,48 @@
+{
+  "lessonId": "GAN",
+  "voice": "clone-duyenhamy",
+  "scenes": [
+    {
+      "id": "s1",
+      "audio": "/audio/guide/gan/s1.mp3",
+      "duration": 9.44,
+      "caption": "GAN có hai mạng thi đấu với nhau. Generator biến nhiễu ngẫu nhiên thành dữ liệu giả, discriminator cố phân biệt đâu là thật, đâu là giả.",
+      "preset": {
+        "title": "Hai mạng đối kháng",
+        "bullets": [
+          "Generator tạo dữ liệu giả",
+          "Discriminator phân biệt thật và giả"
+        ],
+        "icon": "🎭"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/gan/s2.mp3",
+      "duration": 6.64,
+      "caption": "Hai mạng được huấn luyện luân phiên. Khi generator giỏi lên, phân phối dữ liệu giả tiến gần phân phối thật.",
+      "preset": {
+        "title": "Luyện luân phiên",
+        "bullets": [
+          "Discriminator học tách thật giả",
+          "Generator học đánh lừa discriminator"
+        ],
+        "icon": "🔄"
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/gan/s3.mp3",
+      "duration": 10.96,
+      "caption": "GAN nổi tiếng khó huấn luyện. Với dữ liệu hai đỉnh, generator có thể chỉ bắt được một đỉnh, gọi là mode collapse. Hãy đổi seed và learning rate để quan sát.",
+      "preset": {
+        "title": "Khó huấn luyện",
+        "bullets": [
+          "Có thể mất cân bằng giữa hai mạng",
+          "Mode collapse: chỉ sinh một kiểu"
+        ],
+        "icon": "⚠️"
+      }
+    }
+  ]
+}

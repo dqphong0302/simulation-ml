@@ -1,0 +1,81 @@
+{
+  "lessonId": "TREE",
+  "voice": "clone-duyenhamy",
+  "scenes": [
+    {
+      "id": "s1",
+      "audio": "/audio/tree/s1.mp3",
+      "duration": 6.72,
+      "caption": "Một cây quyết định hỏi từng câu hỏi có hoặc không để chia dữ liệu. Với độ sâu một, cây chỉ hỏi đúng một câu.",
+      "preset": {
+        "depth": 1,
+        "showCurve": false
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/tree/s2.mp3",
+      "duration": 9.28,
+      "caption": "Câu hỏi đó chia dữ liệu bằng một ngưỡng. Trên tập train, cây đúng khoảng tám mươi tư phần trăm, còn trên validation khoảng bảy mươi bảy phần trăm.",
+      "preset": {
+        "depth": 1,
+        "showCurve": false
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/tree/s3.mp3",
+      "duration": 8.64,
+      "caption": "Bạn thử đoán nhé. Nếu cho cây hỏi nhiều câu hơn, độ chính xác trên validation sẽ tăng mãi, tăng rồi giảm, hay gần như không đổi?",
+      "preset": {
+        "depth": 1,
+        "showCurve": false
+      },
+      "pauseForInteraction": true,
+      "prompt": "Chọn dự đoán của bạn rồi bấm Tiếp tục để nghe đáp án."
+    },
+    {
+      "id": "s4",
+      "audio": "/audio/tree/s4.mp3",
+      "duration": 7.04,
+      "caption": "Ở độ sâu ba, validation tăng lên khoảng tám mươi mốt phần trăm. Cây đã hỏi đủ những câu hỏi hữu ích.",
+      "preset": {
+        "depth": 3,
+        "showCurve": true
+      }
+    },
+    {
+      "id": "s5",
+      "audio": "/audio/tree/s5.mp3",
+      "duration": 11.28,
+      "caption": "Nhưng ở độ sâu tám, độ chính xác trên train đạt một trăm phần trăm, còn validation tụt xuống khoảng bảy mươi lăm phần trăm. Cây đã học thuộc cả nhiễu của tập train.",
+      "preset": {
+        "depth": 8,
+        "showCurve": true
+      }
+    },
+    {
+      "id": "s6",
+      "audio": "/audio/tree/s6.mp3",
+      "duration": 6.8,
+      "caption": "Bây giờ bạn kéo thanh trượt độ sâu để tự quan sát, đường train và validation tách ra từ đâu.",
+      "preset": {
+        "depth": 3,
+        "showCurve": true
+      },
+      "pauseForInteraction": true,
+      "interactive": "depth",
+      "prompt": "Kéo thanh trượt độ sâu, quan sát đồ thị, rồi bấm Tiếp tục."
+    },
+    {
+      "id": "s7",
+      "audio": "/audio/tree/s7.mp3",
+      "duration": 6.72,
+      "caption": "Hãy chọn độ sâu bằng validation, không chọn bằng train. Sau đó mới đánh giá cuối cùng trên tập test.",
+      "preset": {
+        "depth": 3,
+        "showCurve": true
+      }
+    }
+  ]
+}

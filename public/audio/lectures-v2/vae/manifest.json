@@ -1,0 +1,124 @@
+{
+  "lessonId": "VAE",
+  "voice": "clone-duyenhamy",
+  "version": "2026.10-expanded",
+  "scenes": [
+    {
+      "id": "extended-1",
+      "audio": "/audio/lectures-v2/vae/ac804b8d66858145.mp3",
+      "duration": 12.32,
+      "caption": "VAE không chỉ nén đầu vào thành một điểm cố định. Encoder mô tả một phân bố trong không gian latent. Mình lấy mẫu từ đó để tái dựng và khuyến khích không gian này có cấu trúc thuận tiện cho sinh mẫu.",
+      "teaching": true,
+      "preset": {
+        "title": "Latent là phân bố, không chỉ một điểm",
+        "bullets": [
+          "Encoder tạo μ và độ phân tán",
+          "Lấy mẫu latent rồi đưa qua decoder",
+          "Học cân bằng tái dựng và cấu trúc latent"
+        ]
+      }
+    },
+    {
+      "id": "s1",
+      "audio": "/audio/guide/vae/s1.mp3",
+      "duration": 10.88,
+      "caption": "VAE không mã hóa mỗi điểm thành một số cố định, mà thành một phân phối có trung bình và độ lệch. Mình lấy mẫu từ phân phối đó bằng thủ thuật reparameterization.",
+      "preset": {
+        "title": "Mã hóa thành phân phối",
+        "bullets": [
+          "Mỗi điểm thành trung bình và độ lệch",
+          "Lấy mẫu z bằng reparameterization"
+        ],
+        "icon": "🎲"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/vae/s2.mp3",
+      "duration": 8,
+      "caption": "Loss gồm lỗi tái dựng và một thành phần KL kéo không gian ẩn về phân phối chuẩn. Hệ số beta cân bằng hai thành phần này.",
+      "preset": {
+        "title": "Hai thành phần của loss",
+        "bullets": [
+          "Lỗi tái dựng",
+          "KL kéo latent về phân phối chuẩn"
+        ],
+        "icon": "⚖️"
+      }
+    },
+    {
+      "id": "extended-2",
+      "audio": "/audio/lectures-v2/vae/d9bc9547f3c6813c.mp3",
+      "duration": 12.4,
+      "caption": "Thay vì lấy mẫu trực tiếp từ phân bố thay đổi theo encoder, ta lấy nhiễu chuẩn rồi co giãn và tịnh tiến. Ví dụ này cho latent một phẩy năm. Cách viết giúp truyền gradient qua các tham số của phân bố.",
+      "teaching": true,
+      "preset": {
+        "title": "Reparameterization dễ hình dung",
+        "bullets": [
+          "z = μ + σ·ε, với ε ~ N(0,1)",
+          "Ví dụ μ = 2, σ = 0,5, ε = −1",
+          "Khi đó z = 1,5"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/vae/s3.mp3",
+      "duration": 8.24,
+      "caption": "Nhờ không gian ẩn gọn gàng, ta có thể lấy z ngẫu nhiên rồi giải mã để sinh mẫu mới. Hãy thử thay beta và quan sát đánh đổi.",
+      "preset": {
+        "title": "Sinh mẫu mới",
+        "bullets": [
+          "Lấy z từ phân phối chuẩn rồi giải mã",
+          "Beta lớn sinh dễ hơn nhưng dựng lại kém hơn"
+        ],
+        "icon": "🌱"
+      }
+    },
+    {
+      "id": "extended-3",
+      "audio": "/audio/lectures-v2/vae/a341ff847f87c224.mp3",
+      "duration": 10.72,
+      "caption": "Tăng trọng số KL ép phân bố latent gần phân bố ưu tiên hơn, nhưng có thể làm tái dựng kém đi. Hãy quan sát cả hai mặt thay vì chỉ tối ưu một con số loss tổng.",
+      "teaching": true,
+      "preset": {
+        "title": "Thử trọng số KL",
+        "bullets": [
+          "Tăng trọng số KL, giữ yếu tố khác",
+          "So lỗi tái dựng với cấu trúc latent",
+          "Quan sát cả mẫu tái dựng và mẫu mới"
+        ]
+      }
+    },
+    {
+      "id": "extended-4",
+      "audio": "/audio/lectures-v2/vae/7ae508576d7b3555.mp3",
+      "duration": 12.24,
+      "caption": "Một mẫu đẹp có thể chỉ là may mắn. Hãy xem cả tập mẫu sinh và mức đa dạng. Nếu latent bị ép quá mạnh, decoder có thể ít sử dụng thông tin từ đầu vào, làm giảm ích lợi của biểu diễn.",
+      "teaching": true,
+      "preset": {
+        "title": "Sinh được chưa chắc sinh tốt",
+        "bullets": [
+          "KL quá mạnh có thể làm latent ít thông tin",
+          "Tái dựng tốt không bảo đảm mẫu mới đa dạng",
+          "Kiểm tra phân bố mẫu, không chỉ một mẫu đẹp"
+        ]
+      }
+    },
+    {
+      "id": "extended-5",
+      "audio": "/audio/lectures-v2/vae/af6ceebcdf4cd0cf.mp3",
+      "duration": 10.8,
+      "caption": "Hãy so hai mức KL và nói rõ em ưu tiên tái dựng hay sinh mẫu. Kết luận cần cả số liệu lẫn hình quan sát, và không nên dựa vào duy nhất một mẫu được chọn đẹp nhất.",
+      "teaching": true,
+      "preset": {
+        "title": "Tổng kết: đánh đổi tái dựng và sinh mẫu",
+        "bullets": [
+          "So ít nhất hai trọng số KL",
+          "Xem loss, tái dựng và mẫu sinh",
+          "Nghĩ xem cấu hình nào phù hợp và vì sao"
+        ]
+      }
+    }
+  ]
+}

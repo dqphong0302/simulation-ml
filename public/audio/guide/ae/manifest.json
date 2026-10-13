@@ -1,0 +1,48 @@
+{
+  "lessonId": "AE",
+  "voice": "clone-duyenhamy",
+  "scenes": [
+    {
+      "id": "s1",
+      "audio": "/audio/guide/ae/s1.mp3",
+      "duration": 8.8,
+      "caption": "Autoencoder gồm hai nửa. Bộ mã hóa nén dữ liệu thành một vài con số, bộ giải mã cố dựng lại dữ liệu ban đầu từ những con số đó.",
+      "preset": {
+        "title": "Nén rồi dựng lại",
+        "bullets": [
+          "Bộ mã hóa nén dữ liệu thành ít số",
+          "Bộ giải mã dựng lại dữ liệu gốc"
+        ],
+        "icon": "🗜️"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/ae/s2.mp3",
+      "duration": 8.48,
+      "caption": "Mạng học bằng cách giảm lỗi tái dựng. Ở đây ta nén hai biến xuống chỉ một số, nên các điểm dựng lại nằm trên một đường cong.",
+      "preset": {
+        "title": "Lỗi tái dựng",
+        "bullets": [
+          "Đo khác biệt giữa gốc và bản dựng lại",
+          "Bottleneck càng nhỏ càng mất thông tin"
+        ],
+        "icon": "📏"
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/ae/s3.mp3",
+      "duration": 8.32,
+      "caption": "Autoencoder có thể dùng để giảm chiều theo cách phi tuyến, hoặc phát hiện điểm bất thường vì những điểm lạ thường có lỗi tái dựng lớn.",
+      "preset": {
+        "title": "Dùng để làm gì",
+        "bullets": [
+          "Giảm chiều phi tuyến",
+          "Phát hiện điểm bất thường"
+        ],
+        "icon": "💡"
+      }
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "lessonId": "GENAI",
+  "voice": "clone-duyenhamy",
+  "scenes": [
+    {
+      "id": "s1",
+      "audio": "/audio/guide/genai/s1.mp3",
+      "duration": 8.8,
+      "caption": "Ở bài này, trình duyệt gọi trực tiếp tới mô hình bạn chọn. Bạn nhập địa chỉ, tên mô hình và key. Key chỉ nằm trong bộ nhớ, tải lại trang là mất.",
+      "preset": {
+        "title": "Kết nối mô hình bên ngoài",
+        "bullets": [
+          "Nhập base URL, model và key của bạn",
+          "Key chỉ nằm trong bộ nhớ phiên"
+        ],
+        "icon": "🔌"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/genai/s2.mp3",
+      "duration": 10.72,
+      "caption": "Trước khi gửi, hãy xem payload cuối cùng: system prompt, context và câu hỏi được tách riêng. Nội dung này sẽ rời khỏi máy bạn và có thể phát sinh phí.",
+      "preset": {
+        "title": "Xem payload trước khi gửi",
+        "bullets": [
+          "System prompt, context và câu hỏi tách riêng",
+          "Key luôn được che"
+        ],
+        "icon": "📦"
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/genai/s3.mp3",
+      "duration": 8.64,
+      "caption": "Hãy hỏi cùng một câu, một lần có context, một lần không có. So sánh hai câu trả lời và nhận xét context đã thay đổi điều gì.",
+      "preset": {
+        "title": "So sánh có và không có context",
+        "bullets": [
+          "Cùng câu hỏi, bật tắt custom context",
+          "Đối chiếu câu trả lời và ghi nhận xét"
+        ],
+        "icon": "🆚"
+      }
+    }
+  ]
+}

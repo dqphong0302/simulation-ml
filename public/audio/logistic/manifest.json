@@ -1,0 +1,81 @@
+{
+  "lessonId": "LOGREG",
+  "voice": "clone-duyenhamy",
+  "scenes": [
+    {
+      "id": "s1",
+      "audio": "/audio/logistic/s1.mp3",
+      "duration": 7.84,
+      "caption": "Hồi quy logistic không trả về nhãn ngay, mà trả về một xác suất từ không đến một. Ta cần chọn một ngưỡng để quyết định.",
+      "preset": {
+        "threshold": 0.5,
+        "showRoc": false
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/logistic/s2.mp3",
+      "duration": 6.88,
+      "caption": "Với ngưỡng không phẩy năm, mô hình bắt đúng hai mươi hai trên hai mươi lăm ca thuộc nhóm cam, và báo nhầm bốn ca.",
+      "preset": {
+        "threshold": 0.5,
+        "showRoc": false
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/logistic/s3.mp3",
+      "duration": 7.44,
+      "caption": "Nếu hạ ngưỡng xuống không phẩy hai, bạn đoán số ca bị bỏ sót sẽ tăng hay giảm? Còn số ca báo nhầm thì sao?",
+      "preset": {
+        "threshold": 0.5,
+        "showRoc": false
+      },
+      "pauseForInteraction": true,
+      "prompt": "Chọn dự đoán của bạn rồi bấm Tiếp tục."
+    },
+    {
+      "id": "s4",
+      "audio": "/audio/logistic/s4.mp3",
+      "duration": 8.0,
+      "caption": "Với ngưỡng không phẩy hai, chỉ còn bỏ sót một ca, nhưng số ca báo nhầm tăng lên tám. Recall tăng, còn precision giảm.",
+      "preset": {
+        "threshold": 0.2,
+        "showRoc": false
+      }
+    },
+    {
+      "id": "s5",
+      "audio": "/audio/logistic/s5.mp3",
+      "duration": 5.92,
+      "caption": "Ngược lại, với ngưỡng không phẩy tám, mô hình chỉ báo nhầm ba ca, nhưng bỏ sót tới chín ca.",
+      "preset": {
+        "threshold": 0.8,
+        "showRoc": false
+      }
+    },
+    {
+      "id": "s6",
+      "audio": "/audio/logistic/s6.mp3",
+      "duration": 4.88,
+      "caption": "Bây giờ bạn kéo thanh trượt ngưỡng và quan sát bảng nhầm lẫn thay đổi thế nào.",
+      "preset": {
+        "threshold": 0.5,
+        "showRoc": true
+      },
+      "pauseForInteraction": true,
+      "interactive": "threshold",
+      "prompt": "Kéo ngưỡng, quan sát bảng nhầm lẫn và điểm trên ROC, rồi bấm Tiếp tục."
+    },
+    {
+      "id": "s7",
+      "audio": "/audio/logistic/s7.mp3",
+      "duration": 11.36,
+      "caption": "Không có ngưỡng nào tốt nhất cho mọi tình huống. Nếu bỏ sót ca bệnh nguy hiểm hơn báo nhầm, ta thường chấp nhận ngưỡng thấp hơn. Hãy chọn ngưỡng trên validation và giải thích lý do.",
+      "preset": {
+        "threshold": 0.5,
+        "showRoc": true
+      }
+    }
+  ]
+}

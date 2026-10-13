@@ -1,0 +1,124 @@
+{
+  "lessonId": "PCA",
+  "voice": "clone-duyenhamy",
+  "version": "2026.10-expanded",
+  "scenes": [
+    {
+      "id": "extended-1",
+      "audio": "/audio/lectures-v2/pca/f67a7b9817b0cf2f.mp3",
+      "duration": 10.4,
+      "caption": "PCA tìm những hướng mà dữ liệu biến thiên nhiều. Nó không nhìn nhãn để quyết định hướng nào hữu ích cho phân loại. Vì thế, giảm chiều đẹp chưa chắc cải thiện dự đoán.",
+      "teaching": true,
+      "preset": {
+        "title": "Giữ biến thiên, không tìm nhãn",
+        "bullets": [
+          "PCA là phép chiếu tuyến tính không giám sát",
+          "Trục mới vuông góc nhau",
+          "Phương sai lớn không đồng nghĩa dự đoán tốt"
+        ]
+      }
+    },
+    {
+      "id": "s1",
+      "audio": "/audio/guide/pca/s1.mp3",
+      "duration": 8.96,
+      "caption": "Khi có nhiều biến, rất khó vẽ và quan sát. PCA tìm những hướng mà dữ liệu trải rộng nhất, rồi chiếu dữ liệu xuống vài hướng đó.",
+      "preset": {
+        "title": "Giảm số chiều dữ liệu",
+        "bullets": [
+          "Tìm hướng dữ liệu trải rộng nhất",
+          "Chiếu nhiều biến xuống vài thành phần"
+        ],
+        "icon": "🧭"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/pca/s2.mp3",
+      "duration": 8.72,
+      "caption": "Thành phần thứ nhất giữ nhiều phương sai nhất, thành phần thứ hai đứng sau. Cộng dồn tỷ lệ phương sai giúp bạn biết cần giữ bao nhiêu thành phần.",
+      "preset": {
+        "title": "Phương sai giải thích",
+        "bullets": [
+          "PC1 giữ nhiều thông tin nhất",
+          "Cộng dồn để biết cần bao nhiêu thành phần"
+        ],
+        "icon": "📐"
+      }
+    },
+    {
+      "id": "extended-2",
+      "audio": "/audio/lectures-v2/pca/25f3db33e95226ef.mp3",
+      "duration": 10.56,
+      "caption": "Hãy tưởng tượng các điểm nằm thành dải chéo hẹp. Trục chính thứ nhất chạy dọc dải đó. Khi chiếu xuống một chiều, ta giữ chiều dài của dải nhưng bỏ bớt độ rộng của nó.",
+      "teaching": true,
+      "preset": {
+        "title": "Ví dụ: hai biến cùng tăng",
+        "bullets": [
+          "Đám mây điểm kéo dài theo đường chéo",
+          "PC1 đi dọc hướng biến thiên lớn nhất",
+          "Chiếu lên PC1 mất phần biến thiên vuông góc"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/pca/s3.mp3",
+      "duration": 9.44,
+      "caption": "PCA không nhìn vào nhãn. Một hướng có phương sai lớn chưa chắc giúp phân biệt hai nhóm. Hãy dùng nó để quan sát, và thận trọng khi kết luận.",
+      "preset": {
+        "title": "Đừng diễn giải quá mức",
+        "bullets": [
+          "PCA không dùng nhãn",
+          "Phương sai lớn chưa chắc có ích cho phân loại"
+        ],
+        "icon": "⚠️"
+      }
+    },
+    {
+      "id": "extended-3",
+      "audio": "/audio/lectures-v2/pca/0ec18d33e75b9d84.mp3",
+      "duration": 11.2,
+      "caption": "Thử thay đổi thang đo một biến rồi quan sát trục chính. Biến có độ lớn vượt trội có thể chi phối kết quả. Chuẩn hóa là một lựa chọn cần lý do, không phải quy tắc máy móc.",
+      "teaching": true,
+      "preset": {
+        "title": "Thí nghiệm với thang đo",
+        "bullets": [
+          "So sánh PCA trước và sau chuẩn hóa",
+          "Quan sát hướng trục và phương sai giải thích",
+          "Chỉ fit phép biến đổi trên train"
+        ]
+      }
+    },
+    {
+      "id": "extended-4",
+      "audio": "/audio/lectures-v2/pca/20e4bee73c670507.mp3",
+      "duration": 10.88,
+      "caption": "Chín mươi phần trăm phương sai không có nghĩa là chín mươi phần trăm độ chính xác. Cũng đừng lo nếu trục đổi dấu: hướng đối nhau vẫn biểu diễn cùng một đường trong không gian.",
+      "teaching": true,
+      "preset": {
+        "title": "Đọc phương sai giải thích đúng",
+        "bullets": [
+          "Tỷ lệ tích lũy đo thông tin về biến thiên",
+          "Dấu của trục có thể đảo mà không đổi phép chiếu",
+          "PCA không bảo đảm tách lớp hay giữ cấu trúc phi tuyến"
+        ]
+      }
+    },
+    {
+      "id": "extended-5",
+      "audio": "/audio/lectures-v2/pca/bace99a3b3cb84cd.mp3",
+      "duration": 11.92,
+      "caption": "Hãy đặt hình gốc cạnh hình chiếu. Phần biến thiên nào được giữ lại, phần nào bị mất? Số chiều đã chọn có phù hợp với mục tiêu của mình không? Trả lời được ba câu này là bạn đã hiểu PCA.",
+      "teaching": true,
+      "preset": {
+        "title": "Tổng kết: cái gì được giữ, cái gì mất?",
+        "bullets": [
+          "Đặt hình gốc cạnh hình chiếu",
+          "Đọc tỷ lệ phương sai giải thích",
+          "Tự hỏi thông tin nào có thể bị mất"
+        ]
+      }
+    }
+  ]
+}

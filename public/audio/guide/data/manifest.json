@@ -1,0 +1,48 @@
+{
+  "lessonId": "DATA",
+  "voice": "clone-duyenhamy",
+  "scenes": [
+    {
+      "id": "s1",
+      "audio": "/audio/guide/data/s1.mp3",
+      "duration": 13.04,
+      "caption": "Trước khi dạy máy học, mình cùng làm quen với dữ liệu nhé. Mỗi hàng là một mẫu, mỗi cột là một đặc điểm. Hãy nhìn biểu đồ phân bố: các giá trị tập trung ở đâu, và có điểm nào khác thường không?",
+      "preset": {
+        "title": "Làm quen trước khi học",
+        "bullets": [
+          "Mỗi hàng là một mẫu, mỗi cột là một đặc điểm",
+          "Đọc phân bố trước khi chọn mô hình"
+        ],
+        "icon": "🔎"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/data/s2.mp3",
+      "duration": 14.32,
+      "caption": "Một ô trống không có nghĩa là số không. Mình cần hiểu dữ liệu trước khi điền khuyết. Và nhớ chia tập trước nhé: các giá trị dùng để điền khuyết hay chuẩn hóa chỉ được học từ tập huấn luyện, để tránh nhìn trộm đáp án của tập kiểm tra.",
+      "preset": {
+        "title": "Làm sạch mà không nhìn trộm",
+        "bullets": [
+          "Phân biệt ô trống, số không và giá trị bất thường",
+          "Chỉ fit tiền xử lý trên tập huấn luyện"
+        ],
+        "icon": "🧹"
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/lectures-v2/data/ed2487310d3d6d57.mp3",
+      "duration": 13.36,
+      "caption": "Bây giờ đến lượt bạn. Hãy chọn hai biến, so sánh trước và sau chuẩn hóa. Hình dạng phân bố thay đổi ra sao? Hãy thử diễn đạt điều bạn quan sát bằng lời của mình, rồi sang phần thực hành để kiểm tra lại.",
+      "preset": {
+        "title": "Thử, quan sát và kể lại",
+        "bullets": [
+          "So sánh cùng dữ liệu trước và sau chuẩn hóa",
+          "Diễn đạt điều quan sát bằng lời của mình"
+        ],
+        "icon": "✍️"
+      }
+    }
+  ]
+}

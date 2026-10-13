@@ -1,0 +1,48 @@
+{
+  "lessonId": "SVM",
+  "voice": "clone-duyenhamy",
+  "scenes": [
+    {
+      "id": "s1",
+      "audio": "/audio/guide/svm/s1.mp3",
+      "duration": 9.52,
+      "caption": "SVM tìm đường phân cách sao cho khoảng trống giữa hai nhóm là rộng nhất. Những điểm nằm sát lề gọi là support vector, chúng quyết định ranh giới.",
+      "preset": {
+        "title": "Đường phân cách có lề rộng nhất",
+        "bullets": [
+          "SVM tìm ranh giới cách xa hai nhóm nhất",
+          "Support vector là các điểm nằm sát lề"
+        ],
+        "icon": "🛣️"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/svm/s2.mp3",
+      "duration": 10.0,
+      "caption": "Tham số C điều chỉnh mức phạt khi phân loại sai. C lớn cố phân loại đúng mọi điểm nên dễ khớp nhiễu. C nhỏ chấp nhận vài lỗi để có lề rộng hơn.",
+      "preset": {
+        "title": "Tham số C",
+        "bullets": [
+          "C lớn phạt nặng điểm sai",
+          "C nhỏ cho lề rộng hơn, chấp nhận vài lỗi"
+        ],
+        "icon": "🎚️"
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/svm/s3.mp3",
+      "duration": 11.76,
+      "caption": "Với kernel RBF hay đa thức, ranh giới có thể cong mà không cần tự tạo biến mới. Hãy thử dữ liệu hai vòng tròn, và xem gamma lớn làm ranh giới uốn sát từng điểm như thế nào.",
+      "preset": {
+        "title": "Kernel tạo ranh giới cong",
+        "bullets": [
+          "RBF và đa thức cho ranh giới phi tuyến",
+          "Gamma lớn làm ranh giới uốn sát từng điểm"
+        ],
+        "icon": "🌀"
+      }
+    }
+  ]
+}

@@ -1,0 +1,266 @@
+{
+  "TEACHABLE": {
+    "extended-8": {
+      "title": "Tổng kết: học cả từ trường hợp sai",
+      "bullets": [
+        "Xem lại đồ thị loss và validation",
+        "Nhớ số ảnh, số lớp, epoch, learning rate",
+        "Tìm một ảnh mô hình đoán sai hoặc thiếu chắc chắn"
+      ],
+      "caption": "Trước khi kết thúc, hãy xem lại đồ thị loss và cấu hình đã dùng. Tìm ít nhất một ảnh mà mô hình đoán sai hoặc không chắc chắn, rồi tự hỏi: cần thu thập thêm ảnh nào để mô hình tốt hơn? Trường hợp sai thường dạy mình nhiều hơn trường hợp đúng."
+    }
+  },
+  "DATA": {
+    "s3": {
+      "title": "Thử, quan sát và kể lại",
+      "bullets": [
+        "So sánh cùng dữ liệu trước và sau chuẩn hóa",
+        "Diễn đạt điều quan sát bằng lời của mình"
+      ],
+      "caption": "Bây giờ đến lượt bạn. Hãy chọn hai biến, so sánh trước và sau chuẩn hóa. Hình dạng phân bố thay đổi ra sao? Hãy thử diễn đạt điều bạn quan sát bằng lời của mình, rồi sang phần thực hành để kiểm tra lại."
+    },
+    "extended-5": {
+      "title": "Tổng kết: mỗi thao tác cần một lý do",
+      "bullets": [
+        "So sánh biểu đồ trước và sau xử lý",
+        "Nhớ biến, đơn vị đo, cách chia và thao tác",
+        "Luôn nêu một hạn chế còn lại"
+      ],
+      "caption": "Tiền xử lý tốt không phải là làm thật nhiều thao tác, mà là mỗi thao tác đều có lý do. Hãy tự trả lời: mình đã xử lý điều gì, phân bố thay đổi ra sao, và còn hạn chế nào chưa giải quyết được?"
+    }
+  },
+  "KMEANS": {
+    "extended-5": {
+      "title": "Tổng kết: chọn K cần bằng chứng",
+      "bullets": [
+        "Thử ít nhất 3 giá trị K",
+        "Xem đường elbow nếu có",
+        "Nghĩ về ảnh hưởng của khởi tạo"
+      ],
+      "caption": "Chọn số cụm cần có bằng chứng: hình phân cụm với vài giá trị K và đường elbow. Nếu đường elbow không có góc gãy rõ, hãy chấp nhận điều đó. Một nhận định trung thực về sự không chắc chắn tốt hơn một kết luận ép buộc."
+    }
+  },
+  "PCA": {
+    "extended-5": {
+      "title": "Tổng kết: cái gì được giữ, cái gì mất?",
+      "bullets": [
+        "Đặt hình gốc cạnh hình chiếu",
+        "Đọc tỷ lệ phương sai giải thích",
+        "Tự hỏi thông tin nào có thể bị mất"
+      ],
+      "caption": "Hãy đặt hình gốc cạnh hình chiếu. Phần biến thiên nào được giữ lại, phần nào bị mất? Số chiều đã chọn có phù hợp với mục tiêu của mình không? Trả lời được ba câu này là bạn đã hiểu PCA."
+    }
+  },
+  "LINREG": {
+    "extended-5": {
+      "title": "Tổng kết: hiểu sai số bằng đơn vị thật",
+      "bullets": [
+        "Đọc RMSE và MAE theo đơn vị đầu ra",
+        "So train với validation",
+        "Tìm vùng mô hình dự đoán chưa tốt"
+      ],
+      "caption": "Hãy diễn giải sai số bằng chính đơn vị của đầu ra, để biết mô hình lệch nhiều hay ít trong thực tế. Tìm một vùng mà mô hình dự đoán chưa tốt. Nếu có ngoại lệ, hãy tìm hiểu ảnh hưởng của nó thay vì âm thầm xóa đi."
+    }
+  },
+  "FOREST": {
+    "extended-5": {
+      "title": "Tổng kết: có đáng dùng rừng?",
+      "bullets": [
+        "So một cây và nhiều cây",
+        "Giữ chung cách chia và chỉ số",
+        "Cân nhắc chất lượng, độ ổn định và chi phí"
+      ],
+      "caption": "Hãy tự trả lời: trong thí nghiệm này, rừng có đáng dùng hơn một cây không? Dựa vào chỉ số và thời gian chạy, thay vì mặc định rằng mô hình phức tạp hơn luôn tốt hơn."
+    }
+  },
+  "SVM": {
+    "extended-4": {
+      "sub": [
+        "Khi báo cáo, hãy gọi đúng tên đại lượng đang xem.",
+        "Khi trình bày kết quả, hãy gọi đúng tên đại lượng đang xem."
+      ]
+    },
+    "extended-5": {
+      "title": "Tổng kết: vì sao biên có hình dạng đó?",
+      "bullets": [
+        "So hai ranh giới từ hai cấu hình",
+        "Để ý C, kernel và gamma",
+        "Đánh đổi giữa đơn giản và linh hoạt"
+      ],
+      "caption": "Chọn hai cấu hình tạo ranh giới khác nhau và tự giải thích nguyên nhân. So sánh phải dựa trên cùng tập đánh giá. Một ranh giới uốn lượn đẹp không phải bằng chứng cho khả năng tổng quát hóa."
+    }
+  },
+  "COMPARE": {
+    "extended-5": {
+      "title": "Tổng kết: chọn mô hình bằng dữ liệu",
+      "bullets": [
+        "So chỉ số của ít nhất 3 mô hình",
+        "Cùng cách chia, cùng cấu hình đánh giá",
+        "Nêu tiêu chí, lựa chọn và hạn chế"
+      ],
+      "caption": "Chọn mô hình cần dựa trên dữ liệu: cùng cách chia, cùng chỉ số, và một tiêu chí ưu tiên rõ ràng. Hãy nghĩ thêm về tình huống mà lựa chọn này có thể không còn phù hợp."
+    }
+  },
+  "MLP": {
+    "extended-5": {
+      "title": "Tổng kết: đọc đường học",
+      "bullets": [
+        "So hai cấu hình chỉ khác một yếu tố",
+        "Xem đường loss và ranh giới dự đoán",
+        "Giải thích vì sao kết quả khác nhau"
+      ],
+      "caption": "Hãy chọn hai cấu hình chỉ khác một yếu tố, rồi so đường học và ranh giới dự đoán. Vì sao chúng khác nhau? Nếu kết quả không đúng kỳ vọng, đó vẫn là một quan sát đáng giá."
+    }
+  },
+  "CNN": {
+    "extended-5": {
+      "title": "Tổng kết: hiểu từng phép tính",
+      "bullets": [
+        "Chọn một ô, ghi patch và kernel",
+        "Tính tổng tích trước và sau ReLU",
+        "So hai cấu hình stride hoặc padding"
+      ],
+      "caption": "Hãy tính tay một ô đầu ra rồi đối chiếu với mô phỏng. Sau đó thay stride hoặc padding, và tự giải thích sự khác nhau về kích thước cũng như thông tin được giữ lại."
+    }
+  },
+  "ATTN": {
+    "extended-5": {
+      "title": "Tổng kết: theo dấu một query",
+      "bullets": [
+        "Chọn một hàng attention",
+        "Ghi điểm số, mask và trọng số",
+        "Giải thích đầu ra từ tổ hợp các value"
+      ],
+      "caption": "Hãy chọn một query và theo dõi toàn bộ đường đi từ điểm số đến đầu ra. So bản đồ attention trước và sau mask, rồi tự giải thích vì sao các trọng số thay đổi."
+    }
+  },
+  "GPT": {
+    "extended-5": {
+      "title": "Tổng kết: trước và sau huấn luyện",
+      "bullets": [
+        "Nhớ tập văn bản, seed và số bước",
+        "So hai đoạn sinh cùng prompt, kèm đường loss",
+        "Tìm dấu hiệu học được hay chỉ học thuộc"
+      ],
+      "caption": "Hãy so cùng một prompt trước và sau khi học, kèm đường loss. Đâu là bằng chứng mô hình học được một mẫu, và đâu là dấu hiệu nó chỉ ghi nhớ hoặc vẫn sinh sai?"
+    }
+  },
+  "AE": {
+    "extended-5": {
+      "title": "Tổng kết: thông tin qua nút thắt",
+      "bullets": [
+        "Xem gốc và tái dựng trên cùng đồ thị",
+        "Đọc loss và cấu hình huấn luyện",
+        "So một điểm tái dựng tốt với một điểm kém"
+      ]
+    }
+  },
+  "DIFF": {
+    "extended-5": {
+      "title": "Tổng kết: thông tin mất dần ra sao?",
+      "bullets": [
+        "So ba mức nhiễu",
+        "Để ý tham số của mỗi mức",
+        "Còn thiếu gì để sinh theo chiều ngược?"
+      ],
+      "caption": "Hãy so ba mức nhiễu và mô tả thông tin mất dần như thế nào. Cuối cùng, tự hỏi: còn thiếu thành phần nào để biến mô phỏng thuận này thành một hệ thống sinh dữ liệu?"
+    }
+  },
+  "VAE": {
+    "extended-5": {
+      "title": "Tổng kết: đánh đổi tái dựng và sinh mẫu",
+      "bullets": [
+        "So ít nhất hai trọng số KL",
+        "Xem loss, tái dựng và mẫu sinh",
+        "Nghĩ xem cấu hình nào phù hợp và vì sao"
+      ]
+    }
+  },
+  "GAN": {
+    "extended-5": {
+      "title": "Tổng kết: đẹp và đa dạng có khác nhau?",
+      "bullets": [
+        "Xem phân bố thật và sinh ở nhiều thời điểm",
+        "Để ý cấu hình và seed",
+        "Nhận xét độ phủ, dao động, dấu hiệu collapse"
+      ],
+      "caption": "Hãy quan sát kết quả ở nhiều thời điểm, không chỉ thời điểm đẹp nhất. Phân biệt mẫu trông hợp lý với một tập mẫu đa dạng, và để ý xem đã có dấu hiệu collapse hay chưa."
+    }
+  },
+  "GENCON": {
+    "extended-5": {
+      "title": "Tổng kết: tách quan sát khỏi kết luận",
+      "bullets": [
+        "Xem lại bảng tham số và các đầu ra",
+        "Một nhận xét về token hoặc embedding",
+        "Phân biệt phần mô phỏng và phần gọi API thật"
+      ],
+      "caption": "Hãy phân biệt rõ kết quả nào đến từ mô phỏng và kết quả nào từ API thật. Sau đó tách điều em thực sự quan sát được khỏi điều mới chỉ là suy đoán."
+    }
+  },
+  "GENAI": {
+    "extended-1": {
+      "bullets": [
+        "Endpoint, model và key do sinh viên nhập",
+        "Trình duyệt gọi thẳng nhà cung cấp",
+        "Không dán key vào tài liệu hay ảnh chụp màn hình"
+      ],
+      "sub": [
+        "Tuyệt đối không đưa key vào ảnh chụp hoặc file báo cáo.",
+        "Tuyệt đối không dán key vào ảnh chụp màn hình hay tài liệu chia sẻ."
+      ]
+    },
+    "extended-5": {
+      "title": "Tổng kết: có bằng chứng, không lộ key",
+      "bullets": [
+        "Xem lại prompt, context và đầu ra",
+        "Nhận xét độ bám context của câu trả lời",
+        "Không để lộ key hay thông tin nhạy cảm"
+      ],
+      "caption": "Một thí nghiệm tốt cần đủ thông tin để người khác hiểu, nhưng không bao giờ để lộ khóa truy cập. Hãy tìm một câu trả lời bám đúng ngữ cảnh và một hạn chế, rồi giải thích dựa trên dữ kiện em đã cung cấp."
+    }
+  },
+  "RAG": {
+    "extended-5": {
+      "title": "Tổng kết: kiểm toán một câu trả lời",
+      "bullets": [
+        "Xem câu hỏi, các đoạn truy xuất và đầu ra",
+        "Đối chiếu từng khẳng định với đoạn nguồn",
+        "Thử một câu không có đáp án trong tài liệu"
+      ]
+    }
+  },
+  "KNN": {
+    "extended-4": {
+      "title": "Tổng kết: từ đoán đến giải thích",
+      "bullets": [
+        "So k = 1, 3, 7 trên cùng cách chia",
+        "Để ý có chuẩn hóa hay không",
+        "Chọn k bằng validation và nêu hạn chế"
+      ],
+      "caption": "Hãy chuyển sang thực hành, so ba giá trị k và để ý có chuẩn hóa hay không. Chọn k dựa trên validation, không chỉ vì một điểm được đoán đúng, và nghĩ xem lựa chọn đó còn hạn chế gì."
+    }
+  },
+  "TREE": {
+    "extended-4": {
+      "title": "Tổng kết: nhận ra overfitting",
+      "bullets": [
+        "Xem đường train/validation theo độ sâu",
+        "Đọc một đường quyết định của cây",
+        "Chọn độ sâu phù hợp cùng bằng chứng"
+      ],
+      "caption": "Hãy xem đồ thị theo độ sâu và tìm nơi hai đường train, validation bắt đầu tách nhau. Nếu chưa thấy overfitting rõ, hãy chấp nhận đúng quan sát đó thay vì cố gán một kết luận có sẵn."
+    }
+  },
+  "LOGREG": {
+    "extended-4": {
+      "title": "Tổng kết: chọn ngưỡng có lý do",
+      "bullets": [
+        "So ít nhất 3 ngưỡng trên cùng xác suất",
+        "Đọc confusion matrix, precision và recall",
+        "Ưu tiên loại lỗi nào? Đây chỉ là bài học mô phỏng"
+      ],
+      "caption": "Hãy so ba ngưỡng, đọc bảng nhầm lẫn rồi tự hỏi mình muốn giảm loại lỗi nào hơn. Đây là bài thực hành nguyên lý trên dữ liệu học tập, không phải cơ sở để đưa ra quyết định lâm sàng."
+    }
+  }
+}

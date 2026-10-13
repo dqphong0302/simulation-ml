@@ -1,0 +1,124 @@
+{
+  "lessonId": "MLP",
+  "voice": "clone-duyenhamy",
+  "version": "2026.10-expanded",
+  "scenes": [
+    {
+      "id": "extended-1",
+      "audio": "/audio/lectures-v2/mlp/4f3f025df35f19ef.mp3",
+      "duration": 11.6,
+      "caption": "Mình tách quá trình thành ba việc: tính dự đoán, đo sai số, rồi cập nhật trọng số. Lớp ẩn giúp tạo biểu diễn mới. Còn số lớp và số neuron là lựa chọn của người thiết kế.",
+      "teaching": true,
+      "preset": {
+        "title": "Từ đầu vào đến dự đoán",
+        "bullets": [
+          "Đầu vào → lớp ẩn → đầu ra",
+          "Trọng số được học, kiến trúc do ta chọn",
+          "Phân biệt forward, loss và cập nhật"
+        ]
+      }
+    },
+    {
+      "id": "s1",
+      "audio": "/audio/guide/mlp/s1.mp3",
+      "duration": 9.68,
+      "caption": "Một neuron nhân mỗi đầu vào với trọng số, cộng thêm bias, rồi đưa qua hàm kích hoạt như sigmoid hay tanh. Nhiều neuron xếp thành lớp tạo thành mạng.",
+      "preset": {
+        "title": "Một neuron làm gì",
+        "bullets": [
+          "Nhân trọng số, cộng bias",
+          "Đưa qua hàm kích hoạt"
+        ],
+        "icon": "🔵"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/mlp/s2.mp3",
+      "duration": 10.32,
+      "caption": "Mạng học bằng cách tính sai số ở đầu ra, rồi lan truyền gradient ngược qua từng lớp để điều chỉnh trọng số. Learning rate quyết định mỗi bước đi xa bao nhiêu.",
+      "preset": {
+        "title": "Học bằng lan truyền ngược",
+        "bullets": [
+          "Tính loss ở đầu ra",
+          "Gradient đi ngược để cập nhật trọng số"
+        ],
+        "icon": "🔁"
+      }
+    },
+    {
+      "id": "extended-2",
+      "audio": "/audio/lectures-v2/mlp/2af7998d9e36687b.mp3",
+      "duration": 12.48,
+      "caption": "Với đầu vào một và hai, ta nhân trọng số rồi cộng bias để được âm không phẩy năm. Nếu dùng ReLU, đầu ra bằng không. Đây là ví dụ minh họa; hàm kích hoạt trong thí nghiệm có thể khác.",
+      "teaching": true,
+      "preset": {
+        "title": "Tính thử một neuron",
+        "bullets": [
+          "x = [1, 2], w = [0,5; −1], b = 1",
+          "z = 0,5 × 1 − 1 × 2 + 1 = −0,5",
+          "Nếu dùng ReLU: đầu ra = 0"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/mlp/s3.mp3",
+      "duration": 11.36,
+      "caption": "Không có lớp ẩn, mạng chỉ vẽ được ranh giới thẳng. Hãy thử dữ liệu hai vòng tròn, và theo dõi khi nào loss train giảm nhưng validation tăng, đó là overfitting.",
+      "preset": {
+        "title": "Lớp ẩn tạo ranh giới cong",
+        "bullets": [
+          "Không có lớp ẩn chỉ là đường thẳng",
+          "Theo dõi loss train và validation"
+        ],
+        "icon": "🌀"
+      }
+    },
+    {
+      "id": "extended-3",
+      "audio": "/audio/lectures-v2/mlp/3da8e26fb834bd8f.mp3",
+      "duration": 11.76,
+      "caption": "Learning rate giống độ dài bước đi. Quá nhỏ có thể học chậm, quá lớn có thể dao động hoặc không ổn định. Hãy so đường loss trên cùng dữ liệu và tránh kết luận chỉ từ vài bước đầu.",
+      "teaching": true,
+      "preset": {
+        "title": "Thử learning rate",
+        "bullets": [
+          "Giữ seed và kiến trúc cố định",
+          "So tốc độ giảm loss ở các learning rate",
+          "Quan sát cả train và validation"
+        ]
+      }
+    },
+    {
+      "id": "extended-4",
+      "audio": "/audio/lectures-v2/mlp/948aa20b3ce61e5a.mp3",
+      "duration": 11.28,
+      "caption": "Nếu loss train giảm còn validation tăng, mạng có thể đang học quá sát dữ liệu huấn luyện. Và nhiều lớp không đủ: các hàm kích hoạt phi tuyến mới giúp mạng biểu diễn quan hệ phi tuyến.",
+      "teaching": true,
+      "preset": {
+        "title": "Loss giảm chưa phải hết chuyện",
+        "bullets": [
+          "Train tốt nhưng validation kém: nghi overfitting",
+          "Không có phi tuyến: nhiều lớp vẫn có thể gộp tuyến tính",
+          "Khởi tạo khác nhau có thể cho kết quả khác"
+        ]
+      }
+    },
+    {
+      "id": "extended-5",
+      "audio": "/audio/lectures-v2/mlp/eba8d38182ec038e.mp3",
+      "duration": 10.56,
+      "caption": "Hãy chọn hai cấu hình chỉ khác một yếu tố, rồi so đường học và ranh giới dự đoán. Vì sao chúng khác nhau? Nếu kết quả không đúng kỳ vọng, đó vẫn là một quan sát đáng giá.",
+      "teaching": true,
+      "preset": {
+        "title": "Tổng kết: đọc đường học",
+        "bullets": [
+          "So hai cấu hình chỉ khác một yếu tố",
+          "Xem đường loss và ranh giới dự đoán",
+          "Giải thích vì sao kết quả khác nhau"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+[
+  {
+    "title": "Dạy máy ngay trên máy của bạn",
+    "bullets": [
+      "Nhận diện ảnh bằng thư viện Teachable Machine",
+      "Huấn luyện và dự đoán trong trình duyệt",
+      "Không chuyển trang, không API key"
+    ],
+    "caption": "Trong bài này, em tự dạy máy phân biệt hình ảnh ngay trên website. Phần huấn luyện dùng thư viện Teachable Machine thật. Ảnh không gửi lên máy chủ, và em không cần khóa API."
+  },
+  {
+    "title": "Tạo lớp và chọn ví dụ",
+    "bullets": [
+      "Từ 2 đến 5 lớp; tên khác nhau",
+      "Ít nhất 8 ảnh mỗi lớp, tối đa 60",
+      "Ảnh tải lên hoặc chụp từ webcam"
+    ],
+    "caption": "Mỗi lớp tương ứng một loại đồ vật em muốn nhận diện. Hãy đặt tên rõ và thêm ảnh cho từng lớp. Tám ảnh chỉ là mức tối thiểu để chạy bài, không bảo đảm mô hình đủ tốt."
+  },
+  {
+    "title": "Đa dạng dữ liệu thay vì chụp dồn",
+    "bullets": [
+      "Thay góc nhìn, khoảng cách và ánh sáng",
+      "Không để mỗi lớp gắn với một nền riêng",
+      "Ảnh được cắt vuông ở giữa trước khi học"
+    ],
+    "caption": "Nếu chiếc cốc luôn ở bàn trắng còn cây bút luôn ở bàn đen, mô hình có thể học màu bàn thay vì đồ vật. Hãy đổi nền và góc chụp. Kiểm tra vật cần nhận diện nằm trong vùng cắt vuông."
+  },
+  {
+    "title": "Học chuyển giao với MobileNet",
+    "bullets": [
+      "MobileNet đã học đặc trưng hình ảnh",
+      "Giữ nguyên bộ trích đặc trưng",
+      "Chỉ học lớp phân loại mới từ ảnh của bạn"
+    ],
+    "caption": "Ta không huấn luyện một mạng lớn từ đầu. MobileNet cung cấp đặc trưng ảnh đã học trước. Phần phân loại mới dùng ví dụ của em để học phân biệt các lớp, nên bài có thể chạy trên trình duyệt."
+  },
+  {
+    "title": "Theo dõi loss và validation",
+    "bullets": [
+      "Chọn số epoch và learning rate",
+      "Khoảng 15% ảnh mỗi lớp dành cho validation",
+      "Validation nội bộ không phải test độc lập"
+    ],
+    "caption": "Khi học, em xem đường loss của train và validation. Thư viện tách một phần ảnh để kiểm tra nội bộ. Nếu nhiều ảnh gần như giống nhau, điểm validation có thể cao quá mức thực tế."
+  },
+  {
+    "title": "Thử bằng một ảnh mới",
+    "bullets": [
+      "Chọn ảnh chưa dùng khi huấn luyện",
+      "So điểm dự đoán giữa các lớp",
+      "Thử một nền hoặc góc chụp chưa gặp"
+    ],
+    "caption": "Hãy thử ảnh mới thay vì lấy lại ảnh huấn luyện. Một điểm dự đoán cao không bảo đảm mô hình đúng. Thay nền hoặc góc chụp là cách đơn giản để phát hiện việc mô hình học nhầm đặc điểm."
+  },
+  {
+    "title": "Lưu mô hình và bảo vệ dữ liệu",
+    "bullets": [
+      "ZIP gồm model.json, weights.bin, metadata.json",
+      "Không chứa ảnh gốc, nhưng trọng số vẫn học từ ảnh",
+      "Rời bài sẽ mất dữ liệu phiên; webcam được tắt"
+    ],
+    "caption": "Trước khi rời bài, em có thể tải mô hình thành ZIP. Gói này không có ảnh gốc, nhưng vẫn nên cân nhắc trước khi chia sẻ trọng số. Webcam chỉ bật khi cho phép và được tắt khi rời trang."
+  },
+  {
+    "title": "Tổng kết: học cả từ trường hợp sai",
+    "bullets": [
+      "Xem lại đồ thị loss và validation",
+      "Nhớ số ảnh, số lớp, epoch, learning rate",
+      "Tìm một ảnh mô hình đoán sai hoặc thiếu chắc chắn"
+    ],
+    "caption": "Trước khi kết thúc, hãy xem lại đồ thị loss và cấu hình đã dùng. Tìm ít nhất một ảnh mà mô hình đoán sai hoặc không chắc chắn, rồi tự hỏi: cần thu thập thêm ảnh nào để mô hình tốt hơn? Trường hợp sai thường dạy mình nhiều hơn trường hợp đúng."
+  }
+]

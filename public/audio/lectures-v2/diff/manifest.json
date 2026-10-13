@@ -1,0 +1,124 @@
+{
+  "lessonId": "DIFF",
+  "voice": "clone-duyenhamy",
+  "version": "2026.10-expanded",
+  "scenes": [
+    {
+      "id": "extended-1",
+      "audio": "/audio/lectures-v2/diff/a5259751c2ba1a62.mp3",
+      "duration": 10.4,
+      "caption": "Mình sẽ xem thông tin gốc mờ dần khi nhiễu tăng. Để sinh dữ liệu theo chiều ngược, cần một mô hình đã học khử nhiễu. Thanh trượt ở đây không tự thực hiện việc huấn luyện đó.",
+      "teaching": true,
+      "preset": {
+        "title": "Từ dữ liệu rõ đến dữ liệu nhiễu",
+        "bullets": [
+          "Quá trình thuận thêm nhiễu theo mức thời gian",
+          "Quá trình ngược cần mô hình khử nhiễu đã học",
+          "Phòng này mô phỏng quá trình thuận"
+        ]
+      }
+    },
+    {
+      "id": "s1",
+      "audio": "/audio/guide/diff/s1.mp3",
+      "duration": 7.44,
+      "caption": "Mô hình diffusion bắt đầu bằng việc thêm nhiễu vào ảnh qua rất nhiều bước nhỏ, cho tới khi ảnh gần như chỉ còn nhiễu.",
+      "preset": {
+        "title": "Thêm nhiễu từng bước",
+        "bullets": [
+          "Ảnh dần biến thành nhiễu",
+          "Công thức có hệ số tín hiệu và hệ số nhiễu"
+        ],
+        "icon": "🌫️"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/diff/s2.mp3",
+      "duration": 9.28,
+      "caption": "Đại lượng alpha bar cho biết phần tín hiệu còn lại. Nhờ công thức đóng, ta có thể nhảy thẳng tới bất kỳ bước t nào mà không cần thêm nhiễu từng bước.",
+      "preset": {
+        "title": "Tín hiệu giảm theo thời gian",
+        "bullets": [
+          "Alpha bar giảm dần khi t tăng",
+          "Có thể nhảy thẳng tới bước t"
+        ],
+        "icon": "📉"
+      }
+    },
+    {
+      "id": "extended-2",
+      "audio": "/audio/lectures-v2/diff/5e134f2c55e3f249.mp3",
+      "duration": 11.84,
+      "caption": "Hai hệ số điều khiển phần tín hiệu và phần nhiễu. Khi alpha tích lũy bằng một, ta giữ dữ liệu gốc. Khi nó tiến gần không, ảnh quan sát chủ yếu là nhiễu, không còn rõ cấu trúc ban đầu.",
+      "teaching": true,
+      "preset": {
+        "title": "Đọc công thức trộn nhiễu",
+        "bullets": [
+          "xₜ = √ᾱₜ·x₀ + √(1−ᾱₜ)·ε",
+          "ᾱₜ = 1: còn nguyên dữ liệu gốc",
+          "ᾱₜ gần 0: phần nhiễu chiếm ưu thế"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/diff/s3.mp3",
+      "duration": 8.56,
+      "caption": "Mô hình diffusion thật học cách khử nhiễu ngược lại để sinh ảnh mới. Trang này chỉ minh họa phần thêm nhiễu, không có mô hình khử nhiễu.",
+      "preset": {
+        "title": "Mô hình học cách đảo ngược",
+        "bullets": [
+          "Mạng thật học khử nhiễu từng bước",
+          "Trang này chỉ minh họa quá trình thêm nhiễu"
+        ],
+        "icon": "🔙"
+      }
+    },
+    {
+      "id": "extended-3",
+      "audio": "/audio/lectures-v2/diff/a7f2eb1a33aa8263.mp3",
+      "duration": 11.84,
+      "caption": "Em hãy lưu ba mức thời gian và xem chi tiết nào biến mất trước. Khi so sánh, chú ý cùng dữ liệu gốc. Nếu cả mẫu nhiễu cũng thay đổi, đó là thêm một yếu tố ảnh hưởng hình quan sát.",
+      "teaching": true,
+      "preset": {
+        "title": "Thử nhiều mức thời gian",
+        "bullets": [
+          "Lưu mức đầu, giữa và cuối",
+          "Giữ cùng dữ liệu gốc khi so sánh",
+          "Phân biệt thay nhiễu với thay lịch nhiễu"
+        ]
+      }
+    },
+    {
+      "id": "extended-4",
+      "audio": "/audio/lectures-v2/diff/00f2568939d0d09c.mp3",
+      "duration": 11.28,
+      "caption": "Ta không thể chỉ lấy một ảnh nhiễu bất kỳ rồi đảo công thức để có ảnh đẹp, vì không biết nhiễu cần loại bỏ. Mô hình sinh phải học cấu trúc dữ liệu và cách ước lượng quá trình khử nhiễu.",
+      "teaching": true,
+      "preset": {
+        "title": "Không đơn giản là chạy công thức ngược",
+        "bullets": [
+          "Không biết chính xác nhiễu đã thêm trong bài toán sinh",
+          "Mô hình học ước lượng đại lượng khử nhiễu",
+          "Mô phỏng thuận chưa phải hệ sinh ảnh hoàn chỉnh"
+        ]
+      }
+    },
+    {
+      "id": "extended-5",
+      "audio": "/audio/lectures-v2/diff/c859a3aee7aa7e10.mp3",
+      "duration": 10.56,
+      "caption": "Hãy so ba mức nhiễu và mô tả thông tin mất dần như thế nào. Cuối cùng, tự hỏi: còn thiếu thành phần nào để biến mô phỏng thuận này thành một hệ thống sinh dữ liệu?",
+      "teaching": true,
+      "preset": {
+        "title": "Tổng kết: thông tin mất dần ra sao?",
+        "bullets": [
+          "So ba mức nhiễu",
+          "Để ý tham số của mỗi mức",
+          "Còn thiếu gì để sinh theo chiều ngược?"
+        ]
+      }
+    }
+  ]
+}

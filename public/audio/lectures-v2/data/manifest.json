@@ -1,0 +1,123 @@
+{
+  "lessonId": "DATA",
+  "voice": "clone-duyenhamy",
+  "version": "2026.10-expanded",
+  "scenes": [
+    {
+      "id": "extended-1",
+      "audio": "/audio/lectures-v2/data/84c223869d549499.mp3",
+      "duration": 10.24,
+      "caption": "Trước khi vẽ biểu đồ, hãy hỏi: mỗi hàng đại diện cho ai, và mình muốn dự đoán điều gì? Cùng một con số, khác đơn vị đo có thể mang ý nghĩa hoàn toàn khác.",
+      "teaching": true,
+      "preset": {
+        "title": "Dữ liệu tốt bắt đầu từ câu hỏi rõ",
+        "bullets": [
+          "Xác định đơn vị quan sát và biến mục tiêu",
+          "Kiểm tra đơn vị đo, kiểu dữ liệu và nguồn"
+        ]
+      }
+    },
+    {
+      "id": "s1",
+      "audio": "/audio/guide/data/s1.mp3",
+      "duration": 13.04,
+      "caption": "Trước khi dạy máy học, mình cùng làm quen với dữ liệu nhé. Mỗi hàng là một mẫu, mỗi cột là một đặc điểm. Hãy nhìn biểu đồ phân bố: các giá trị tập trung ở đâu, và có điểm nào khác thường không?",
+      "preset": {
+        "title": "Làm quen trước khi học",
+        "bullets": [
+          "Mỗi hàng là một mẫu, mỗi cột là một đặc điểm",
+          "Đọc phân bố trước khi chọn mô hình"
+        ],
+        "icon": "🔎"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/data/s2.mp3",
+      "duration": 14.32,
+      "caption": "Một ô trống không có nghĩa là số không. Mình cần hiểu dữ liệu trước khi điền khuyết. Và nhớ chia tập trước nhé: các giá trị dùng để điền khuyết hay chuẩn hóa chỉ được học từ tập huấn luyện, để tránh nhìn trộm đáp án của tập kiểm tra.",
+      "preset": {
+        "title": "Làm sạch mà không nhìn trộm",
+        "bullets": [
+          "Phân biệt ô trống, số không và giá trị bất thường",
+          "Chỉ fit tiền xử lý trên tập huấn luyện"
+        ],
+        "icon": "🧹"
+      }
+    },
+    {
+      "id": "extended-2",
+      "audio": "/audio/lectures-v2/data/06a2e54dac172479.mp3",
+      "duration": 12,
+      "caption": "Giả sử tập huấn luyện có trung bình một trăm và độ lệch chuẩn hai mươi. Giá trị một trăm bốn mươi được đổi thành hai. Tập kiểm tra phải dùng lại hai tham số này, không tự tính lại.",
+      "teaching": true,
+      "preset": {
+        "title": "Ví dụ: chuẩn hóa một giá trị",
+        "bullets": [
+          "Train có trung bình 100, độ lệch chuẩn 20",
+          "Giá trị 140 trở thành (140 − 100) / 20 = 2",
+          "Dùng cùng tham số cho validation và test"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/lectures-v2/data/ed2487310d3d6d57.mp3",
+      "duration": 13.36,
+      "caption": "Bây giờ đến lượt bạn. Hãy chọn hai biến, so sánh trước và sau chuẩn hóa. Hình dạng phân bố thay đổi ra sao? Hãy thử diễn đạt điều bạn quan sát bằng lời của mình, rồi sang phần thực hành để kiểm tra lại.",
+      "preset": {
+        "title": "Thử, quan sát và kể lại",
+        "bullets": [
+          "So sánh cùng dữ liệu trước và sau chuẩn hóa",
+          "Diễn đạt điều quan sát bằng lời của mình"
+        ],
+        "icon": "✍️"
+      }
+    },
+    {
+      "id": "extended-3",
+      "audio": "/audio/lectures-v2/data/9b812b0499db4793.mp3",
+      "duration": 11.28,
+      "caption": "Mình thử từng thay đổi một nhé. Giữ nguyên cách chia dữ liệu, so sánh trước và sau chuẩn hóa. Nếu đổi cả dữ liệu lẫn mô hình, ta khó biết điều gì thực sự tạo nên khác biệt.",
+      "teaching": true,
+      "preset": {
+        "title": "Thí nghiệm: trước và sau xử lý",
+        "bullets": [
+          "Giữ nguyên cách chia dữ liệu",
+          "Thay một thao tác tiền xử lý mỗi lần",
+          "So sánh phân bố, thang đo và kết quả mô hình"
+        ]
+      }
+    },
+    {
+      "id": "extended-4",
+      "audio": "/audio/lectures-v2/data/afb9c195915df90a.mp3",
+      "duration": 11.28,
+      "caption": "Một điểm khác thường có thể là lỗi nhập liệu, nhưng cũng có thể là trường hợp quan trọng. Hãy kiểm tra nguồn trước khi xóa. Nếu một người có nhiều bản ghi, chú ý tránh rò rỉ giữa các tập.",
+      "teaching": true,
+      "preset": {
+        "title": "Ba bẫy cần tránh",
+        "bullets": [
+          "Ô trống không đồng nghĩa với số 0",
+          "Không tự động xóa mọi điểm ngoại lệ",
+          "Các mẫu cùng đối tượng không nên rơi vào cả train và test"
+        ]
+      }
+    },
+    {
+      "id": "extended-5",
+      "audio": "/audio/lectures-v2/data/5c3ddebe22dc41b5.mp3",
+      "duration": 12.32,
+      "caption": "Tiền xử lý tốt không phải là làm thật nhiều thao tác, mà là mỗi thao tác đều có lý do. Hãy tự trả lời: mình đã xử lý điều gì, phân bố thay đổi ra sao, và còn hạn chế nào chưa giải quyết được?",
+      "teaching": true,
+      "preset": {
+        "title": "Tổng kết: mỗi thao tác cần một lý do",
+        "bullets": [
+          "So sánh biểu đồ trước và sau xử lý",
+          "Nhớ biến, đơn vị đo, cách chia và thao tác",
+          "Luôn nêu một hạn chế còn lại"
+        ]
+      }
+    }
+  ]
+}

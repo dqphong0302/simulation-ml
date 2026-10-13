@@ -1,0 +1,48 @@
+{
+  "lessonId": "CNN",
+  "voice": "clone-duyenhamy",
+  "scenes": [
+    {
+      "id": "s1",
+      "audio": "/audio/guide/cnn/s1.mp3",
+      "duration": 10.08,
+      "caption": "Mạng tích chập dùng một ô lọc nhỏ gọi là kernel trượt trên ảnh. Ở mỗi vị trí, nhân từng cặp ô rồi cộng lại để được một giá trị của bản đồ đặc trưng.",
+      "preset": {
+        "title": "Kernel trượt trên ảnh",
+        "bullets": [
+          "Nhân từng ô rồi cộng lại",
+          "Mỗi vị trí cho một giá trị của feature map"
+        ],
+        "icon": "🔍"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/cnn/s2.mp3",
+      "duration": 9.52,
+      "caption": "Stride là số ô kernel nhảy mỗi lần, padding là viền số không thêm quanh ảnh. Hai tham số này quyết định kích thước đầu ra theo một công thức đơn giản.",
+      "preset": {
+        "title": "Stride và padding",
+        "bullets": [
+          "Stride là bước nhảy của kernel",
+          "Padding thêm viền để giữ kích thước"
+        ],
+        "icon": "📐"
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/cnn/s3.mp3",
+      "duration": 9.84,
+      "caption": "Sau tích chập, ReLU giữ lại giá trị dương, rồi pooling thu nhỏ bản đồ đặc trưng. Trong mạng thật, kernel được học từ dữ liệu chứ không đặt sẵn.",
+      "preset": {
+        "title": "ReLU và pooling",
+        "bullets": [
+          "ReLU bỏ giá trị âm",
+          "Pooling thu nhỏ và giữ đặc trưng nổi bật"
+        ],
+        "icon": "🧱"
+      }
+    }
+  ]
+}

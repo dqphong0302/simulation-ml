@@ -1,0 +1,124 @@
+{
+  "lessonId": "AE",
+  "voice": "clone-duyenhamy",
+  "version": "2026.10-expanded",
+  "scenes": [
+    {
+      "id": "extended-1",
+      "audio": "/audio/lectures-v2/ae/5ef3e81d62f51c36.mp3",
+      "duration": 11.84,
+      "caption": "Autoencoder nhận một đầu vào và cố tái dựng lại chính nó. Nút thắt ở giữa giới hạn lượng thông tin truyền qua. Nhờ đó, mình quan sát được mô hình giữ lại cấu trúc nào và bỏ mất điều gì.",
+      "teaching": true,
+      "preset": {
+        "title": "Học tái dựng chính đầu vào",
+        "bullets": [
+          "Encoder nén vào latent",
+          "Decoder tái dựng từ latent",
+          "Bottleneck buộc mô hình chọn thông tin"
+        ]
+      }
+    },
+    {
+      "id": "s1",
+      "audio": "/audio/guide/ae/s1.mp3",
+      "duration": 8.8,
+      "caption": "Autoencoder gồm hai nửa. Bộ mã hóa nén dữ liệu thành một vài con số, bộ giải mã cố dựng lại dữ liệu ban đầu từ những con số đó.",
+      "preset": {
+        "title": "Nén rồi dựng lại",
+        "bullets": [
+          "Bộ mã hóa nén dữ liệu thành ít số",
+          "Bộ giải mã dựng lại dữ liệu gốc"
+        ],
+        "icon": "🗜️"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/ae/s2.mp3",
+      "duration": 8.48,
+      "caption": "Mạng học bằng cách giảm lỗi tái dựng. Ở đây ta nén hai biến xuống chỉ một số, nên các điểm dựng lại nằm trên một đường cong.",
+      "preset": {
+        "title": "Lỗi tái dựng",
+        "bullets": [
+          "Đo khác biệt giữa gốc và bản dựng lại",
+          "Bottleneck càng nhỏ càng mất thông tin"
+        ],
+        "icon": "📏"
+      }
+    },
+    {
+      "id": "extended-2",
+      "audio": "/audio/lectures-v2/ae/d03ae69270ac5e8d.mp3",
+      "duration": 11.12,
+      "caption": "Một điểm hai chiều là hai và bốn được tái dựng thành ba và ba. Hai sai số bình phương đều bằng một, nên trung bình bằng một. Cần nhớ thang đo các biến ảnh hưởng đến lỗi này.",
+      "teaching": true,
+      "preset": {
+        "title": "Hiểu lỗi tái dựng",
+        "bullets": [
+          "Đầu vào [2,4], tái dựng [3,3]",
+          "Sai số bình phương từng biến: 1 và 1",
+          "MSE theo hai biến bằng 1"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/ae/s3.mp3",
+      "duration": 8.32,
+      "caption": "Autoencoder có thể dùng để giảm chiều theo cách phi tuyến, hoặc phát hiện điểm bất thường vì những điểm lạ thường có lỗi tái dựng lớn.",
+      "preset": {
+        "title": "Dùng để làm gì",
+        "bullets": [
+          "Giảm chiều phi tuyến",
+          "Phát hiện điểm bất thường"
+        ],
+        "icon": "💡"
+      }
+    },
+    {
+      "id": "extended-3",
+      "audio": "/audio/lectures-v2/ae/b32e50facfeadb9c.mp3",
+      "duration": 11.04,
+      "caption": "Khi nén hai chiều xuống một chiều, không phải mọi cấu trúc đều được giữ nguyên. Hãy tìm vùng nào có điểm tái dựng lệch xa và giải thích vì sao nút thắt có thể làm mất thông tin đó.",
+      "teaching": true,
+      "preset": {
+        "title": "Quan sát nút thắt một chiều",
+        "bullets": [
+          "So điểm gốc với điểm tái dựng",
+          "Theo dõi loss trong huấn luyện",
+          "Tìm vùng dữ liệu bị nén kém"
+        ]
+      }
+    },
+    {
+      "id": "extended-4",
+      "audio": "/audio/lectures-v2/ae/11d2d706cb23ec80.mp3",
+      "duration": 10.4,
+      "caption": "Lỗi tái dựng lớn có nhiều nguyên nhân, từ mô hình chưa học đủ đến dữ liệu khác phân bố. Nó không tự động xác nhận một bất thường thực tế, và càng không phải kết luận chẩn đoán.",
+      "teaching": true,
+      "preset": {
+        "title": "Lỗi lớn không tự động là bất thường",
+        "bullets": [
+          "Có thể do thiếu học hoặc lệch thang đo",
+          "AE thường không tổ chức latent để lấy mẫu tùy ý",
+          "Không diễn giải như công cụ chẩn đoán"
+        ]
+      }
+    },
+    {
+      "id": "extended-5",
+      "audio": "/audio/lectures-v2/ae/14153dad23dfd48a.mp3",
+      "duration": 10.32,
+      "caption": "Hãy chọn hai điểm đối lập: một điểm tái dựng tốt và một điểm kém. Dùng hình và sai số để giải thích sự khác biệt, rồi nêu giới hạn của biểu diễn một chiều.",
+      "teaching": true,
+      "preset": {
+        "title": "Tổng kết: thông tin qua nút thắt",
+        "bullets": [
+          "Xem gốc và tái dựng trên cùng đồ thị",
+          "Đọc loss và cấu hình huấn luyện",
+          "So một điểm tái dựng tốt với một điểm kém"
+        ]
+      }
+    }
+  ]
+}

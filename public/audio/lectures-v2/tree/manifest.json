@@ -1,0 +1,142 @@
+{
+  "lessonId": "TREE",
+  "voice": "clone-duyenhamy",
+  "version": "2026.10-expanded",
+  "scenes": [
+    {
+      "id": "s1",
+      "audio": "/audio/tree/s1.mp3",
+      "duration": 6.72,
+      "caption": "Một cây quyết định hỏi từng câu hỏi có hoặc không để chia dữ liệu. Với độ sâu một, cây chỉ hỏi đúng một câu.",
+      "preset": {
+        "depth": 1,
+        "showCurve": false
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/tree/s2.mp3",
+      "duration": 9.28,
+      "caption": "Câu hỏi đó chia dữ liệu bằng một ngưỡng. Trên tập train, cây đúng khoảng tám mươi tư phần trăm, còn trên validation khoảng bảy mươi bảy phần trăm.",
+      "preset": {
+        "depth": 1,
+        "showCurve": false
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/tree/s3.mp3",
+      "duration": 8.64,
+      "caption": "Bạn thử đoán nhé. Nếu cho cây hỏi nhiều câu hơn, độ chính xác trên validation sẽ tăng mãi, tăng rồi giảm, hay gần như không đổi?",
+      "preset": {
+        "depth": 1,
+        "showCurve": false
+      },
+      "pauseForInteraction": true,
+      "prompt": "Chọn dự đoán của bạn rồi bấm Tiếp tục để nghe đáp án."
+    },
+    {
+      "id": "s4",
+      "audio": "/audio/tree/s4.mp3",
+      "duration": 7.04,
+      "caption": "Ở độ sâu ba, validation tăng lên khoảng tám mươi mốt phần trăm. Cây đã hỏi đủ những câu hỏi hữu ích.",
+      "preset": {
+        "depth": 3,
+        "showCurve": true
+      }
+    },
+    {
+      "id": "s5",
+      "audio": "/audio/tree/s5.mp3",
+      "duration": 11.28,
+      "caption": "Nhưng ở độ sâu tám, độ chính xác trên train đạt một trăm phần trăm, còn validation tụt xuống khoảng bảy mươi lăm phần trăm. Cây đã học thuộc cả nhiễu của tập train.",
+      "preset": {
+        "depth": 8,
+        "showCurve": true
+      }
+    },
+    {
+      "id": "s6",
+      "audio": "/audio/tree/s6.mp3",
+      "duration": 6.8,
+      "caption": "Bây giờ bạn kéo thanh trượt độ sâu để tự quan sát, đường train và validation tách ra từ đâu.",
+      "preset": {
+        "depth": 3,
+        "showCurve": true
+      },
+      "pauseForInteraction": true,
+      "interactive": "depth",
+      "prompt": "Kéo thanh trượt độ sâu, quan sát đồ thị, rồi bấm Tiếp tục."
+    },
+    {
+      "id": "s7",
+      "audio": "/audio/tree/s7.mp3",
+      "duration": 6.72,
+      "caption": "Hãy chọn độ sâu bằng validation, không chọn bằng train. Sau đó mới đánh giá cuối cùng trên tập test.",
+      "preset": {
+        "depth": 3,
+        "showCurve": true
+      }
+    },
+    {
+      "id": "extended-1",
+      "audio": "/audio/lectures-v2/tree/b50c57cf015d2fa3.mp3",
+      "duration": 11.84,
+      "caption": "Một nút có ba mẫu A và một mẫu B có Gini bằng không phẩy ba bảy năm. Khi đánh giá phép chia, ta tính độ hỗn tạp các nút con theo trọng số số mẫu, chứ không chỉ nhìn một nhánh đẹp.",
+      "teaching": true,
+      "preset": {
+        "title": "Gini của một nút",
+        "bullets": [
+          "Nút có 3 mẫu A và 1 mẫu B",
+          "Gini = 1 − (3/4)² − (1/4)² = 0,375",
+          "Chọn phép chia giảm độ hỗn tạp có trọng số"
+        ]
+      }
+    },
+    {
+      "id": "extended-2",
+      "audio": "/audio/lectures-v2/tree/6ffd2a2b27a5c3ec.mp3",
+      "duration": 11.12,
+      "caption": "Cây sâu hơn có thêm khả năng ghi nhớ train. Nhưng mục tiêu của mình là dự đoán dữ liệu chưa thấy. Hãy dựa vào validation để chọn độ sâu, và giữ test đến lần đánh giá cuối.",
+      "teaching": true,
+      "preset": {
+        "title": "Từ đường học đến chọn độ sâu",
+        "bullets": [
+          "Giữ cùng split khi đổi độ sâu",
+          "Train thường tốt hơn khi cây sâu thêm",
+          "Chọn theo validation, không theo độ đẹp của cây"
+        ]
+      }
+    },
+    {
+      "id": "extended-3",
+      "audio": "/audio/lectures-v2/tree/7aad6b9ce6c57dbc.mp3",
+      "duration": 11.28,
+      "caption": "Cây dễ đọc nhưng không có nghĩa các luật luôn ổn định. Một nhánh chứa rất ít mẫu có thể chỉ phản ánh tình cờ của dữ liệu. Đừng biến luật dự đoán thành kết luận nhân quả hoặc khuyến cáo thực tế.",
+      "teaching": true,
+      "preset": {
+        "title": "Giới hạn của các luật dễ đọc",
+        "bullets": [
+          "Thay ít dữ liệu có thể đổi cấu trúc cây",
+          "Luật dự đoán không phải luật nhân quả",
+          "Một nhánh ít mẫu cần diễn giải thận trọng"
+        ]
+      }
+    },
+    {
+      "id": "extended-4",
+      "audio": "/audio/lectures-v2/tree/c8e73c4fefc2e9d8.mp3",
+      "duration": 12.56,
+      "caption": "Hãy xem đồ thị theo độ sâu và tìm nơi hai đường train, validation bắt đầu tách nhau. Nếu chưa thấy overfitting rõ, hãy chấp nhận đúng quan sát đó thay vì cố gán một kết luận có sẵn.",
+      "teaching": true,
+      "preset": {
+        "title": "Tổng kết: nhận ra overfitting",
+        "bullets": [
+          "Xem đường train/validation theo độ sâu",
+          "Đọc một đường quyết định của cây",
+          "Chọn độ sâu phù hợp cùng bằng chứng"
+        ]
+      }
+    }
+  ]
+}

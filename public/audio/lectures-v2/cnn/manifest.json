@@ -1,0 +1,124 @@
+{
+  "lessonId": "CNN",
+  "voice": "clone-duyenhamy",
+  "version": "2026.10-expanded",
+  "scenes": [
+    {
+      "id": "extended-1",
+      "audio": "/audio/lectures-v2/cnn/dc2e83cb382179a8.mp3",
+      "duration": 10.96,
+      "caption": "Thay vì nối mọi điểm ảnh với mọi neuron, convolution dùng một bộ lọc nhỏ trượt trên ảnh. Cùng bộ trọng số được dùng lại ở nhiều nơi để phát hiện một kiểu đặc trưng cục bộ.",
+      "teaching": true,
+      "preset": {
+        "title": "Vì sao dùng bộ lọc cục bộ?",
+        "bullets": [
+          "Một kernel trượt qua nhiều vị trí",
+          "Chia sẻ trọng số giúp giảm tham số",
+          "Feature map ghi phản ứng theo vị trí"
+        ]
+      }
+    },
+    {
+      "id": "s1",
+      "audio": "/audio/guide/cnn/s1.mp3",
+      "duration": 10.08,
+      "caption": "Mạng tích chập dùng một ô lọc nhỏ gọi là kernel trượt trên ảnh. Ở mỗi vị trí, nhân từng cặp ô rồi cộng lại để được một giá trị của bản đồ đặc trưng.",
+      "preset": {
+        "title": "Kernel trượt trên ảnh",
+        "bullets": [
+          "Nhân từng ô rồi cộng lại",
+          "Mỗi vị trí cho một giá trị của feature map"
+        ],
+        "icon": "🔍"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/cnn/s2.mp3",
+      "duration": 9.52,
+      "caption": "Stride là số ô kernel nhảy mỗi lần, padding là viền số không thêm quanh ảnh. Hai tham số này quyết định kích thước đầu ra theo một công thức đơn giản.",
+      "preset": {
+        "title": "Stride và padding",
+        "bullets": [
+          "Stride là bước nhảy của kernel",
+          "Padding thêm viền để giữ kích thước"
+        ],
+        "icon": "📐"
+      }
+    },
+    {
+      "id": "extended-2",
+      "audio": "/audio/lectures-v2/cnn/6358c33d229ebe9c.mp3",
+      "duration": 12.24,
+      "caption": "Ở một vị trí, nhân từng phần tử của patch với kernel rồi cộng lại. Ví dụ này được âm ba, và sau ReLU là không. Phép trượt thường dùng trong mạng CNN thực tế là tương quan chéo.",
+      "teaching": true,
+      "preset": {
+        "title": "Tính một ô feature map",
+        "bullets": [
+          "Patch [[1,2],[3,4]]",
+          "Kernel [[1,0],[0,−1]], bias = 0",
+          "Tổng tích = 1 − 4 = −3; ReLU → 0"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/cnn/s3.mp3",
+      "duration": 9.84,
+      "caption": "Sau tích chập, ReLU giữ lại giá trị dương, rồi pooling thu nhỏ bản đồ đặc trưng. Trong mạng thật, kernel được học từ dữ liệu chứ không đặt sẵn.",
+      "preset": {
+        "title": "ReLU và pooling",
+        "bullets": [
+          "ReLU bỏ giá trị âm",
+          "Pooling thu nhỏ và giữ đặc trưng nổi bật"
+        ],
+        "icon": "🧱"
+      }
+    },
+    {
+      "id": "extended-3",
+      "audio": "/audio/lectures-v2/cnn/9ae66ef7777e1504.mp3",
+      "duration": 11.36,
+      "caption": "Tăng stride làm bộ lọc nhảy xa hơn, thường giảm kích thước đầu ra. Padding bổ sung vùng đệm ở biên. Hãy thay từng tham số để thấy thay đổi đến từ đâu, thay vì đổi tất cả cùng lúc.",
+      "teaching": true,
+      "preset": {
+        "title": "Thử stride và padding",
+        "bullets": [
+          "Stride lớn: lấy thưa vị trí hơn",
+          "Padding giữ thêm thông tin vùng biên",
+          "So kích thước và chi tiết feature map"
+        ]
+      }
+    },
+    {
+      "id": "extended-4",
+      "audio": "/audio/lectures-v2/cnn/e80a23c5cd34acdb.mp3",
+      "duration": 10.96,
+      "caption": "Max pooling giữ phản ứng lớn nhất trong từng vùng, nhưng làm mất chi tiết vị trí. Phòng này giúp hiểu phép tính; nó không chứng minh rằng một bộ lọc đặt tay đã nhận diện được mọi vật thể.",
+      "teaching": true,
+      "preset": {
+        "title": "Pooling và giới hạn mô phỏng",
+        "bullets": [
+          "Max pooling lấy giá trị lớn nhất trong cửa sổ",
+          "Pooling làm mất một phần thông tin vị trí",
+          "Kernel minh họa không phải CNN đã huấn luyện"
+        ]
+      }
+    },
+    {
+      "id": "extended-5",
+      "audio": "/audio/lectures-v2/cnn/61bc30d4b5df8f9e.mp3",
+      "duration": 10,
+      "caption": "Hãy tính tay một ô đầu ra rồi đối chiếu với mô phỏng. Sau đó thay stride hoặc padding, và tự giải thích sự khác nhau về kích thước cũng như thông tin được giữ lại.",
+      "teaching": true,
+      "preset": {
+        "title": "Tổng kết: hiểu từng phép tính",
+        "bullets": [
+          "Chọn một ô, ghi patch và kernel",
+          "Tính tổng tích trước và sau ReLU",
+          "So hai cấu hình stride hoặc padding"
+        ]
+      }
+    }
+  ]
+}

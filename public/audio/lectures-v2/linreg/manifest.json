@@ -1,0 +1,124 @@
+{
+  "lessonId": "LINREG",
+  "voice": "clone-duyenhamy",
+  "version": "2026.10-expanded",
+  "scenes": [
+    {
+      "id": "extended-1",
+      "audio": "/audio/lectures-v2/linreg/871ee2990de151ce.mp3",
+      "duration": 11.52,
+      "caption": "Hồi quy tuyến tính dự đoán một giá trị số. Hệ số góc cho biết dự đoán thay đổi thế nào khi đầu vào tăng một đơn vị. Nhưng một mối liên hệ quan sát được chưa chứng minh quan hệ nhân quả.",
+      "teaching": true,
+      "preset": {
+        "title": "Dự đoán một đại lượng liên tục",
+        "bullets": [
+          "Đầu ra là số, không phải nhãn lớp",
+          "Mô hình đơn giản: ŷ = a·x + b",
+          "Đường khớp mô tả liên hệ, không chứng minh nhân quả"
+        ]
+      }
+    },
+    {
+      "id": "s1",
+      "audio": "/audio/guide/linreg/s1.mp3",
+      "duration": 8.08,
+      "caption": "Không phải bài toán nào cũng là phân loại. Hồi quy tuyến tính dự đoán một con số, bằng cách khớp một đường thẳng qua dữ liệu.",
+      "preset": {
+        "title": "Dự đoán một con số",
+        "bullets": [
+          "Hồi quy dự đoán giá trị liên tục",
+          "Khớp đường thẳng y bằng a nhân x cộng b"
+        ],
+        "icon": "📈"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/linreg/s2.mp3",
+      "duration": 9.76,
+      "caption": "Để biết đường thẳng tốt đến đâu, ta đo sai số bình phương trung bình và căn của nó. R bình phương cho biết biến x giải thích được bao nhiêu phần biến thiên của y.",
+      "preset": {
+        "title": "Đo sai số",
+        "bullets": [
+          "MSE và RMSE đo sai số trung bình",
+          "R bình phương cho biết phần biến thiên được giải thích"
+        ],
+        "icon": "📏"
+      }
+    },
+    {
+      "id": "extended-2",
+      "audio": "/audio/lectures-v2/linreg/febe9a9c7aec4a06.mp3",
+      "duration": 12,
+      "caption": "Với hai giá trị thật là hai và bốn, nếu đều dự đoán ba thì hai sai số bình phương đều bằng một. Trung bình của chúng là một. Đây là cách tính MSE, không phải tỷ lệ dự đoán đúng.",
+      "teaching": true,
+      "preset": {
+        "title": "Tự tính sai số",
+        "bullets": [
+          "Giá trị thật: 2 và 4; dự đoán: 3 và 3",
+          "Sai số bình phương: 1 và 1",
+          "MSE = 1; RMSE = 1"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/linreg/s3.mp3",
+      "duration": 9.36,
+      "caption": "Hệ số dốc chỉ mô tả mối liên hệ trong dữ liệu này, không chứng minh x gây ra y. Hãy so sánh kết quả trên train và validation trước khi kết luận.",
+      "preset": {
+        "title": "Tương quan không phải nhân quả",
+        "bullets": [
+          "Hệ số dốc chỉ mô tả liên hệ trong dữ liệu",
+          "So sánh train và validation"
+        ],
+        "icon": "🧩"
+      }
+    },
+    {
+      "id": "extended-3",
+      "audio": "/audio/lectures-v2/linreg/9f1e9819f1680f27.mp3",
+      "duration": 11.2,
+      "caption": "Mình quan sát khoảng cách từ từng điểm đến đường dự đoán theo chiều đầu ra. Một điểm rất xa có thể kéo lệch đường khớp vì sai số được bình phương. Đừng chỉ nhìn đường thẳng có vẻ đẹp.",
+      "teaching": true,
+      "preset": {
+        "title": "Thử độ dốc và ngoại lệ",
+        "bullets": [
+          "Quan sát residual: y − ŷ",
+          "So sánh đường khớp khi dữ liệu thay đổi",
+          "Đánh giá trên tập không dùng để fit"
+        ]
+      }
+    },
+    {
+      "id": "extended-4",
+      "audio": "/audio/lectures-v2/linreg/ec278106d9c5e49b.mp3",
+      "duration": 10.96,
+      "caption": "R bình phương âm có thể xảy ra khi dự đoán tệ hơn việc dùng trung bình của tập đánh giá. Và một đường thẳng khớp tốt trong miền đã thấy không bảo đảm đúng khi dự đoán rất xa.",
+      "teaching": true,
+      "preset": {
+        "title": "Những diễn giải dễ nhầm",
+        "bullets": [
+          "R² có thể âm trên dữ liệu mới",
+          "RMSE có cùng đơn vị với đầu ra",
+          "Ngoại suy xa miền đã học thường rủi ro"
+        ]
+      }
+    },
+    {
+      "id": "extended-5",
+      "audio": "/audio/lectures-v2/linreg/a50f6e98f731e725.mp3",
+      "duration": 13.68,
+      "caption": "Hãy diễn giải sai số bằng chính đơn vị của đầu ra, để biết mô hình lệch nhiều hay ít trong thực tế. Tìm một vùng mà mô hình dự đoán chưa tốt. Nếu có ngoại lệ, hãy tìm hiểu ảnh hưởng của nó thay vì âm thầm xóa đi.",
+      "teaching": true,
+      "preset": {
+        "title": "Tổng kết: hiểu sai số bằng đơn vị thật",
+        "bullets": [
+          "Đọc RMSE và MAE theo đơn vị đầu ra",
+          "So train với validation",
+          "Tìm vùng mô hình dự đoán chưa tốt"
+        ]
+      }
+    }
+  ]
+}

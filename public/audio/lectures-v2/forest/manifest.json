@@ -1,0 +1,124 @@
+{
+  "lessonId": "FOREST",
+  "voice": "clone-duyenhamy",
+  "version": "2026.10-expanded",
+  "scenes": [
+    {
+      "id": "extended-1",
+      "audio": "/audio/lectures-v2/forest/83328e7aa02cd997.mp3",
+      "duration": 11.92,
+      "caption": "Một cây có thể thay đổi nhiều khi dữ liệu hơi khác. Rừng ngẫu nhiên kết hợp nhiều cây được tạo có chủ đích khác nhau. Khi lỗi của chúng không hoàn toàn giống nhau, việc tổng hợp thường ổn định hơn.",
+      "teaching": true,
+      "preset": {
+        "title": "Vì sao cần nhiều cây?",
+        "bullets": [
+          "Mỗi cây học trên một mẫu bootstrap",
+          "Mỗi lần chia chỉ xét một tập biến ngẫu nhiên",
+          "Phân loại bằng tổng hợp phiếu các cây"
+        ]
+      }
+    },
+    {
+      "id": "s1",
+      "audio": "/audio/guide/forest/s1.mp3",
+      "duration": 11.92,
+      "caption": "Một cây quyết định dễ bị thay đổi nhiều khi dữ liệu thay đổi một chút. Rừng ngẫu nhiên trồng nhiều cây, mỗi cây học trên một mẫu lấy lại ngẫu nhiên và chỉ xét vài biến ở mỗi lần chia.",
+      "preset": {
+        "title": "Nhiều cây tốt hơn một cây",
+        "bullets": [
+          "Mỗi cây học trên mẫu bootstrap",
+          "Mỗi lần chia chỉ xét vài biến ngẫu nhiên"
+        ],
+        "icon": "🌲"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/forest/s2.mp3",
+      "duration": 8.64,
+      "caption": "Kết quả cuối là trung bình dự đoán của các cây. Nhờ trung bình hóa, mô hình ổn định hơn và thường ít overfitting hơn một cây đơn lẻ.",
+      "preset": {
+        "title": "Trung bình hóa để ổn định",
+        "bullets": [
+          "Lấy trung bình xác suất của các cây",
+          "Giảm phương sai so với một cây"
+        ],
+        "icon": "🗳️"
+      }
+    },
+    {
+      "id": "extended-2",
+      "audio": "/audio/lectures-v2/forest/7c31f7f1525e7e6f.mp3",
+      "duration": 11.76,
+      "caption": "Năm cây cùng dự đoán, ba cây chọn A và hai cây chọn B, nên kết quả đa số là A. Tỷ lệ phiếu thể hiện sự đồng thuận, nhưng chưa chắc là xác suất đúng đã được hiệu chỉnh.",
+      "teaching": true,
+      "preset": {
+        "title": "Ví dụ bỏ phiếu",
+        "bullets": [
+          "Năm cây dự đoán: A, A, B, A, B",
+          "Ba phiếu A → dự đoán A",
+          "Tỷ lệ phiếu không mặc nhiên là xác suất đã hiệu chỉnh"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/forest/s3.mp3",
+      "duration": 9.36,
+      "caption": "Hãy thay số cây và độ sâu, rồi đổi seed để xem kết quả có ổn định không. Trên tập validation nhỏ, rừng không phải lúc nào cũng thắng.",
+      "preset": {
+        "title": "Thử nghiệm của bạn",
+        "bullets": [
+          "Thay số cây và độ sâu",
+          "Đổi seed để kiểm tra độ ổn định"
+        ],
+        "icon": "🔬"
+      }
+    },
+    {
+      "id": "extended-3",
+      "audio": "/audio/lectures-v2/forest/8363074785aac16c.mp3",
+      "duration": 11.44,
+      "caption": "Hãy giữ nguyên dữ liệu rồi tăng số cây. Em có thể thấy kết quả ổn định hơn nhưng thời gian tính tăng. Nhiều cây hơn không tự sửa được dữ liệu sai hoặc cách đánh giá bị rò rỉ.",
+      "teaching": true,
+      "preset": {
+        "title": "Thử số cây và độ sâu",
+        "bullets": [
+          "So một cây với rừng trên cùng split",
+          "Tăng số cây, giữ các tham số khác",
+          "Theo dõi chất lượng và thời gian tính"
+        ]
+      }
+    },
+    {
+      "id": "extended-4",
+      "audio": "/audio/lectures-v2/forest/d6ab8afaff5e3cdd.mp3",
+      "duration": 10.32,
+      "caption": "Nếu mọi cây cùng học từ nguồn dữ liệu lệch, rừng vẫn có thể sai. Một biến quan trọng với dự đoán cũng không có nghĩa là thay đổi biến đó sẽ gây ra thay đổi ở kết quả.",
+      "teaching": true,
+      "preset": {
+        "title": "Rừng không miễn nhiễm sai lệch",
+        "bullets": [
+          "Các cây vẫn có thể cùng học một sai lệch",
+          "Không dùng test để chọn tham số",
+          "Tầm quan trọng biến không phải quan hệ nhân quả"
+        ]
+      }
+    },
+    {
+      "id": "extended-5",
+      "audio": "/audio/lectures-v2/forest/7df948b40ed37c8a.mp3",
+      "duration": 10.72,
+      "caption": "Hãy tự trả lời: trong thí nghiệm này, rừng có đáng dùng hơn một cây không? Dựa vào chỉ số và thời gian chạy, thay vì mặc định rằng mô hình phức tạp hơn luôn tốt hơn.",
+      "teaching": true,
+      "preset": {
+        "title": "Tổng kết: có đáng dùng rừng?",
+        "bullets": [
+          "So một cây và nhiều cây",
+          "Giữ chung cách chia và chỉ số",
+          "Cân nhắc chất lượng, độ ổn định và chi phí"
+        ]
+      }
+    }
+  ]
+}

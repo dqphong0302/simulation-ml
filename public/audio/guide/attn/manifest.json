@@ -1,0 +1,48 @@
+{
+  "lessonId": "ATTN",
+  "voice": "clone-duyenhamy",
+  "scenes": [
+    {
+      "id": "s1",
+      "audio": "/audio/guide/attn/s1.mp3",
+      "duration": 10.08,
+      "caption": "Trong attention, mỗi token tạo ra một câu hỏi gọi là query, so khớp với key của các token khác, rồi lấy về thông tin từ value theo mức độ phù hợp.",
+      "preset": {
+        "title": "Mỗi token nhìn các token khác",
+        "bullets": [
+          "Query hỏi, key được so khớp",
+          "Value là thông tin được lấy về"
+        ],
+        "icon": "👀"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/attn/s2.mp3",
+      "duration": 8.72,
+      "caption": "Điểm so khớp được chia cho căn bậc hai số chiều, rồi đi qua softmax để thành trọng số. Mỗi hàng trọng số cộng lại bằng một.",
+      "preset": {
+        "title": "Softmax thành trọng số",
+        "bullets": [
+          "Chia điểm cho căn bậc hai của d",
+          "Mỗi hàng trọng số cộng lại bằng một"
+        ],
+        "icon": "🧮"
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/attn/s3.mp3",
+      "duration": 11.2,
+      "caption": "Khi mô hình sinh văn bản, một token không được nhìn token phía sau. Causal mask che các vị trí tương lai. Trọng số ở trang này là ngẫu nhiên, chỉ để minh họa phép tính.",
+      "preset": {
+        "title": "Causal mask",
+        "bullets": [
+          "Che các token tương lai",
+          "Dùng khi mô hình sinh văn bản từ trái sang phải"
+        ],
+        "icon": "🚧"
+      }
+    }
+  ]
+}

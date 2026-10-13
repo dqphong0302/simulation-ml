@@ -1,0 +1,124 @@
+{
+  "lessonId": "GAN",
+  "voice": "clone-duyenhamy",
+  "version": "2026.10-expanded",
+  "scenes": [
+    {
+      "id": "extended-1",
+      "audio": "/audio/lectures-v2/gan/ddac51b62850ebd6.mp3",
+      "duration": 11.84,
+      "caption": "Hãy tưởng tượng một bên tạo mẫu, bên kia học phân biệt. Khi bên phân biệt tiến bộ, bên tạo phải thay đổi để đánh lừa nó. Vì cả hai cùng học, quá trình có thể khó ổn định hơn một mô hình đơn lẻ.",
+      "teaching": true,
+      "preset": {
+        "title": "Hai mạng cùng thay đổi",
+        "bullets": [
+          "Generator biến nhiễu thành mẫu giả",
+          "Discriminator phân biệt thật và giả",
+          "Hai mục tiêu tương tác trong huấn luyện"
+        ]
+      }
+    },
+    {
+      "id": "s1",
+      "audio": "/audio/guide/gan/s1.mp3",
+      "duration": 9.44,
+      "caption": "GAN có hai mạng thi đấu với nhau. Generator biến nhiễu ngẫu nhiên thành dữ liệu giả, discriminator cố phân biệt đâu là thật, đâu là giả.",
+      "preset": {
+        "title": "Hai mạng đối kháng",
+        "bullets": [
+          "Generator tạo dữ liệu giả",
+          "Discriminator phân biệt thật và giả"
+        ],
+        "icon": "🎭"
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/guide/gan/s2.mp3",
+      "duration": 6.64,
+      "caption": "Hai mạng được huấn luyện luân phiên. Khi generator giỏi lên, phân phối dữ liệu giả tiến gần phân phối thật.",
+      "preset": {
+        "title": "Luyện luân phiên",
+        "bullets": [
+          "Discriminator học tách thật giả",
+          "Generator học đánh lừa discriminator"
+        ],
+        "icon": "🔄"
+      }
+    },
+    {
+      "id": "extended-2",
+      "audio": "/audio/lectures-v2/gan/fafde73e0fdcdeec.mp3",
+      "duration": 11.28,
+      "caption": "Một vòng thường có bước cập nhật bộ phân biệt rồi bước cập nhật bộ sinh. Loss của mỗi bên phản ánh cuộc tương tác hiện tại. Vì vậy, không đọc nó giống hệt đường loss hồi quy thông thường.",
+      "teaching": true,
+      "preset": {
+        "title": "Một vòng học gồm hai phần",
+        "bullets": [
+          "Cập nhật discriminator với mẫu thật và giả",
+          "Cập nhật generator qua tín hiệu discriminator",
+          "Luân phiên; không xem một loss là toàn bộ chất lượng"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/guide/gan/s3.mp3",
+      "duration": 10.96,
+      "caption": "GAN nổi tiếng khó huấn luyện. Với dữ liệu hai đỉnh, generator có thể chỉ bắt được một đỉnh, gọi là mode collapse. Hãy đổi seed và learning rate để quan sát.",
+      "preset": {
+        "title": "Khó huấn luyện",
+        "bullets": [
+          "Có thể mất cân bằng giữa hai mạng",
+          "Mode collapse: chỉ sinh một kiểu"
+        ],
+        "icon": "⚠️"
+      }
+    },
+    {
+      "id": "extended-3",
+      "audio": "/audio/lectures-v2/gan/5c2b035a6e10d5b6.mp3",
+      "duration": 10.4,
+      "caption": "Mình không chỉ xem một mẫu giả có hợp lý không mà xem nó có phủ được các vùng dữ liệu thật không. Nếu một bên học quá nhanh, bên còn lại có thể nhận tín hiệu khó sử dụng.",
+      "teaching": true,
+      "preset": {
+        "title": "Thử cân bằng hai phía",
+        "bullets": [
+          "Quan sát phân bố thật và phân bố sinh",
+          "Thay số bước hoặc tốc độ học nếu có",
+          "Theo dõi cả độ phủ và độ ổn định"
+        ]
+      }
+    },
+    {
+      "id": "extended-4",
+      "audio": "/audio/lectures-v2/gan/c8fe2297081f529f.mp3",
+      "duration": 12.32,
+      "caption": "Mode collapse xảy ra khi bộ sinh cứ tạo quanh một vài kiểu mẫu. Chúng có thể trông hợp lý nhưng bỏ qua nhiều vùng dữ liệu thật. Phòng một chiều giúp thấy nguyên lý, chưa thể suy rộng mọi hành vi của GAN ảnh.",
+      "teaching": true,
+      "preset": {
+        "title": "Mode collapse",
+        "bullets": [
+          "Nhiều đầu vào nhiễu cho mẫu gần giống nhau",
+          "Mẫu trông hợp lý nhưng thiếu đa dạng",
+          "GAN một chiều không đại diện đầy đủ cho GAN ảnh"
+        ]
+      }
+    },
+    {
+      "id": "extended-5",
+      "audio": "/audio/lectures-v2/gan/c866afa2f1e5bde6.mp3",
+      "duration": 11.12,
+      "caption": "Hãy quan sát kết quả ở nhiều thời điểm, không chỉ thời điểm đẹp nhất. Phân biệt mẫu trông hợp lý với một tập mẫu đa dạng, và để ý xem đã có dấu hiệu collapse hay chưa.",
+      "teaching": true,
+      "preset": {
+        "title": "Tổng kết: đẹp và đa dạng có khác nhau?",
+        "bullets": [
+          "Xem phân bố thật và sinh ở nhiều thời điểm",
+          "Để ý cấu hình và seed",
+          "Nhận xét độ phủ, dao động, dấu hiệu collapse"
+        ]
+      }
+    }
+  ]
+}
