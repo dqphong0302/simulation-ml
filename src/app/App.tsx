@@ -102,8 +102,16 @@ function Shell({ path, tab, lesson, children }: { path: string; tab: string; les
   const [open, setOpen] = useState(false);
   const [mobile, setMobile] = useState(() => window.matchMedia('(max-width: 900px)').matches);
   const [q, setQ] = useState('');
-  const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
-  useEffect(() => { setOpen(false); window.scrollTo({ top: 0 }); }, [path]);
+  const [expanded, setExpanded] = useState<Record<string, boolean>>(() => {
+    return lesson ? { [lesson.group]: true } : {};
+  });
+  useEffect(() => {
+    setOpen(false);
+    window.scrollTo({ top: 0 });
+    if (lesson?.group) {
+      setExpanded(prev => ({ ...prev, [lesson.group]: true }));
+    }
+  }, [path, lesson?.group]);
   useEffect(() => {
     const media = window.matchMedia('(max-width: 900px)');
     const update = () => { setMobile(media.matches); setOpen(false); };
@@ -136,19 +144,28 @@ function Shell({ path, tab, lesson, children }: { path: string; tab: string; les
         {GROUPS.map((g) => {
           const items = LESSONS.filter((l) => l.group === g.id && matchesLesson(l, q));
           if (!items.length) return null;
-          const shut = collapsed[g.id] && !q;
+          const isExpanded = q.trim().length > 0 || !!expanded[g.id];
+          const shut = !isExpanded;
           return (
             <div className="nav-group" key={g.id}>
-              <button className="nav-head" aria-expanded={!shut} onClick={() => setCollapsed({ ...collapsed, [g.id]: !collapsed[g.id] })}>
-                <Icon name={g.icon} size={15} /><span>{g.title}</span><span className="n">{items.length}</span><Icon name="chevron" size={14} className="chev" />
+              <button
+                className="nav-head"
+                aria-expanded={isExpanded}
+                onClick={() => setExpanded(prev => ({ ...prev, [g.id]: !prev[g.id] }))}
+              >
+                <Icon name={g.icon} size={15} />
+                <span>{g.title}</span>
+                <span className="n">{items.length}</span>
+                <Icon name="chevron" size={14} className="chev" />
               </button>
-              <div className={`nav-items${shut ? ' shut' : ''}`}>{items.map((l) => link(l.path, l.title.split(':')[0]))}</div>
+              <div className={`nav-items${shut ? ' shut' : ''}`}>
+                {items.map((l) => link(l.path, l.title.split(':')[0]))}
+              </div>
             </div>
           );
         })}
         {!LESSONS.some(l => matchesLesson(l, q)) && <p className="muted" role="status">Không tìm thấy bài học.</p>}
         {link('/settings', 'Cấu hình API', 'settings')}
-        <div className="sidebar-mentor"><span className="learning-emblem" aria-hidden="true"><Icon name="brain" size={23} /></span><p><b>Học theo nhịp của bạn</b><span>Thử một ý tưởng nhỏ hôm nay.</span></p></div>
       </aside>
       <div className="scrim only-mobile" onClick={() => setOpen(false)} aria-hidden="true" />
       <main id="main" tabIndex={-1}>

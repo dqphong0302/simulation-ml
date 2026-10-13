@@ -28,9 +28,12 @@ export function Chart({ spec }: { spec: ChartSpec }) {
   );
 }
 
-export function ModeBadge({ mode }: { mode: string }) {
+export function ModeBadge({ mode, short }: { mode: string; short?: boolean }) {
   const cls = mode.startsWith('Mô phỏng') ? 'sim' : mode.startsWith('Suy luận') ? 'api' : 'real';
-  return <span className={`chip chip-${cls}`}><span className="dot" />{mode}</span>;
+  const label = short
+    ? (cls === 'sim' ? 'Mô phỏng' : cls === 'api' ? 'API' : 'Client')
+    : mode;
+  return <span className={`chip chip-${cls}`} title={mode}><span className="dot" />{label}</span>;
 }
 
 export function Field({ label, children }: { label: string; children: ReactNode }) {
