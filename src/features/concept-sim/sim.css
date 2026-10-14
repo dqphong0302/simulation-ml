@@ -1,0 +1,46 @@
+/* ===== Mô phỏng hoạt hình (lý thuyết + thực hành) ===== */
+.concept-sim { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); box-shadow: var(--shadow-2); padding: 18px 20px 20px; margin: 0 0 20px; animation: fadeUp .45s var(--ease) both; }
+.concept-sim.sim-theory { border-top: 4px solid var(--sim); }
+.concept-sim.sim-lab { border-top: 4px solid var(--chart-2); }
+.sim-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.sim-head h2 { font-size: 20px; margin: 0 0 12px; }
+.sim-badge { flex: none; font-size: 11px; font-weight: 700; color: var(--sim); background: var(--sim-soft); border-radius: var(--r-full); padding: 4px 10px; }
+.sim-predict { margin: 0 0 14px; padding: 10px 14px; border-radius: var(--r-md); background: var(--warn-soft); border: 1px solid var(--warn-line); color: var(--text); line-height: 1.6; font-size: 14px; }
+.sim-body { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(250px, 1fr); gap: 18px; align-items: start; }
+.sim-stage { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r-md); padding: 8px; }
+.sim-stage svg { display: block; width: 100%; height: auto; }
+.sim-progress { display: flex; gap: 4px; padding: 6px 4px 2px; }
+.sim-progress span { flex: 1; height: 4px; border-radius: 2px; background: var(--surface-3); overflow: hidden; }
+.sim-progress i { display: block; height: 100%; background: var(--sim); }
+.sim-steps { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 4px; }
+.sim-steps button { width: 100%; display: flex; gap: 10px; align-items: center; justify-content: flex-start; text-align: left; height: auto; padding: 7px 10px; border-radius: var(--r-sm); border: 1px solid transparent; background: transparent; color: var(--text-2); font-weight: 500; transition: background .2s, color .2s, border-color .2s; }
+.sim-steps button:hover { background: var(--surface-2); }
+.sim-steps button.on { background: var(--sim-soft); color: var(--text); border-color: color-mix(in srgb, var(--sim) 30%, transparent); font-weight: 700; }
+.sim-n { flex: none; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--surface-3); font-size: 11.5px; font-weight: 700; transition: background .2s, color .2s, transform .3s var(--spring); }
+.sim-steps .on .sim-n { background: var(--sim); color: #fff; transform: scale(1.12); }
+.sim-steps .done .sim-n { background: var(--ok-soft); color: var(--ok); }
+.sim-note { min-height: 4.8em; margin: 0 0 12px; font-size: 14px; line-height: 1.6; color: var(--text); animation: fadeUp .35s var(--ease) both; }
+.sim-param { display: grid; gap: 6px; margin: 0 0 12px; font-size: 13px; color: var(--text-2); }
+.sim-param input { width: 100%; accent-color: var(--sim); }
+.sim-controls { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.sim-speed { margin-left: auto; display: flex; gap: 6px; align-items: center; font-size: 12.5px; color: var(--text-3); }
+.sim-speed select { height: 32px; }
+.sim-link { display: inline-flex; gap: 6px; align-items: center; margin-top: 12px; font-weight: 600; font-size: 13px; }
+.sim-tip { margin: 12px 0 0; font-size: 12.5px; color: var(--text-3); line-height: 1.55; }
+@media (max-width: 900px) { .sim-body { grid-template-columns: 1fr; } .concept-sim { padding: 14px; } .sim-steps { grid-template-columns: 1fr 1fr; } .sim-steps button { font-size: 12.5px; padding: 6px 8px; } }
+
+/* ===== Xuất hiện dần khi cuộn: lý thuyết ===== */
+@media (prefers-reduced-motion: no-preference) {
+  .theory-body .rv { opacity: 0; transform: translateY(14px); transition: opacity .5s var(--ease), transform .5s var(--ease); }
+  .theory-body .rv.in { opacity: 1; transform: none; }
+  .theory-body .formula.rv { clip-path: inset(0 100% 0 0); transition: opacity .4s var(--ease), clip-path .8s var(--ease) .1s; transform: none; }
+  .theory-body .formula.rv.in { clip-path: inset(0 0 0 0); }
+  .optional-theory[open] > .theory { animation: fadeUp .4s var(--ease) both; }
+
+  /* ===== Thực hành: các khối lab lần lượt trượt vào ===== */
+  .lab-anim > * > *, .lab-anim .card { animation: fadeUp .5s var(--ease) both; }
+  .lab-anim > * > *:nth-child(2) { animation-delay: .08s; }
+  .lab-anim > * > *:nth-child(3) { animation-delay: .16s; }
+  .lab-anim > * > *:nth-child(4) { animation-delay: .24s; }
+  .lab-anim > * > *:nth-child(n+5) { animation-delay: .3s; }
+}

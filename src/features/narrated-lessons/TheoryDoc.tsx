@@ -4,6 +4,8 @@ import { LESSONS, GROUPS, type Group } from '../../lessons';
 import { download } from '../../core/reporting/files';
 import { Icon } from '../../app/icons';
 import { PythonPractice } from './PythonPractice';
+import { ConceptSim } from '../concept-sim/ConceptSim';
+import { useReveal } from '../concept-sim/useReveal';
 
 /** Chữ đậm và liên kết HTTPS tham khảo, không dùng HTML thô. */
 function inline(text: string): ReactNode {
@@ -21,6 +23,7 @@ export function TheoryDoc({ lessonId, title, group }: { lessonId: string; title:
   const lesson = LESSONS.find((l) => l.id === lessonId);
   const subject = GROUPS.find((g) => g.id === group)?.title ?? 'Bài học';
   const heads = useMemo(() => blocks.filter((b): b is Extract<typeof b, { t: 'h' }> => b.t === 'h'), [blocks]);
+  const body = useReveal<HTMLDivElement>([blocks]);
   const mins = Math.max(1, Math.round((src?.split(/\s+/).length ?? 0) / 200));
 
   // Mục lục sáng theo đề mục đang đọc, để người học luôn biết mình đang ở đâu.
@@ -47,7 +50,7 @@ export function TheoryDoc({ lessonId, title, group }: { lessonId: string; title:
   };
 
   return (
-    <><p className="optional-note">Python là phần tùy chọn: hãy thử mô phỏng trước, rồi chạy notebook khi muốn khám phá thêm.</p><PythonPractice lessonId={lessonId} /><details className="optional-theory"><summary>Đọc thêm: công thức và lý thuyết chuyên sâu</summary><article className="theory" aria-labelledby={`theory-${lessonId}`}>
+    <><ConceptSim lessonId={lessonId} mode="theory" /><p className="optional-note">Python là phần tùy chọn: hãy thử mô phỏng trước, rồi chạy notebook khi muốn khám phá thêm.</p><PythonPractice lessonId={lessonId} /><details className="optional-theory"><summary>Đọc thêm: công thức và lý thuyết chuyên sâu</summary><article className="theory" aria-labelledby={`theory-${lessonId}`}>
       <header className="theory-head">
         <div className="th-copy">
           <h2 id={`theory-${lessonId}`} className="sr-only">{title} — tài liệu lý thuyết</h2>
@@ -86,15 +89,15 @@ export function TheoryDoc({ lessonId, title, group }: { lessonId: string; title:
             </ol>
           </nav>
         )}
-        <div className="theory-body">
+        <div className="theory-body" ref={body}>
           {blocks.map((b, i) => {
             switch (b.t) {
-              case 'h': return <h3 key={i} id={b.id}>{b.text}</h3>;
-              case 'p': return <p key={i}>{inline(b.text)}</p>;
-              case 'ul': return <ul key={i}>{b.items.map((x, j) => <li key={j}>{inline(x)}</li>)}</ul>;
-              case 'ol': return <ol key={i}>{b.items.map((x, j) => <li key={j}>{inline(x)}</li>)}</ol>;
-              case 'f': return <div key={i} className="formula" role="math" aria-label={b.text}>{b.text}</div>;
-              case 'note': return <aside key={i} className="theory-note">{inline(b.text)}</aside>;
+              case 'h': return <h3 key={i} id={b.id} className="rv">{b.text}</h3>;
+              case 'p': return <p key={i} className="rv">{inline(b.text)}</p>;
+              case 'ul': return <ul key={i} className="rv">{b.items.map((x, j) => <li key={j}>{inline(x)}</li>)}</ul>;
+              case 'ol': return <ol key={i} className="rv">{b.items.map((x, j) => <li key={j}>{inline(x)}</li>)}</ol>;
+              case 'f': return <div key={i} className="formula rv" role="math" aria-label={b.text}>{b.text}</div>;
+              case 'note': return <aside key={i} className="theory-note rv">{inline(b.text)}</aside>;
               default: return null;
             }
           })}
