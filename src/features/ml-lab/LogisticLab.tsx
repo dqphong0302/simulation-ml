@@ -36,7 +36,7 @@ export function LogisticLab({ d }: { d: LabData }) {
       <section className="main">
         <h3>Confusion matrix (validation)</h3>
         <Table data={{ columns: ['', 'Dự đoán: cam (dương)', 'Dự đoán: xanh (âm)'], rows: [['Thực tế: cam', `TP = ${c.tp}`, `FN = ${c.fn}`], ['Thực tế: xanh', `FP = ${c.fp}`, `TN = ${c.tn}`]] }} />
-        <p className="muted">Hạ ngưỡng → bắt được nhiều ca dương hơn (recall tăng) nhưng thêm cảnh báo sai (precision, specificity giảm). Lớp dương là nhóm cam.</p>
+        <p className="muted">Giữ nguyên điểm dự báo và hạ ngưỡng → recall không giảm, specificity không tăng; có thể thêm cảnh báo sai. Precision có thể tăng hoặc giảm. Lớp dương là nhóm cam; ngưỡng ở đây chỉ minh họa, không phải ngưỡng điều trị.</p>
         <Table data={table} />
         <Chart spec={lossChart} />
         {rocChart ? <Chart spec={rocChart} /> : <p className="muted">Tập validation chỉ có một lớp nên không tính ROC/AUC.</p>}

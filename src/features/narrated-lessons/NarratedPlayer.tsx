@@ -125,6 +125,7 @@ export function NarratedPlayer<P>({ lessonId, manifestUrl, noscriptHint, stage, 
               <button className="btn sm rate-btn" aria-label={`Tốc độ đọc ${rate}×, bấm để đổi`} onClick={() => { const R = [0.75, 1, 1.25, 1.5]; setRate(R[(R.indexOf(rate) + 1) % R.length]); }}>{String(rate).replace('.', ',')}×</button>
             </div>
           </div>
+          <div className="caption-heading">Lời giảng<span>Phím cách: phát / dừng · ← →: đổi slide</span></div>
           <p className="caption" key={scene.id}>{scene.caption}</p>
           {audioFail && <p role="alert" className="warn">Không phát được âm thanh. Hãy đọc phụ đề; bài học vẫn dùng được.</p>}
           {waiting && <div className="result" role="status"><span>{scene.prompt}</span><button className="primary" onClick={() => goto(idx + 1, true)}>Tiếp tục</button></div>}

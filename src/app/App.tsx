@@ -17,13 +17,17 @@ import { KnnLab } from '../features/ml-lab/KnnLab';
 import { LogisticLab } from '../features/ml-lab/LogisticLab';
 import { TreeLab } from '../features/ml-lab/TreeLab';
 import { SettingsPage } from '../features/settings/SettingsPage';
-import { GROUPS, LESSONS } from '../lessons';
+import { GROUPS, LESSONS, orderLessons } from '../lessons';
 import { SlideLecture } from '../features/narrated-lessons/SlideLecture';
 import { DataGate } from './DataGate';
 import { Icon } from './icons';
 import { ModeBadge, Toasts } from './ui';
 import { Home } from './Home';
+import { DataWorkspace } from './DataWorkspace';
 import { matchesLesson } from './search';
+import { LessonPrimer, LessonLearning } from '../learning/LessonLearning';
+import { LearningPath } from '../learning/LearningPath';
+import { Introduction, Capstone } from '../learning/StudyPages';
 const TheoryDoc = lazy(() => import('../features/narrated-lessons/TheoryDoc').then(m => ({ default: m.TheoryDoc })));
 const EdaLab = lazy(() => import('../features/eda/EdaLab').then(m => ({ default: m.EdaLab })));
 const TeachableLab = lazy(() => import('../features/teachable-lab/TeachableLab').then(m => ({ default: m.TeachableLab })));
@@ -87,16 +91,38 @@ function lectureFor(id: string, toLab: () => void): ReactNode {
 export function App() {
   const full = useHashPath();
   const [path, query] = full.split('?');
-  const tab = new URLSearchParams(query ?? '').get('tab') === 'lab' ? 'lab' : 'lecture';
+  const requested = new URLSearchParams(query ?? '').get('tab');
+  const tab: Tab = requested === 'lab' ? 'lab' : requested === 'theory' ? 'theory' : 'lecture';
   const lesson = LESSONS.find((l) => l.path === path);
   let page: ReactNode;
   if (lesson) {
     const toLab = () => { location.hash = `#${lesson.path}?tab=lab`; };
-    page = <div key={`${path}-${tab}`} className="tab-panel" role="tabpanel">{tab === 'lab' ? labFor(path) : <>{lectureFor(lesson.id, toLab)}<Suspense fallback={null}><TheoryDoc lessonId={lesson.id} title={lesson.title} /></Suspense></>}</div>;
-  } else if (path === '/settings') page = <SettingsPage />;
+    page = (
+      <div key={`${path}-${tab}`} className="tab-panel" role="tabpanel">
+        <LessonPrimer lessonId={lesson.id} />
+        {tab === 'lab' && <p className="practice-direction">Trước khi chỉnh tham số, hãy <a href={`#guided-${lesson.id}`} onClick={e => { e.preventDefault(); document.getElementById(`guided-${lesson.id}`)?.scrollIntoView({ behavior: 'smooth' }); }}>đọc thí nghiệm và ghi dự đoán bên dưới</a>. Đổi một yếu tố, rồi quay lại ghi kết quả.</p>}
+        {tab === 'lab' && labFor(path)}
+        {tab === 'lecture' && lectureFor(lesson.id, toLab)}
+        {tab === 'theory' && <Suspense fallback={<p className="loading">Đang mở tài liệu lý thuyết…</p>}><TheoryDoc lessonId={lesson.id} title={lesson.title} group={lesson.group} /></Suspense>}
+        <LessonLearning key={`${lesson.id}-${tab}`} lessonId={lesson.id} practice={tab === 'lab'} />
+      </div>
+    );
+  } else if (path === '/intro') page = <Introduction />;
+  else if (path === '/learning') page = <LearningPath />;
+  else if (path === '/project') page = <Capstone />;
+  else if (path === '/datasets') page = <DataWorkspace />;
+  else if (path === '/settings') page = <SettingsPage />;
   else page = <Home />;
   return <Shell path={path} tab={tab} lesson={lesson}>{page}</Shell>;
 }
+
+/** Ba mặt của một bài: nghe giảng, đọc lý thuyết, rồi thực hành. */
+export type Tab = 'lecture' | 'theory' | 'lab';
+export const TABS: { id: Tab; label: string; icon: string; hint: string }[] = [
+  { id: 'lecture', label: 'Bài giảng', icon: 'headphones', hint: 'Slide có giọng đọc, đồng bộ theo từng cảnh.' },
+  { id: 'theory', label: 'Lý thuyết', icon: 'file', hint: 'Tài liệu chữ đầy đủ: công thức, mục lục, tải về.' },
+  { id: 'lab', label: 'Thực hành', icon: 'chart', hint: 'Chạy mô phỏng, chỉnh tham số, tải CSV của bạn.' },
+];
 
 function Shell({ path, tab, lesson, children }: { path: string; tab: string; lesson?: (typeof LESSONS)[number]; children: ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -122,8 +148,9 @@ function Shell({ path, tab, lesson, children }: { path: string; tab: string; les
   const link = (href: string, label: string, icon?: string) => (
     <a key={href} href={`#${href}`} className="nav-link" aria-current={path === href ? 'page' : undefined}>{icon && <Icon name={icon} size={15} />}<span>{label}</span></a>
   );
-  const idx = lesson ? LESSONS.indexOf(lesson) : -1;
-  const prev = idx > 0 ? LESSONS[idx - 1] : null, next = idx >= 0 && idx < LESSONS.length - 1 ? LESSONS[idx + 1] : null;
+  const ordered = orderLessons(LESSONS);
+  const idx = lesson ? ordered.indexOf(lesson) : -1;
+  const prev = idx > 0 ? ordered[idx - 1] : null, next = idx >= 0 && idx < ordered.length - 1 ? ordered[idx + 1] : null;
   return (
     <div className={`shell${open ? ' nav-open' : ''}`}>
       <a className="skip" href="#main" onClick={e => { e.preventDefault(); document.getElementById('main')?.focus(); }}>Bỏ qua điều hướng</a>
@@ -141,8 +168,10 @@ function Shell({ path, tab, lesson, children }: { path: string; tab: string; les
       <aside id="lesson-sidebar" className="sidebar" aria-label="Bài học" inert={mobile && !open} onClick={e => { if ((e.target as HTMLElement).closest('a')) setOpen(false); }} onKeyDown={e => { if (e.key === 'Escape') { setOpen(false); document.getElementById('menu-toggle')?.focus(); } }}>
         <label className="search"><Icon name="search" size={15} /><input placeholder="Tìm bài…" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Tìm bài" /></label>
         {link('/', 'Trang chủ', 'home')}
+        {link('/learning', 'Lộ trình học tập', 'file')}
+        {link('/datasets', 'Nhập dữ liệu', 'database')}
         {GROUPS.map((g) => {
-          const items = LESSONS.filter((l) => l.group === g.id && matchesLesson(l, q));
+          const items = orderLessons(LESSONS.filter((l) => l.group === g.id && matchesLesson(l, q)));
           if (!items.length) return null;
           const isExpanded = q.trim().length > 0 || !!expanded[g.id];
           const shut = !isExpanded;
@@ -181,14 +210,18 @@ function Shell({ path, tab, lesson, children }: { path: string; tab: string; les
                 <ModeBadge mode={lesson.mode} />
               </div>
               <nav className="mode-tabs" role="tablist" aria-label="Chế độ học">
-                <a role="tab" aria-selected={tab === 'lecture'} href={`#${lesson.path}`} className={tab === 'lecture' ? 'on' : ''}>
-                  <span className="mt-ic"><Icon name="headphones" size={20} /></span>
-                  <span className="mt-txt"><b>Bài giảng</b><small>Slide có giọng đọc và tài liệu lý thuyết</small></span>
-                </a>
-                <a role="tab" aria-selected={tab === 'lab'} href={`#${lesson.path}?tab=lab`} className={tab === 'lab' ? 'on' : ''}>
-                  <span className="mt-ic"><Icon name="chart" size={20} /></span>
-                  <span className="mt-txt"><b>Thực hành</b><small>{lesson.group === 'genai' ? 'Thử với mô hình và tài liệu của bạn' : 'Chạy mô phỏng, chỉnh tham số, tải CSV'}</small></span>
-                </a>
+                {TABS.map((t) => (
+                  <a
+                    key={t.id}
+                    role="tab"
+                    aria-selected={tab === t.id}
+                    href={t.id === 'lecture' ? `#${lesson.path}` : `#${lesson.path}?tab=${t.id}`}
+                    className={tab === t.id ? 'on' : ''}
+                  >
+                    <span className="mt-ic"><Icon name={t.icon} size={20} /></span>
+                    <span className="mt-txt"><b>{t.label}</b><small>{t.id === 'lab' && lesson.group === 'genai' ? 'Thử với mô hình và tài liệu của bạn' : t.hint}</small></span>
+                  </a>
+                ))}
               </nav>
             </header>
           )}

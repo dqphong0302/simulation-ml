@@ -1,9 +1,12 @@
 import { useState } from 'react';
-import { GROUPS, LESSONS, type Group } from '../lessons';
+import { GROUPS, LESSONS, orderLessons, type Group } from '../lessons';
 import { Icon } from './icons';
 import { ModeBadge } from './ui';
 import { matchesLesson } from './search';
-import { DataImport } from './DataImport';
+import { LibraryTabs } from './DataWorkspace';
+import { LessonVisual } from './LessonVisual';
+import { LearningPath } from '../learning/LearningPath';
+import { CORE_LESSONS } from '../learning/model';
 
 export function Home() {
   const [group, setGroup] = useState<Group | 'all'>('all');
@@ -11,81 +14,30 @@ export function Home() {
 
   const lessons = GROUPS.flatMap((g) => LESSONS.filter((l) => l.group === g.id))
     .filter((l) => (group === 'all' || l.group === group) && matchesLesson(l, query));
+  const current = GROUPS.find((g) => g.id === group);
 
   return (
-    <div className="home compact-home clean-home">
-      {/* Hero tối giản, gọn gàng, ít chữ */}
-      <section className="home-intro" aria-labelledby="home-title">
-        <div className="home-intro-content">
-          <h1 id="home-title">Hiểu AI, từng bước một.</h1>
-          <p className="lead">
-            23 phòng lab tương tác và bài giảng audio trực quan chạy 100% trên trình duyệt.
-          </p>
-          <div className="home-intro-actions">
-            <a id="home-start" className="btn primary sm" href="#/eda">
-              Bắt đầu với EDA <Icon name="arrow" size={14} />
-            </a>
-            <a id="home-knn" className="btn sm" href="#/ml/knn">
-              <Icon name="headphones" size={14} /> Học nhanh KNN
-            </a>
-            <a id="home-teachable" className="btn sm" href="#/ml/teachable?tab=lab">
-              <Icon name="cpu" size={14} /> Nhận diện ảnh
-            </a>
-          </div>
-        </div>
-        <img
-          src="/images/ai-learning-studio.png"
-          alt="Góc học AI với laptop và đồ thị dữ liệu y sinh"
-          width="160"
-          height="160"
-          fetchPriority="high"
-        />
-      </section>
+    <div className="home">
+      <header className="library-intro">
+        <p className="eyebrow">AI · Y tế &amp; Y sinh</p>
+        <h1 id="home-title">Học từ nguyên lý, hiểu qua thực hành.</h1>
+        <p>{LESSONS.length} bài học · {GROUPS.length} chuyên đề · Bài giảng, lý thuyết và Python trên Colab.</p>
+      </header>
+      <LibraryTabs active="library" />
+      <LearningPath compact />
 
-      {/* Nhập dữ liệu riêng - gọn gàng 1 dòng */}
-      <details className="home-data">
-        <summary>
-          Nhập dữ liệu riêng <span>CSV · TSV · Excel · JSON</span>
-        </summary>
-        <div className="data-box-inner">
-          <DataImport />
-          <div className="data-box-footer">
-            <a id="home-explore-data" className="btn primary sm" href="#/eda?tab=lab">
-              Khám phá dữ liệu đã nhập <Icon name="arrow" size={14} />
-            </a>
-          </div>
-        </div>
-      </details>
-
-      {/* Danh mục bài học tinh gọn - không tràn chữ, cuộn cực ít */}
       <section className="lesson-catalog" aria-labelledby="catalog-title">
-        <h2 id="catalog-title" className="sr-only">Khám phá bài học ({lessons.length})</h2>
         <div className="catalog-toolbar">
-          <div className="catalog-filters" role="group" aria-label="Lọc theo chủ đề">
-            <button id="filter-all" type="button" aria-pressed={group === 'all'} onClick={() => setGroup('all')}>
-              Tất cả <span>{LESSONS.length}</span>
-            </button>
-            {GROUPS.map((g) => (
-              <button
-                id={`filter-${g.id}`}
-                key={g.id}
-                type="button"
-                aria-pressed={group === g.id}
-                onClick={() => setGroup(g.id)}
-              >
-                <Icon name={g.icon} size={14} />
-                {g.title}
-                <span>{LESSONS.filter((l) => l.group === g.id).length}</span>
-              </button>
-            ))}
+          <div className="ct-head">
+            <h2 id="catalog-title">Thư viện bài học</h2>
+            <p>{current ? current.blurb : 'Bài cơ bản trước, phần mở rộng sau. Không cần học hết để bắt đầu.'}</p>
           </div>
-
           <label className="search catalog-search" htmlFor="home-search">
-            <Icon name="search" size={14} />
+            <Icon name="search" size={16} />
             <input
               id="home-search"
               type="search"
-              placeholder="Tìm bài học…"
+              placeholder="Tìm bài học, mục tiêu…"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               aria-label="Tìm bài học trên trang chủ"
@@ -93,29 +45,71 @@ export function Home() {
           </label>
         </div>
 
-        <div className="lesson-list sleek-list">
-          {lessons.map((l) => (
-            <article className="lesson-row" key={l.id} title={l.goal}>
-              <span className={`lesson-symbol lesson-symbol-${l.group}`} aria-hidden="true">
-                <Icon name={GROUPS.find((g) => g.id === l.group)!.icon} size={18} />
-              </span>
+        <div className="catalog-filters" role="group" aria-label="Lọc theo chủ đề">
+          <span className="filter-label">Chuyên đề</span>
+          <button id="filter-all" type="button" className="chip" aria-pressed={group === 'all'} onClick={() => setGroup('all')}>
+            Tất cả <span className="count">{LESSONS.length}</span>
+          </button>
+          {GROUPS.map((g) => (
+            <button
+              id={`filter-${g.id}`}
+              key={g.id}
+              type="button"
+              className="chip"
+              aria-pressed={group === g.id}
+              onClick={() => setGroup(g.id)}
+            >
+              <Icon name={g.icon} size={14} />
+              {g.title}
+              <span className="count">{LESSONS.filter((l) => l.group === g.id).length}</span>
+            </button>
+          ))}
+        </div>
+
+        <p className="catalog-result" role="status">{lessons.length} bài học{query.trim() ? ` phù hợp với “${query.trim()}”` : ' · Chọn một bài để bắt đầu'}</p>
+        {GROUPS.map((section, index) => {
+          const items = lessons.filter(l => l.group === section.id);
+          if (!items.length) return null;
+          return <section className={`catalog-group catalog-group-${section.id}`} key={section.id} aria-labelledby={`group-${section.id}`}>
+            <header className="catalog-group-head">
+              <span className="group-number" aria-hidden="true">0{index + 1}</span>
+              <div><h3 id={`group-${section.id}`}>{section.title}</h3><p>{section.blurb}</p></div>
+              <span className="group-count">{items.length} bài học</span>
+            </header>
+            <div className="lesson-list sleek-list">
+          {orderLessons(items).map((l) => (
+            <article className="lesson-row" key={l.id}>
+              <a className="lesson-thumbnail" href={`#${l.path}`} aria-label={`Xem bài ${l.title}`}>
+                <LessonVisual group={l.group} lessonId={l.id} label={l.title.split(':')[0]} />
+              </a>
               <div className="lesson-row-copy">
-                <h3>
+                <h4>
                   <a id={`lesson-${l.id}`} href={`#${l.path}`}>
                     {l.title.split(':')[0]}
                   </a>
-                </h3>
-                <ModeBadge mode={l.mode} short />
+                </h4>
+                <span className="lesson-level">{String(orderLessons(LESSONS.filter(x => x.group === l.group)).findIndex(x => x.id === l.id) + 1).padStart(2, '0')} · {CORE_LESSONS.includes(l.id) ? 'Cơ bản' : 'Mở rộng · Tùy chọn'}</span>
+                <p className="lesson-goal">{l.goal}</p>
               </div>
+              <ModeBadge mode={l.mode} short />
               <div className="lesson-row-actions">
                 <a
                   id={`lecture-${l.id}`}
                   href={`#${l.path}`}
-                  className="btn-action lecture"
+                  className="btn-action"
                   aria-label={`Bài giảng ${l.title.split(':')[0]}`}
                 >
-                  <Icon name="headphones" size={14} />
-                  <span>Bài giảng</span>
+                  <Icon name="headphones" size={15} />
+                  <span>Giảng</span>
+                </a>
+                <a
+                  id={`theory-${l.id}`}
+                  href={`#${l.path}?tab=theory`}
+                  className="btn-action"
+                  aria-label={`Lý thuyết ${l.title.split(':')[0]}`}
+                >
+                  <Icon name="file" size={15} />
+                  <span>Lý thuyết · Python</span>
                 </a>
                 <a
                   id={`practice-${l.id}`}
@@ -124,16 +118,18 @@ export function Home() {
                   aria-label={`Thực hành ${l.title.split(':')[0]}`}
                 >
                   <span>Thực hành</span>
-                  <Icon name="arrow" size={14} />
+                  <Icon name="arrow" size={15} />
                 </a>
               </div>
             </article>
           ))}
-        </div>
+            </div>
+          </section>;
+        })}
 
         {!lessons.length && (
           <div className="catalog-empty">
-            <Icon name="search" size={24} />
+            <Icon name="search" size={26} />
             <h3>Không tìm thấy bài học</h3>
             <p>Thử từ khóa khác hoặc chuyển sang chuyên đề khác.</p>
             <button id="home-reset" className="btn primary sm" onClick={() => { setQuery(''); setGroup('all'); }}>

@@ -12,7 +12,7 @@ interface Props {
 }
 
 const W = 560, H = 380, M = { l: 52, r: 12, t: 12, b: 44 };
-const COLOR = ['#1f6feb', '#d9480f'];
+const COLOR = ['#2563eb', '#dc6a0b'];
 
 /** Nhóm phân biệt bằng cả màu lẫn hình (tròn / tam giác), không chỉ dựa vào màu. */
 export function Scatter({ points, names, featureNames, query, highlight = [], onPick, bounds, predicted }: Props) {

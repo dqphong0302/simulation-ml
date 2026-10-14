@@ -6,7 +6,7 @@ import type { TableData } from '../../core/types';
 import { Table } from '../../app/ui';
 
 /** Thống kê mô tả cho một bảng CSV bất kỳ: tổng quan, cảnh báo, thống kê, phân bố, hộp, phân tán, tương quan. Chỉ mô tả, không fit mô hình. */
-export const PALETTE = ['#2563eb', '#ea580c', '#16a34a', '#9333ea', '#dc2626', '#0891b2', '#ca8a04', '#db2777', '#4b5563', '#65a30d', '#7c3aed', '#0d9488'];
+export const PALETTE = ['#2563eb', '#dc6a0b', '#0f9a6c', '#9333ea', '#c0392b', '#0b5cab', '#b2530a', '#c0392b', '#475467', '#0f9a6c', '#9333ea', '#0f9a6c'];
 const cc = (k: number) => PALETTE[((k % PALETTE.length) + PALETTE.length) % PALETTE.length];
 
 interface NumProfile { kind: 'numeric'; v: number[]; mean: number | null; std: number | null; min: number | null; q1: number; median: number | null; q3: number; max: number | null; skew: number | null; zeros: number; outliers: number; zeroGap: number | null }
@@ -206,7 +206,7 @@ export function DataProfile({ table, cols, target, fileName }: { table: FreeTabl
         <div className="tbl-wrap"><table className="tbl heat corr">
           <thead><tr><th />{nums.slice(0, 20).map((c) => <th key={c.info.name} title={c.info.name}>{c.info.name}</th>)}</tr></thead>
           <tbody>{nums.slice(0, 20).map((a, i) => <tr key={a.info.name}><th>{a.info.name}</th>{corr[i].map((r, j) => (
-            <td key={j} title={`${a.info.name} – ${nums[j].info.name}: ${g(r, 3)}`} onClick={() => setPick([i, j])} style={{ cursor: 'pointer', background: r === null ? undefined : `color-mix(in srgb, ${r > 0 ? '#2563eb' : '#dc2626'} ${Math.round(Math.abs(r) * 70)}%, white)`, color: r !== null && Math.abs(r) > 0.6 ? '#fff' : undefined }}>{g(r)}</td>
+            <td key={j} title={`${a.info.name} – ${nums[j].info.name}: ${g(r, 3)}`} onClick={() => setPick([i, j])} style={{ cursor: 'pointer', background: r === null ? undefined : `color-mix(in srgb, ${r > 0 ? '#2563eb' : '#c0392b'} ${Math.round(Math.abs(r) * 70)}%, white)`, color: r !== null && Math.abs(r) > 0.6 ? '#fff' : undefined }}>{g(r)}</td>
           ))}</tr>)}</tbody>
         </table></div>
         <p className="muted">Xanh = cùng chiều, đỏ = ngược chiều; càng đậm càng mạnh. Bấm một ô để xem biểu đồ phân tán của cặp đó. Tương quan chỉ đo quan hệ tuyến tính, không phải nhân quả.</p>
@@ -215,7 +215,7 @@ export function DataProfile({ table, cols, target, fileName }: { table: FreeTabl
       {assoc.length > 0 && <>
         <h3>{nums.length >= 2 ? (classMode ? 7 : 6) : 3}. Biến nào liên hệ nhiều nhất với “{target}”?</h3>
         <div className="bars">{assoc.slice(0, 15).map((a) => (
-          <div key={a.name} className="bar-row" title={a.how}><span>{a.name}</span><i style={{ width: `${Math.min(1, a.abs) * 100}%`, background: a.val !== null && a.val < 0 ? '#dc2626' : undefined }} /><b>{g(a.val, 2)}</b></div>
+          <div key={a.name} className="bar-row" title={a.how}><span>{a.name}</span><i style={{ width: `${Math.min(1, a.abs) * 100}%`, background: a.val !== null && a.val < 0 ? '#c0392b' : undefined }} /><b>{g(a.val, 2)}</b></div>
         ))}</div>
         <p className="muted">{classMode ? 'η² = tỷ lệ phương sai của biến được giải thích bởi nhóm (0 = không khác nhau giữa các nhóm, 1 = tách hoàn toàn).' : 'Hệ số Pearson r với cột đích.'} Đây là liên hệ từng biến riêng lẻ.</p>
       </>}
@@ -251,14 +251,14 @@ function Mini({ p, big, classOf, nC, onClick }: { p: Profile; big: boolean; clas
         {bars.map((b, i) => { let y = H - M.b; return <g key={i}><title>{`${b.label}: ${b.parts.reduce((a, c) => a + c, 0)}`}</title>{b.parts.map((c, k) => {
           const h = (c / mx) * (H - M.t - M.b); y -= h;
           return <rect key={k} x={M.l + i * bw + 0.6} y={y} width={Math.max(1, bw - 1.2)} height={h} fill={classOf ? cc(k) : '#0ea5c6'} opacity={0.85} />;
-        })}{p.kind === 'categorical' && big && <text x={M.l + i * bw + bw / 2} y={H - 10} fontSize="10" textAnchor="middle" fill="#4b5563">{b.label.slice(0, 10)}</text>}</g>; })}
+        })}{p.kind === 'categorical' && big && <text x={M.l + i * bw + bw / 2} y={H - 10} fontSize="10" textAnchor="middle" fill="#475467">{b.label.slice(0, 10)}</text>}</g>; })}
         {p.kind === 'numeric' && p.mean !== null && p.median !== null && p.max !== p.min && (() => {
           const X = (v: number) => M.l + ((v - (p.min ?? 0)) / ((p.max ?? 1) - (p.min ?? 0))) * (W - M.l - M.r);
-          return <g strokeWidth="1.5"><line x1={X(p.mean)} x2={X(p.mean)} y1={M.t} y2={H - M.b} stroke="#dc2626" strokeDasharray="4 3" /><line x1={X(p.median)} x2={X(p.median)} y1={M.t} y2={H - M.b} stroke="#111827" /></g>;
+          return <g strokeWidth="1.5"><line x1={X(p.mean)} x2={X(p.mean)} y1={M.t} y2={H - M.b} stroke="#c0392b" strokeDasharray="4 3" /><line x1={X(p.median)} x2={X(p.median)} y1={M.t} y2={H - M.b} stroke="#0f1729" /></g>;
         })()}
         <line x1={M.l} x2={W - M.r} y1={H - M.b} y2={H - M.b} stroke="#9ca3af" />
-        <text x={M.l} y={H - 5} fontSize="10" fill="#6b7280">{axis[0]}</text>
-        <text x={W - M.r} y={H - 5} fontSize="10" textAnchor="end" fill="#6b7280">{axis[1]}</text>
+        <text x={M.l} y={H - 5} fontSize="10" fill="#6b7689">{axis[0]}</text>
+        <text x={W - M.r} y={H - 5} fontSize="10" textAnchor="end" fill="#6b7689">{axis[1]}</text>
       </svg>
       {p.kind === 'numeric' && <span className="mini-key"><i className="k-med" />median <i className="k-mean" />trung bình</span>}
     </button>
@@ -280,15 +280,15 @@ function BoxPlot({ p, groups }: { p: Profile & NumProfile; groups: { classOf: (i
           const out = v.filter((x) => x < wl || x > wh);
           const y = 6 + r * rowH + rowH / 2, col = s.k >= 0 ? cc(s.k) : '#0ea5c6';
           return <g key={s.name}><title>{`${s.name}: Q1 ${g(q1)}, median ${g(md)}, Q3 ${g(q3)}, ${out.length} ngoại lai`}</title>
-            <line x1={X(wl)} x2={X(wh)} y1={y} y2={y} stroke="#6b7280" />
-            <line x1={X(wl)} x2={X(wl)} y1={y - 5} y2={y + 5} stroke="#6b7280" /><line x1={X(wh)} x2={X(wh)} y1={y - 5} y2={y + 5} stroke="#6b7280" />
+            <line x1={X(wl)} x2={X(wh)} y1={y} y2={y} stroke="#6b7689" />
+            <line x1={X(wl)} x2={X(wl)} y1={y - 5} y2={y + 5} stroke="#6b7689" /><line x1={X(wh)} x2={X(wh)} y1={y - 5} y2={y + 5} stroke="#6b7689" />
             <rect x={X(q1)} y={y - 7} width={Math.max(1, X(q3) - X(q1))} height={14} fill={col} opacity={0.3} stroke={col} />
-            <line x1={X(md)} x2={X(md)} y1={y - 7} y2={y + 7} stroke="#111827" strokeWidth="2" />
+            <line x1={X(md)} x2={X(md)} y1={y - 7} y2={y + 7} stroke="#0f1729" strokeWidth="2" />
             {out.slice(0, 80).map((o, j) => <circle key={j} cx={X(o)} cy={y} r={1.8} fill={col} opacity={0.7} />)}
           </g>;
         })}
-        <text x={8} y={H - 3} fontSize="10" fill="#6b7280">{g(lo)}</text>
-        <text x={W - 8} y={H - 3} fontSize="10" textAnchor="end" fill="#6b7280">{g(hi)}</text>
+        <text x={8} y={H - 3} fontSize="10" fill="#6b7689">{g(lo)}</text>
+        <text x={W - 8} y={H - 3} fontSize="10" textAnchor="end" fill="#6b7689">{g(hi)}</text>
       </svg>
     </figure>
   );
@@ -312,15 +312,15 @@ function ScatterXY({ a, b, classOf }: { a: Profile & NumProfile; b: Profile & Nu
       <div role="img" aria-label={`Biểu đồ phân tán ${a.info.name} theo ${b.info.name}, r = ${g(r)}`}>
         <svg viewBox={`0 0 ${W} ${H}`}>
           <rect width={W} height={H} fill="#fff" />
-          {[0, 1, 2, 3, 4].map((k) => { const xv = rx[0] + ((rx[1] - rx[0]) * k) / 4, yv = ry[0] + ((ry[1] - ry[0]) * k) / 4; return <g key={k} fontSize="11" fill="#4b5563">
+          {[0, 1, 2, 3, 4].map((k) => { const xv = rx[0] + ((rx[1] - rx[0]) * k) / 4, yv = ry[0] + ((ry[1] - ry[0]) * k) / 4; return <g key={k} fontSize="11" fill="#475467">
             <line x1={X(xv)} x2={X(xv)} y1={M.t} y2={H - M.b} stroke="#eef0f3" /><line x1={M.l} x2={W - M.r} y1={Y(yv)} y2={Y(yv)} stroke="#eef0f3" />
             <text x={X(xv)} y={H - M.b + 16} textAnchor="middle">{g(xv, 1)}</text><text x={M.l - 6} y={Y(yv) + 4} textAnchor="end">{g(yv, 1)}</text></g>; })}
           <rect x={M.l} y={M.t} width={W - M.l - M.r} height={H - M.t - M.b} fill="none" stroke="#9ca3af" />
           {idx.map((i, k) => <circle key={k} cx={X(xs[k])} cy={Y(ys[k])} r={3.2} fill={classOf ? cc(classOf(i)) : '#0ea5c6'} opacity={0.6} />)}
-          <line x1={X(rx[0])} y1={Y(my + slope * (rx[0] - mx))} x2={X(rx[1])} y2={Y(my + slope * (rx[1] - mx))} stroke="#111827" strokeDasharray="6 4" strokeWidth="1.5" />
-          <text x={(M.l + W - M.r) / 2} y={H - 8} textAnchor="middle" fontSize="12.5" fontWeight="600" fill="#111827">{a.info.name}</text>
-          <text transform={`translate(15 ${(M.t + H - M.b) / 2}) rotate(-90)`} textAnchor="middle" fontSize="12.5" fontWeight="600" fill="#111827">{b.info.name}</text>
-          <text x={W - M.r - 8} y={M.t + 18} textAnchor="end" fontSize="13" fontWeight="700" fill="#111827">r = {g(r)}</text>
+          <line x1={X(rx[0])} y1={Y(my + slope * (rx[0] - mx))} x2={X(rx[1])} y2={Y(my + slope * (rx[1] - mx))} stroke="#0f1729" strokeDasharray="6 4" strokeWidth="1.5" />
+          <text x={(M.l + W - M.r) / 2} y={H - 8} textAnchor="middle" fontSize="12.5" fontWeight="600" fill="#0f1729">{a.info.name}</text>
+          <text transform={`translate(15 ${(M.t + H - M.b) / 2}) rotate(-90)`} textAnchor="middle" fontSize="12.5" fontWeight="600" fill="#0f1729">{b.info.name}</text>
+          <text x={W - M.r - 8} y={M.t + 18} textAnchor="end" fontSize="13" fontWeight="700" fill="#0f1729">r = {g(r)}</text>
         </svg>
       </div>
       <figcaption className="muted">{idx.length} điểm. Đường đứt: xu hướng tuyến tính. |r| gần 1: quan hệ tuyến tính mạnh; gần 0: không có quan hệ tuyến tính (có thể vẫn có quan hệ cong).</figcaption>

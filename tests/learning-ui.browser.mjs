@@ -20,7 +20,7 @@ try {
   for (const [width, height] of [[1440, 900], [768, 1024], [390, 844]]) {
     await page.setViewportSize({ width, height });
     await page.goto(baseURL);
-    await page.locator('.home-intro').waitFor();
+    await page.locator('.library-intro').waitFor();
     await page.emulateMedia({ reducedMotion: 'reduce' });
     assert.equal(await page.locator('h1').count(), 1);
     assert.equal(await page.locator('.hero-stats').count(), 0);
@@ -28,12 +28,13 @@ try {
     assert.equal(await page.getByRole('button', { name: /Chuyển sang giao diện/ }).count(), 0);
     assert.equal(await page.evaluate(() => getComputedStyle(document.documentElement).colorScheme), 'light');
     assert.equal(await page.locator('.lesson-row').count(), 23);
-    await page.waitForFunction(() => {
-      const img = document.querySelector('.home-intro img');
-      return img instanceof HTMLImageElement && img.complete && img.naturalWidth > 0;
-    });
+    assert.equal(await page.locator('.catalog-group').count(), 4);
+    assert.equal(await page.locator('.lesson-thumbnail svg').count(), 23);
+    assert.equal(await page.locator('.home-data').count(), 0);
+    assert.equal(await page.locator('.home-intro').count(), 0);
     await page.locator('#filter-foundation').click();
     assert.equal(await page.locator('.lesson-row').count(), 2);
+    assert.equal(await page.locator('.catalog-group').count(), 1);
     await page.locator('#home-search').fill('kham pha');
     assert.equal(await page.locator('.lesson-row').count(), 1);
     await page.locator('#home-search').fill('xyz-no-lesson');
@@ -54,6 +55,11 @@ try {
     await goTo(page, 2);
     assert.equal(await page.locator('audio').count(), 1);
     assert.match(await page.locator('.slide h2').innerText(), /lan truyền ngược/);
+    assert.ok(await page.locator('.lecture-illustration').isVisible(), `slide illustration hidden at ${width}`);
+    const toolbar = await page.locator('.deck-toolbar').boundingBox();
+    const slide = await page.locator('.slide').boundingBox();
+    assert.ok(toolbar && slide && toolbar.y + toolbar.height <= slide.y + 1, `navigation overlaps slide at ${width}`);
+    if (width === 1440) assert.ok(slide.width > 900, 'desktop slide is unnecessarily narrow');
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `lecture overflow at ${width}`);
     await page.screenshot({ path: `/tmp/simulation-lesson-${width}.png` });
     await page.goto(`${baseURL}/#/data`);

@@ -12,7 +12,7 @@ try {
   page.on('pageerror', e => errors.push(e.message));
   page.on('request', r => { if (r.url().startsWith('http') && !r.url().startsWith(baseURL)) external.push(r.url()); });
   await page.goto(baseURL);
-  await page.locator('.home-data summary').click();
+  await page.locator('.library-tabs a[href="#/datasets"]').click();
   await upload(page, 'my-data.csv', csv(120));
   await expect(page.getByRole('heading', { name: /Xem trước: 120 dòng/ })).toBeVisible();
   for (const [width, height] of [[1440, 900], [768, 1024], [390, 844]]) {

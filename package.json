@@ -11,6 +11,9 @@
     "test:ui": "node tests/learning-ui.browser.mjs && node tests/navigation.browser.mjs",
     "test:lectures": "node tests/lectures.browser.mjs",
     "test:imports": "node tests/import-data.browser.mjs",
+    "test:python": "node tests/python.browser.mjs",
+    "test:learning": "node tests/learning-path.browser.mjs",
+    "test:adaptive": "node tests/adaptive-learning.browser.mjs",
     "deploy": "pnpm run build && wrangler deploy"
   },
   "dependencies": {

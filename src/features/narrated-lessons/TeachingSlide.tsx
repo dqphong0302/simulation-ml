@@ -10,8 +10,8 @@ export function TeachingSlide({ preset, lessonId, index, onPractice }: {
     <div className="lecture-illustration">{SlideFigure({ title: preset.title }) ?? <LessonVisual
       group={LESSONS.find(l => l.id === lessonId)?.group ?? 'foundation'}
       lessonId={lessonId} label={`Slide ${index + 1} · Minh họa nguyên lý`} />}</div>
-    <span className="slide-no" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
     <div className="slide-body">
+      <p className="slide-kicker">Ý chính <span>{String(index + 1).padStart(2, '0')}</span></p>
       <h2>{preset.title}</h2>
       <ul>{preset.bullets.map((b, i) => <li key={b} style={{ animationDelay: `${0.15 + i * 0.12}s` }}>{b}</li>)}</ul>
       {onPractice && <button className="btn ghost" onClick={onPractice}>Sang phần thực hành →</button>}

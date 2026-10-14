@@ -20,6 +20,12 @@ export const GROUPS: { id: Group; title: string; icon: string; blurb: string }[]
 
 /** Các bài có bài giảng kèm mô phỏng đồng bộ theo cảnh; các bài còn lại có bài giảng dạng slide. */
 export const STAGED_LECTURES = new Set(['KNN', 'TREE', 'LOGREG']);
+/** Explicit teaching order, shared by the library, sidebar and lesson pager. */
+const TEACHING_ORDER = ['EDA', 'DATA', 'KNN', 'TREE', 'LOGREG', 'COMPARE', 'TEACHABLE', 'LINREG', 'KMEANS', 'PCA', 'FOREST', 'SVM', 'MLP', 'CNN', 'ATTN', 'GPT', 'AE', 'VAE', 'GAN', 'DIFF', 'GENCON', 'GENAI', 'RAG'];
+export function orderLessons<T extends { id: string }>(lessons: readonly T[]): T[] {
+  const rank = (id: string) => { const i = TEACHING_ORDER.indexOf(id); return i < 0 ? TEACHING_ORDER.length : i; };
+  return [...lessons].sort((a, b) => rank(a.id) - rank(b.id));
+}
 
 export const MODE_CLASS: Record<LessonMeta['mode'], string> = {
   'Mô phỏng nguyên lý': 'sim',

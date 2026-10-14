@@ -5,7 +5,7 @@ import { fitLine, forestPredict, forestProba, kmeans, kmeansInit, kmeansStep, pc
 import { Chart, Field, Table } from '../../app/ui';
 import type { LabData } from './useData';
 
-const COL = ['#1f6feb', '#d9480f', '#2f9e44', '#9c36b5', '#b08800', '#0b7285'];
+const COL = ['#2563eb', '#dc6a0b', '#0f9a6c', '#9333ea', '#b2530a', '#0a4f94'];
 const W = 520, H = 360, M = 44;
 
 export function Plot({ pts, groups, ring, lines, xl, yl, centers }: { pts: number[][]; groups: number[]; ring?: number[]; lines?: [number, number, number, number][]; xl: string; yl: string; centers?: number[][] }) {
@@ -191,10 +191,10 @@ export function SvmLab({ d }: { d: LabData }) {
         <p className="badge">Huấn luyện thật — SVM {kLabel}{kname !== 'linear-sgd' ? ', tối ưu bằng SMO' : ''}</p>
         {two ? (
           <svg viewBox={`0 0 ${S} ${S}`} className="scatter" style={{ maxWidth: 420, cursor: 'default' }} role="img" aria-label="Vùng quyết định của SVM trên hai biến">
-            {cells.map((c) => <rect key={`${c.i}-${c.j}`} x={c.i * cs} y={S - (c.j + 1) * cs} width={cs + .5} height={cs + .5} fill={c.s >= 0 ? '#ea580c' : '#2563eb'} opacity={Math.min(0.45, 0.12 + Math.abs(c.s) * 0.15)} />)}
+            {cells.map((c) => <rect key={`${c.i}-${c.j}`} x={c.i * cs} y={S - (c.j + 1) * cs} width={cs + .5} height={cs + .5} fill={c.s >= 0 ? '#dc6a0b' : '#2563eb'} opacity={Math.min(0.45, 0.12 + Math.abs(c.s) * 0.15)} />)}
             {data.train.map((s, i) => s.y === 0
               ? <circle key={i} cx={px(s.x[0])} cy={py(s.x[1])} r={3} fill="#2563eb" stroke="#fff" strokeWidth=".5" />
-              : <polygon key={i} points={`${px(s.x[0])},${py(s.x[1]) - 4} ${px(s.x[0]) - 3.5},${py(s.x[1]) + 3} ${px(s.x[0]) + 3.5},${py(s.x[1]) + 3}`} fill="#ea580c" stroke="#fff" strokeWidth=".5" />)}
+              : <polygon key={i} points={`${px(s.x[0])},${py(s.x[1]) - 4} ${px(s.x[0]) - 3.5},${py(s.x[1]) + 3} ${px(s.x[0]) + 3.5},${py(s.x[1]) + 3}`} fill="#dc6a0b" stroke="#fff" strokeWidth=".5" />)}
           </svg>
         ) : <p className="muted">Chọn đúng 2 biến để xem vùng quyết định; với nhiều biến ranh giới không vẽ được trên 2D.</p>}
         <p className="muted">Nền: vùng mô hình dự đoán (xanh/cam), càng đậm càng xa ranh giới. Kernel cho phép ranh giới cong mà không cần tự tạo biến mới. γ lớn làm ranh giới uốn sát từng điểm (dễ overfitting); C lớn phạt nặng điểm sai. Trục: {data.names.join(' × ')}.</p>

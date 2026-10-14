@@ -4,9 +4,9 @@ import type { ReactNode } from 'react';
  * Hình minh họa riêng cho từng slide (khóa theo tiêu đề slide). Vẽ SVG 360×240, cùng một bảng màu:
  * xanh = dữ liệu/nhóm A, cam = nhóm B / cảnh báo, xám = khung. Slide nào không có ở đây dùng hình chung của bài.
  */
-const C = { a: '#0891b2', a2: '#0e7490', soft: '#e0f2fe', b: '#ea580c', bSoft: '#ffedd5', ink: '#1f2937', mute: '#6b7280', line: '#cbd5e1', ok: '#16a34a', bad: '#dc2626', bg: '#f8fafc' };
+const C = { a: '#0b5cab', a2: '#094d90', soft: '#e7f0fa', b: '#dc6a0b', bSoft: '#fff6ec', ink: '#0f1729', mute: '#6b7689', line: '#cdd3dc', ok: '#0f9a6c', bad: '#c0392b', bg: '#f4f6f9' };
 const T = ({ x, y, children, s = 13, w = 500, c = C.ink, a = 'middle' }: { x: number; y: number; children: ReactNode; s?: number; w?: number; c?: string; a?: 'start' | 'middle' | 'end' }) =>
-  <text x={x} y={y} fontSize={s * 1.12} fontWeight={w} fill={c} textAnchor={a} fontFamily="Inter, system-ui, sans-serif">{children}</text>;
+  <text x={x} y={y} fontSize={s * 1.12} fontWeight={w} fill={c} textAnchor={a} fontFamily="Be Vietnam Pro, Inter, system-ui, sans-serif">{children}</text>;
 const Arrow = ({ x1, y1, x2, y2, c = C.mute }: { x1: number; y1: number; x2: number; y2: number; c?: string }) => {
   const a = Math.atan2(y2 - y1, x2 - x1), h = 7;
   return <g stroke={c} strokeWidth="2" fill="none" strokeLinecap="round"><line x1={x1} y1={y1} x2={x2} y2={y2} /><path d={`M${x2 - h * Math.cos(a - 0.5)} ${y2 - h * Math.sin(a - 0.5)} L${x2} ${y2} L${x2 - h * Math.cos(a + 0.5)} ${y2 - h * Math.sin(a + 0.5)}`} /></g>;

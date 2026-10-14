@@ -142,10 +142,10 @@ export function DlLab({ d }: { d: LabData }) {
         <NeuronDemo />
         <h3>2. Huấn luyện mạng nhỏ (backpropagation tự cài đặt)</h3>
         {nIn === 2 ? <svg viewBox={`0 0 ${S} ${S}`} className="scatter" role="img" aria-label="Bản đồ xác suất dự đoán của mạng trên lưới 2 chiều" style={{ maxWidth: 380, cursor: 'default' }}>
-          {cells.map((c) => <rect key={`${c.x}-${c.y}`} x={c.x * cs} y={S - (c.y + 1) * cs} width={cs + 0.5} height={cs + 0.5} fill={c.p >= 0.5 ? '#d9480f' : '#1f6feb'} opacity={0.15 + 0.35 * Math.abs(c.p - 0.5) * 2} />)}
+          {cells.map((c) => <rect key={`${c.x}-${c.y}`} x={c.x * cs} y={S - (c.y + 1) * cs} width={cs + 0.5} height={cs + 0.5} fill={c.p >= 0.5 ? '#dc6a0b' : '#2563eb'} opacity={0.15 + 0.35 * Math.abs(c.p - 0.5) * 2} />)}
           {data.raw.map((s, i) => s.y === 0
-            ? <circle key={i} cx={px(s.x[0])} cy={py(s.x[1])} r={3.5} fill="#1f6feb" stroke="#fff" strokeWidth=".5" />
-            : <polygon key={i} points={`${px(s.x[0])},${py(s.x[1]) - 4.5} ${px(s.x[0]) - 4},${py(s.x[1]) + 3.5} ${px(s.x[0]) + 4},${py(s.x[1]) + 3.5}`} fill="#d9480f" stroke="#fff" strokeWidth=".5" />)}
+            ? <circle key={i} cx={px(s.x[0])} cy={py(s.x[1])} r={3.5} fill="#2563eb" stroke="#fff" strokeWidth=".5" />
+            : <polygon key={i} points={`${px(s.x[0])},${py(s.x[1]) - 4.5} ${px(s.x[0]) - 4},${py(s.x[1]) + 3.5} ${px(s.x[0]) + 4},${py(s.x[1]) + 3.5}`} fill="#dc6a0b" stroke="#fff" strokeWidth=".5" />)}
         </svg> : <p className="muted">Bản đồ quyết định chỉ vẽ được khi mạng có đúng 2 biến đầu vào (hiện {nIn} biến). Hãy xem loss và accuracy.</p>}
         <p className="muted">Nền: vùng dự đoán (xanh = lớp 0, cam = lớp 1) trên lưới của hai biến. Tròn = lớp 0, tam giác = lớp 1 (train). Đây là kết quả của lần huấn luyện thật.</p>
         <Table data={table} />

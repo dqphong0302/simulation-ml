@@ -1,6 +1,6 @@
 import type { ChartSpec } from '../types';
 
-const COLORS = ['#2563eb', '#ea580c', '#059669', '#9333ea'];
+const COLORS = ['#2563eb', '#dc6a0b', '#0f9a6c', '#9333ea'];
 const MARKS = ['circle', 'square', 'triangle', 'diamond'];
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
 
@@ -19,24 +19,24 @@ export function chartToSvg(spec: ChartSpec, w = 720, h = 420): string {
   const X = (v: number) => m.l + ((v - x0) / (x1 - x0)) * (w - m.l - m.r);
   const Y = (v: number) => h - m.b - ((v - y0) / (y1 - y0)) * (h - m.t - m.b);
   const parts: string[] = [
-    `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" font-family="Inter, Segoe UI, Arial, sans-serif">`,
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" font-family="Be Vietnam Pro, Inter, Segoe UI, Arial, sans-serif">`,
     `<rect width="${w}" height="${h}" fill="#fff"/>`,
-    `<text x="${w / 2}" y="24" text-anchor="middle" font-size="15" font-weight="600" fill="#111827">${esc(spec.title)}</text>`,
+    `<text x="${w / 2}" y="24" text-anchor="middle" font-size="15" font-weight="600" fill="#0f1729">${esc(spec.title)}</text>`,
   ];
   for (let i = 0; i <= 4; i++) {
     const yv = y0 + ((y1 - y0) * i) / 4;
-    parts.push(`<line x1="${m.l}" x2="${w - m.r}" y1="${Y(yv)}" y2="${Y(yv)}" stroke="#eceef2"/>`,
-      `<text x="${m.l - 8}" y="${Y(yv) + 4}" text-anchor="end" font-size="11">${yv.toFixed(2)}</text>`);
+    parts.push(`<line x1="${m.l}" x2="${w - m.r}" y1="${Y(yv)}" y2="${Y(yv)}" stroke="#e3e7ed"/>`,
+      `<text x="${m.l - 8}" y="${Y(yv) + 4}" text-anchor="end" font-size="11" fill="#6b7689">${yv.toFixed(2)}</text>`);
   }
   const xs = Array.from(new Set(all.map((p) => p[0]))).sort((a, b) => a - b);
   const xTicks = xs.length <= 10 ? xs : [0, 1, 2, 3, 4].map((i) => x0 + ((x1 - x0) * i) / 4);
   xTicks.forEach((xv) => parts.push(
-    `<line x1="${X(xv)}" x2="${X(xv)}" y1="${h - m.b}" y2="${h - m.b + 4}" stroke="#333"/>`,
-    `<text x="${X(xv)}" y="${h - m.b + 18}" text-anchor="middle" font-size="11">${Number.isInteger(xv) ? xv : xv.toFixed(2)}</text>`));
-  parts.push(`<line x1="${m.l}" x2="${m.l}" y1="${m.t}" y2="${h - m.b}" stroke="#333"/>`,
-    `<line x1="${m.l}" x2="${w - m.r}" y1="${h - m.b}" y2="${h - m.b}" stroke="#333"/>`,
-    `<text x="${(m.l + w - m.r) / 2}" y="${h - 22}" text-anchor="middle" font-size="12">${esc(spec.xLabel)}</text>`,
-    `<text transform="translate(16 ${(m.t + h - m.b) / 2}) rotate(-90)" text-anchor="middle" font-size="12">${esc(spec.yLabel)}</text>`);
+    `<line x1="${X(xv)}" x2="${X(xv)}" y1="${h - m.b}" y2="${h - m.b + 4}" stroke="#cdd3dc"/>`,
+    `<text x="${X(xv)}" y="${h - m.b + 18}" text-anchor="middle" font-size="11" fill="#6b7689">${Number.isInteger(xv) ? xv : xv.toFixed(2)}</text>`));
+  parts.push(`<line x1="${m.l}" x2="${m.l}" y1="${m.t}" y2="${h - m.b}" stroke="#cdd3dc"/>`,
+    `<line x1="${m.l}" x2="${w - m.r}" y1="${h - m.b}" y2="${h - m.b}" stroke="#cdd3dc"/>`,
+    `<text x="${(m.l + w - m.r) / 2}" y="${h - 22}" text-anchor="middle" font-size="12" fill="#475467">${esc(spec.xLabel)}</text>`,
+    `<text transform="translate(16 ${(m.t + h - m.b) / 2}) rotate(-90)" text-anchor="middle" font-size="12" fill="#475467">${esc(spec.yLabel)}</text>`);
   spec.series.forEach((s, i) => {
     const c = COLORS[i % COLORS.length];
     const dash = i % 2 ? ' stroke-dasharray="6 3"' : '';
