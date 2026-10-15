@@ -61,41 +61,45 @@
 .catalog-filters .chip { height: 38px; padding-inline: 12px; background: transparent; border-color: var(--border); font-weight: 500; }
 .catalog-filters .chip[aria-pressed="true"] { background: #15304c; border-color: #15304c; }
 .catalog-result { color: var(--text-3); font-size: 12px; margin: 14px 0; }
-.home .lesson-list.sleek-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-.home .lesson-list.sleek-list .lesson-row { display: grid; grid-template-columns: 1fr auto; gap: 16px 12px; padding: 22px; border-radius: 16px; box-shadow: none; align-items: start; }
-.home .lesson-list.sleek-list .lesson-row:hover { border-color: #a8bbce; box-shadow: 0 6px 20px #15304c08; }
+.home .lesson-list.sleek-list { grid-template-columns: repeat(auto-fill, minmax(min(100%, 268px), 1fr)); gap: 14px; }
+.home .lesson-list.sleek-list .lesson-row { display: grid; grid-template-columns: 1fr auto; gap: 10px 12px; padding: 14px; border-radius: 14px; box-shadow: none; align-items: start; border-top: 3px solid var(--group-color); }
+.home .lesson-list.sleek-list .lesson-row:hover { border-color: color-mix(in srgb, var(--group-color) 45%, var(--border)); border-top-color: var(--group-color); box-shadow: 0 8px 22px color-mix(in srgb, var(--group-color) 14%, transparent); transform: translateY(-2px); }
+.home .lesson-list.sleek-list .lesson-row { transition: transform .2s var(--ease), box-shadow .2s, border-color .2s; }
 .lesson-row .lesson-symbol { width: 40px; height: 40px; border-radius: 11px; grid-column: 1; grid-row: 1; }
 .lesson-row > .chip { grid-column: 2; grid-row: 1; align-self: center; font-size: 10px; max-width: 100%; white-space: normal; }
 .lesson-row .lesson-row-copy { grid-column: 1 / -1; grid-row: 2; gap: 8px; }
 .lesson-row-copy h3 { font-size: 18px; line-height: 1.4; }
-.lesson-row-copy .lesson-goal { display: block; overflow: visible; font-size: 13px; line-height: 1.7; min-height: 44px; }
-.lesson-row .lesson-row-actions { grid-column: 1 / -1; grid-row: 3; width: 100%; max-width: none; justify-content: flex-start; gap: 8px; border-top: 1px solid var(--border); padding-top: 14px; align-self: end; }
-.lesson-row-actions .btn-action { height: 38px; border: 0; padding: 0 9px; background: var(--surface-2); }
+.lesson-row-copy .lesson-goal { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; font-size: 12.5px; line-height: 1.6; min-height: 0; }
+.lesson-row .lesson-row-actions { grid-column: 1 / -1; grid-row: 3; width: 100%; max-width: none; justify-content: flex-start; gap: 6px; border-top: 1px solid var(--border); padding-top: 10px; align-self: end; }
+.lesson-row-actions .btn-action { height: 32px; border: 0; padding: 0 8px; font-size: 12px; background: var(--surface-2); }
 .lesson-row-actions .practice { margin-left: auto; background: var(--brand-soft); }
 
 /* A compact header leaves room for the actual lecture. */
-.catalog-group { margin: 28px 0 40px; --group-color: #16887c; }
+.catalog-group { margin: 24px 0 28px; --group-color: #16887c; padding: 18px; border: 1px solid color-mix(in srgb, var(--group-color) 22%, var(--border)); border-left: 5px solid var(--group-color); border-radius: 18px; background: color-mix(in srgb, var(--group-color) 5%, var(--surface)); }
 .catalog-group-ml { --group-color: #0b5cab; }
 .catalog-group-dl { --group-color: #7552b4; }
 .catalog-group-genai { --group-color: #ae6525; }
-.catalog-group-head { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; padding-top: 20px; border-top: 1px solid var(--border); }
-.group-number { color: var(--group-color); font-family: var(--mono); font-size: 22px; font-weight: 700; }
-.catalog-group-head h3 { font-size: 20px; margin: 0 0 5px; }
+.catalog-group-head { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+.group-icon { flex: none; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 13px; background: var(--group-color); color: #fff; box-shadow: 0 6px 16px color-mix(in srgb, var(--group-color) 30%, transparent); }
+.catalog-group-head .group-number { color: var(--group-color); font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin: 0 0 2px; }
+.catalog-group-head h3 { font-size: 22px; margin: 0 0 3px; color: var(--text); letter-spacing: -.01em; }
 .catalog-group-head p { font-size: 13px; color: var(--text-2); margin: 0; line-height: 1.6; }
-.group-count { margin-left: auto; white-space: nowrap; color: var(--text-3); font-size: 12px; }
+.group-count { margin-left: auto; white-space: nowrap; color: var(--group-color); background: var(--surface); border: 1px solid color-mix(in srgb, var(--group-color) 30%, transparent); border-radius: 999px; padding: 4px 11px; font-size: 12px; font-weight: 700; }
 .home .catalog-group .lesson-row { grid-template-rows: auto auto 1fr auto; }
 .lesson-row .lesson-thumbnail { grid-column: 1 / -1; grid-row: 1; display: block; min-width: 0; border-radius: 10px; overflow: hidden; }
-.lesson-thumbnail .lesson-visual { height: 150px; border-radius: 10px; }
-.lesson-thumbnail .lesson-visual svg { height: 120px; }
+.lesson-thumbnail .lesson-visual { height: 104px; border-radius: 10px; }
+.lesson-thumbnail .lesson-visual svg { height: 82px; }
 .lesson-thumbnail .visual-label { font-size: 10px; }
 .home .catalog-group .lesson-row > .chip { grid-column: 1 / -1; grid-row: 2; justify-self: start; }
 .home .catalog-group .lesson-row-copy { grid-row: 3; }
-.lesson-row-copy h4 { font-size: 18px; line-height: 1.4; margin: 0; }
+.lesson-row-copy h4 { font-size: 16px; line-height: 1.35; margin: 0; }
 .home .catalog-group .lesson-row-actions { grid-row: 4; flex-wrap: wrap; }
 @media (max-width: 480px) {
   .catalog-group-head { align-items: flex-start; gap: 10px; }
   .catalog-group-head h3 { font-size: 18px; }
-  .group-count { font-size: 10px; padding-top: 5px; }
+  .group-count { font-size: 10.5px; padding: 3px 8px; }
+  .catalog-group { padding: 12px; border-radius: 14px; }
+  .group-icon { width: 38px; height: 38px; border-radius: 11px; }
 }
 
 .lesson-head { padding: 4px 0 0; border: 0; background: transparent; border-radius: 0; box-shadow: none; margin-bottom: 24px; }

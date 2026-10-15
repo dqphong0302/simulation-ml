@@ -72,8 +72,8 @@ export function Home() {
           if (!items.length) return null;
           return <section className={`catalog-group catalog-group-${section.id}`} key={section.id} aria-labelledby={`group-${section.id}`}>
             <header className="catalog-group-head">
-              <span className="group-number" aria-hidden="true">0{index + 1}</span>
-              <div><h3 id={`group-${section.id}`}>{section.title}</h3><p>{section.blurb}</p></div>
+              <span className="group-icon" aria-hidden="true"><Icon name={section.icon} size={22} /></span>
+              <div><p className="group-number">Chuyên đề 0{index + 1}</p><h3 id={`group-${section.id}`}>{section.title}</h3><p>{section.blurb}</p></div>
               <span className="group-count">{items.length} bài học</span>
             </header>
             <div className="lesson-list sleek-list">
