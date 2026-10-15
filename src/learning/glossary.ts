@@ -1,0 +1,20 @@
+/** Giải nghĩa ngắn cho các thuật ngữ xuất hiện ngay trên nút/ô điều khiển, dành cho người chưa học ML. */
+export const GLOSSARY: Record<string, string> = {
+  train: 'Tập huấn luyện: phần dữ liệu mô hình được nhìn thấy để học.',
+  validation: 'Tập kiểm định: phần dữ liệu dùng để chọn tham số (như k, độ sâu). Mô hình không học trên phần này.',
+  test: 'Tập kiểm tra: phần dữ liệu giữ riêng tới cuối, chỉ dùng một lần để báo kết quả công bằng.',
+  seed: 'Con số quyết định cách xáo trộn và chia dữ liệu. Giữ nguyên seed thì làm lại thí nghiệm sẽ ra đúng kết quả cũ.',
+  nhãn: 'Cột chứa đáp án mà mô hình phải dự đoán, ví dụ: có hay không mắc tiểu đường.',
+  'lớp dương': 'Giá trị của nhãn được coi là "trường hợp cần phát hiện" và mã hóa thành 1. Các giá trị khác gộp thành 0.',
+  biến: 'Biến (đặc trưng): các cột thông tin đưa vào mô hình để dự đoán, ví dụ tuổi, glucose, BMI.',
+  'chuẩn hóa': 'Đưa các biến về cùng thang đo (trung bình 0, độ lệch chuẩn 1) để biến có số lớn như glucose không lấn át biến có số nhỏ như BMI. Thang đo chỉ tính trên tập train.',
+  k: 'Số láng giềng gần nhất được "hỏi ý kiến" khi dự đoán một điểm mới.',
+  'learning rate': 'Độ lớn mỗi bước mô hình tự sửa. Quá lớn thì dao động, quá nhỏ thì học rất chậm.',
+  epoch: 'Một lượt mô hình đi qua toàn bộ tập train.',
+  ngưỡng: 'Xác suất từ mức này trở lên thì xếp vào lớp dương. Hạ ngưỡng thì bắt được nhiều ca hơn nhưng báo nhầm cũng nhiều hơn.',
+  gini: 'Gini và entropy đo mức "lẫn lộn" của một nhóm. Cây chọn cách chia làm cho các nhóm con thuần nhất.',
+  'độ sâu': 'Số tầng câu hỏi tối đa của cây. Sâu quá dễ học thuộc cả nhiễu (overfitting).',
+  'mã hóa': 'Đổi cột chữ (Nam/Nữ, Có/Không) thành cột 0/1 để mô hình tính toán được.',
+  median: 'Trung vị: giá trị đứng giữa khi xếp từ nhỏ đến lớn; ít bị kéo lệch bởi giá trị cực đoan.',
+  overfitting: 'Học thuộc lòng: mô hình rất đúng trên train nhưng kém trên dữ liệu mới.',
+};

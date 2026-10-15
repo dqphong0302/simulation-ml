@@ -121,7 +121,8 @@ export function GanLab() {
   const csvData = useMemo(() => {
     if (!csv) return null;
     const j = csv.table.names.indexOf(csv.col);
-    const v = csv.table.cells.map((r) => toNumber(r[j], csv.table.delimiter)).filter((x) => Number.isFinite(x));
+    const dec = inspectColumns(csv.table).find((c) => c.name === csv.col)?.decimal;
+    const v = csv.table.cells.map((r) => toNumber(r[j], dec)).filter((x) => Number.isFinite(x));
     if (v.length < 10) return null;
     const m = v.reduce((a, b) => a + b, 0) / v.length, sd = Math.sqrt(v.reduce((a, b) => a + (b - m) ** 2, 0) / v.length) || 1;
     return { m, sd, z: v.map((x) => 2.5 + 1.2 * ((x - m) / sd)) };

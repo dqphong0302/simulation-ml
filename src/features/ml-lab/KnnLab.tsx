@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { Term } from '../../learning/Term';
 import { knnPredict, knnPredictAll } from '../../core/algorithms/knn';
 import { applyScaler } from '../../core/algorithms/dataset';
 import { evaluate, fmt } from '../../core/algorithms/metrics';
@@ -47,8 +48,8 @@ export function KnnLab({ d }: { d: LabData }) {
       <section className="controls">
         {d.panel}
         <div className="box">
-          <Field label={`k = ${k}`}><input type="range" min={1} max={15} value={k} onChange={(e) => setK(Number(e.target.value))} /></Field>
-          <label className="check"><input type="checkbox" checked={scale} onChange={(e) => setScale(e.target.checked)} /> Chuẩn hóa (fit trên train)</label>
+          <Field label={<><Term k="k" /> = {k}</>}><input type="range" min={1} max={15} value={k} onChange={(e) => setK(Number(e.target.value))} /></Field>
+          <label className="check"><input type="checkbox" checked={scale} onChange={(e) => setScale(e.target.checked)} /> <Term k="chuẩn hóa">Chuẩn hóa</Term> (fit trên train)</label>
           <p className="muted">Bấm vào biểu đồ để đặt điểm mới. Hiện tại: {d.ds.featureNames[0]} = {query[0].toFixed(1)}, {d.ds.featureNames[1]} = {query[1].toFixed(1)}{d.ds.featureNames.length > 2 ? '; các biến khác = median train' : ''}.</p>
         </div>
         <div className="box">

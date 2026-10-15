@@ -1,0 +1,19 @@
+/* ===== Báo cáo xử lý từng cột ===== */
+.col-report { margin: 12px 0; border: 1px solid var(--border); border-radius: var(--r-md); background: var(--surface); }
+.col-report > summary { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; justify-content: space-between; padding: 10px 12px; cursor: pointer; font-weight: 650; font-size: 13.5px; }
+.col-report > p, .col-report > .import-table { margin: 0 12px 12px; }
+.cr-chips { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.cr-chips b { font-size: 11.5px; font-weight: 700; border-radius: var(--r-full); padding: 2px 9px; }
+.cr-use { color: var(--ok); background: var(--ok-soft); }
+.cr-encode { color: var(--brand); background: color-mix(in srgb, var(--brand) 10%, transparent); }
+.cr-drop { color: var(--danger); background: var(--danger-soft); }
+.cr-note { color: var(--warn); background: var(--warn-soft); }
+.cr-table td { vertical-align: top; font-size: 12.5px; line-height: 1.5; }
+.cr-table td:first-child { font-weight: 650; border-left: 3px solid transparent; }
+.cr-table td small { display: block; color: var(--warn); margin-top: 2px; }
+.cr-table tr.cr-use td:first-child { border-left-color: var(--ok); }
+.cr-table tr.cr-encode td:first-child { border-left-color: var(--brand); }
+.cr-table tr.cr-drop td:first-child { border-left-color: var(--danger); }
+.cr-table tr.cr-drop td { color: var(--text-3); }
+.cr-table tr.cr-target td:first-child { border-left-color: var(--chart-2); }
+.cr-table tr.cr-idle td:first-child { border-left-color: var(--border-strong); }

@@ -1,0 +1,32 @@
+/* ===== Khởi động: hai mô phỏng trong một khung có tab ===== */
+.warmup { border: 1px solid var(--border); border-top: 4px solid var(--sim); border-radius: var(--r-lg); background: var(--surface); box-shadow: var(--shadow-2); margin: 0 0 20px; padding: 14px 18px 4px; }
+.warmup.collapsed { padding-bottom: 14px; }
+.warmup-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 10px 16px; margin-bottom: 12px; }
+.warmup-head .eyebrow { margin: 0 0 8px; }
+.warmup-tabs { display: inline-flex; flex-wrap: wrap; gap: 4px; padding: 3px; border-radius: var(--r-full); background: var(--surface-3); }
+.warmup-tabs button { height: 32px; border: 0; border-radius: var(--r-full); padding: 0 14px; background: transparent; color: var(--text-2); font-weight: 650; font-size: 13px; }
+.warmup-tabs button.on { background: var(--surface); color: var(--text); box-shadow: 0 1px 2px rgba(0, 0, 0, .08); }
+.warmup-actions { display: flex; gap: 6px; }
+.warmup.collapsed .warmup-head { margin-bottom: 0; }
+.warmup .warmup-body > .concept-sim, .warmup .warmup-body > .dv-sim { border: 0; box-shadow: none; padding: 0; margin: 0 0 14px; animation: none; }
+
+/* ===== Việc cần làm: bốn bước thí nghiệm ở đầu trang Thực hành ===== */
+.experiment-brief { border: 1px solid var(--warn-line); background: var(--warn-soft); border-radius: var(--r-lg); padding: 14px 18px; margin: 0 0 20px; }
+.experiment-brief .eyebrow { margin: 0 0 6px; }
+.experiment-brief ol { margin: 0 0 8px; padding-left: 20px; display: grid; gap: 4px; line-height: 1.55; font-size: 14px; }
+.experiment-brief p { margin: 0; }
+.linklike { border: 0; background: none; padding: 0; height: auto; color: var(--brand); font-weight: 600; cursor: pointer; text-decoration: underline; }
+.linklike:hover { background: none !important; }
+
+/* ===== Thuật ngữ có nút (?) giải nghĩa ===== */
+.term { position: relative; display: inline-flex; align-items: center; gap: 3px; }
+.term-q { display: inline-grid; place-items: center; width: 16px; height: 16px; min-width: 0; padding: 0; border-radius: 50%; border: 1px solid var(--border-strong); background: var(--surface); color: var(--text-3); font-size: 10.5px; font-weight: 700; line-height: 1; cursor: help; }
+.term-q:hover, .term-q:focus-visible { color: var(--brand); border-color: var(--brand); }
+.term-pop { position: fixed; left: 0; top: 0; z-index: 60; width: max-content; max-width: min(280px, 80vw); padding: 8px 10px; border-radius: var(--r-sm); background: var(--text); color: var(--surface); font-size: 12.5px; font-weight: 500; line-height: 1.5; text-transform: none; letter-spacing: 0; box-shadow: var(--shadow-2); opacity: 0; visibility: hidden; transform: translateY(-2px); transition: opacity .15s, transform .15s, visibility .15s; pointer-events: none; white-space: normal; }
+.term:hover .term-pop, .term-q:focus-visible + .term-pop, .term.pinned .term-pop { opacity: 1; visibility: visible; transform: none; }
+
+/* ===== Tùy chọn nâng cao ===== */
+.advanced-opts { margin: 4px 0 12px; font-size: 13px; }
+.advanced-opts > summary { cursor: pointer; color: var(--text-3); font-weight: 600; padding: 4px 0; }
+.advanced-opts[open] > summary { margin-bottom: 8px; }
+@media (max-width: 700px) { .warmup { padding: 12px 12px 2px; } .warmup-actions { width: 100%; } .warmup-actions .btn { flex: 1; } }

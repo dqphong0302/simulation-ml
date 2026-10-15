@@ -36,7 +36,7 @@ export function ModeBadge({ mode, short }: { mode: string; short?: boolean }) {
   return <span className={`chip chip-${cls}`} title={mode}><span className="dot" />{label}</span>;
 }
 
-export function Field({ label, children }: { label: string; children: ReactNode }) {
+export function Field({ label, children }: { label: ReactNode; children: ReactNode }) {
   return <label className="field"><span>{label}</span>{children}</label>;
 }
 

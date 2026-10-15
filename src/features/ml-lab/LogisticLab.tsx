@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { Term } from '../../learning/Term';
 import { classify, logisticProba, trainLogistic } from '../../core/algorithms/logistic';
 import { evaluate, fmt, roc } from '../../core/algorithms/metrics';
 import { Chart, Field, Table } from '../../app/ui';
@@ -27,9 +28,9 @@ export function LogisticLab({ d }: { d: LabData }) {
       <section className="controls">
         {d.panel}
         <div className="box">
-          <Field label={`Learning rate = ${lr}`}><input type="range" min={0.01} max={2} step={0.01} value={lr} onChange={(e) => setLr(Number(e.target.value))} /></Field>
-          <Field label={`Số epoch = ${epochs}`}><input type="range" min={10} max={1000} step={10} value={epochs} onChange={(e) => setEpochs(Number(e.target.value))} /></Field>
-          <Field label={`Ngưỡng phân loại = ${th.toFixed(2)}`}><input type="range" min={0.05} max={0.95} step={0.05} value={th} onChange={(e) => setTh(Number(e.target.value))} /></Field>
+          <Field label={<><Term k="learning rate">Learning rate</Term> = {lr}</>}><input type="range" min={0.01} max={2} step={0.01} value={lr} onChange={(e) => setLr(Number(e.target.value))} /></Field>
+          <Field label={<>Số <Term k="epoch" /> = {epochs}</>}><input type="range" min={10} max={1000} step={10} value={epochs} onChange={(e) => setEpochs(Number(e.target.value))} /></Field>
+          <Field label={<><Term k="ngưỡng">Ngưỡng phân loại</Term> = {th.toFixed(2)}</>}><input type="range" min={0.05} max={0.95} step={0.05} value={th} onChange={(e) => setTh(Number(e.target.value))} /></Field>
           <p className="muted">Dữ liệu được chuẩn hóa (fit trên train). Trọng số: {model.w.map((w) => w.toFixed(2)).join(', ')}; bias {model.b.toFixed(2)}.</p>
         </div>
       </section>

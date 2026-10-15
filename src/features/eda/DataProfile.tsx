@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { describe, pearson, quantile } from '../../core/algorithms/dataset';
-import { toNumber, zeroGap, type ColumnInfo, type FreeTable } from '../../core/datasets/freecsv';
+import { isBlank, toNumber, zeroGap, type ColumnInfo, type FreeTable } from '../../core/datasets/freecsv';
 import { download } from '../../core/reporting/files';
 import type { TableData } from '../../core/types';
 import { Table } from '../../app/ui';
@@ -14,14 +14,13 @@ interface CatProfile { kind: 'categorical'; top: [string, number][] }
 export type Profile = (NumProfile | CatProfile) & { info: ColumnInfo; values: string[] };
 
 export const g = (v: number | null | undefined, d = 2) => (v === null || v === undefined || !Number.isFinite(v) ? '–' : Math.abs(v) >= 1e5 || (v !== 0 && Math.abs(v) < 1e-3) ? v.toExponential(2) : v.toFixed(d));
-const isBlank = (c: string) => c === '' || /^(null|na|nan|n\/a|none|\?)$/i.test(c);
 const csvCell = (s: string) => (/[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s);
 
 export function profile(t: FreeTable, cols: ColumnInfo[]): Profile[] {
   return cols.map((info, j) => {
     const values = t.cells.map((r) => r[j]);
     if (info.kind === 'numeric') {
-      const v = values.map((c) => toNumber(c, t.delimiter));
+      const v = values.map((c) => toNumber(c, info.decimal));
       const ok = v.filter((x) => !Number.isNaN(x)).sort((a, b) => a - b);
       const s = describe(ok);
       const q1 = quantile(ok, 0.25), q3 = quantile(ok, 0.75), iqr = q3 - q1;
@@ -93,8 +92,13 @@ export function DataProfile({ table, cols, target, fileName }: { table: FreeTabl
       const nm = p.info.name, miss = p.info.missing / n;
       if (miss > 0.2) w.push(`“${nm}” thiếu ${(miss * 100).toFixed(0)}% — cân nhắc bỏ cột hoặc kiểm tra cách điền.`);
       if (p.info.unique <= 1) w.push(`“${nm}” chỉ có một giá trị — không mang thông tin.`);
-      if (p.info.unique >= n * 0.95 && n > 20 && (p.kind === 'categorical' || p.v.every((x) => Number.isNaN(x) || Number.isInteger(x))))
-        w.push(`“${nm}” gần như mỗi dòng một giá trị — giống mã định danh (ID), không nên dùng làm biến.`);
+      if (p.info.role === 'id') w.push(`“${nm}” giống mã định danh (ID/họ tên) — không phải số đo, tự động loại khỏi mô hình.`);
+      if (p.info.role === 'date') w.push(`“${nm}” là ngày tháng — không dùng trực tiếp làm biến; cần tách thành tuổi, khoảng thời gian… nếu muốn dùng.`);
+      if (p.info.role === 'text') w.push(`“${nm}” có ${p.info.unique} giá trị chữ khác nhau — quá nhiều để mã hóa, tự động loại khỏi mô hình.`);
+      if (p.info.units.length > 1) w.push(`“${nm}” có nhiều đơn vị (${p.info.units.slice(0, 4).join(', ')}) — cần quy đổi về một đơn vị trước khi so sánh.`);
+      else if (p.info.units.length === 1) w.push(`“${nm}”: đã bỏ đơn vị “${p.info.units[0]}” khi đọc số.`);
+      if (p.info.missingTokens) w.push(`“${nm}”: ${p.info.missingTokens} ô ghi mã thiếu (“-”, “không rõ”, “N/A”…) — được coi là thiếu.`);
+      if (p.info.coerced) w.push(`“${nm}”: ${p.info.coerced} ô không đọc được thành số (ví dụ: ${p.info.coercedExamples.map((x) => `“${x}”`).join(', ')}) — được coi là thiếu, hãy kiểm tra.`);
       if (p.kind === 'numeric') {
         if (p.zeroGap !== null) w.push(`“${nm}” có ${p.zeros} giá trị 0 nhưng không có giá trị nào giữa 0 và ${g(p.zeroGap)} — 0 có thể là mã hóa cho “thiếu”.`);
         if (p.skew !== null && Math.abs(p.skew) > 2) w.push(`“${nm}” lệch mạnh (skew = ${p.skew.toFixed(1)}) — trung bình bị kéo xa median; cân nhắc biến đổi log.`);
@@ -112,8 +116,8 @@ export function DataProfile({ table, cols, target, fileName }: { table: FreeTabl
 
   const statCols = ['Cột', 'Kiểu', 'Thiếu', 'Khác nhau', 'Trung bình', 'Độ lệch chuẩn', 'Min', 'Q1', 'Median', 'Q3', 'Max', 'Skew', 'Ngoại lai (IQR)', 'Giá trị phổ biến'];
   const statRows = P.map((p) => p.kind === 'numeric'
-    ? [p.info.name + (p.info.name === target ? ' (đích)' : ''), 'số', String(p.info.missing), String(p.info.unique), g(p.mean), g(p.std), g(p.min), g(p.q1), g(p.median), g(p.q3), g(p.max), g(p.skew), String(p.outliers), '']
-    : [p.info.name + (p.info.name === target ? ' (đích)' : ''), 'chữ', String(p.info.missing), String(p.info.unique), '', '', '', '', '', '', '', '', '', p.top.slice(0, 3).map(([v, c]) => `${v} (${c})`).join(', ')]);
+    ? [p.info.name + (p.info.name === target ? ' (đích)' : ''), p.info.role === 'id' ? 'số (ID)' : p.info.units[0] ? `số (${p.info.units[0]})` : 'số', String(p.info.missing), String(p.info.unique), g(p.mean), g(p.std), g(p.min), g(p.q1), g(p.median), g(p.q3), g(p.max), g(p.skew), String(p.outliers), '']
+    : [p.info.name + (p.info.name === target ? ' (đích)' : ''), ({ id: 'ID', date: 'ngày', text: 'văn bản', constant: 'hằng số', feature: 'phân loại' } as const)[p.info.role], String(p.info.missing), String(p.info.unique), '', '', '', '', '', '', '', '', '', p.top.slice(0, 3).map(([v, c]) => `${v} (${c})`).join(', ')]);
 
   // Thống kê theo nhóm của cột đích: trung bình (độ lệch chuẩn) từng biến số.
   const byClass: TableData | null = classMode && tP ? {

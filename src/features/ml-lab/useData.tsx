@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { Term } from '../../learning/Term';
 import {
   fitScaler, makeSyntheticDataset, scaleSamples, splitDataset, describe,
   type Dataset, type Sample, type Scaler, type Split,
 } from '../../core/algorithms/dataset';
 import { PIMA, parseLabelledCsv, type RawTable } from '../../core/datasets/csv';
-import { labelCandidates, makeCustomCsv, patchCustomCsv, toBinaryRaw, type CustomCsv } from '../../core/datasets/customCsv';
+import { featureSpecs, labelCandidates, makeCustomCsv, patchCustomCsv, toBinaryRaw, type CustomCsv } from '../../core/datasets/customCsv';
+import { ColumnReport } from '../../app/ColumnReport';
 import { sampleTable, modelLimitsFor } from '../../core/datasets/importData';
 import { setSessionData, useSessionData } from '../../core/datasets/session';
 import { DataImport } from '../../app/DataImport';
@@ -141,23 +143,25 @@ export function useData(opts: { fixed?: Source; seed?: number } = {}): DataState
       {src === 'custom' && tooLarge && session && <div className="warn"><p>Bài mô hình giới hạn {trainRows} dòng để giảm tải tính toán. Dữ liệu phiên hiện có {session.table.cells.length} dòng.</p><button className="btn" onClick={() => setSessionData({ ...session, table: sampleTable(session.table, trainRows), sampled: true })}>Đồng ý lấy mẫu {trainRows.toLocaleString('vi')} dòng cho phiên (seed 42)</button></div>}
       {src === 'custom' && tooWide && <p className="warn" role="alert">Chỉ chọn tối đa {trainColumns} biến bên dưới trước khi chạy mô hình.</p>}
       {src === 'custom' && custom?.dropped ? <p className="warn">Loại {custom.dropped} dòng thiếu nhãn khỏi mô hình; các dòng gốc vẫn còn trong dữ liệu phiên.</p> : null}
-      <Field label="Seed (cách chia)">
-        <input type="number" value={seed} onChange={(e) => setSeed(Math.max(0, Math.floor(Number(e.target.value) || 0)))} />
-      </Field>
+      <details className="advanced-opts"><summary>Tùy chọn nâng cao</summary>
+        <Field label={<><Term k="seed">Seed</Term> (cách chia dữ liệu)</>}>
+          <input type="number" value={seed} onChange={(e) => setSeed(Math.max(0, Math.floor(Number(e.target.value) || 0)))} />
+        </Field>
+      </details>
       {src === 'custom' && shared && (
         <>
-          {!numericOnly && <Field label="Cột nhãn">
+          {!numericOnly && <Field label={<>Cột <Term k="nhãn">nhãn</Term> (đáp án cần dự đoán)</>}>
             <select value={shared.target} onChange={(e) => updateSharedCsv({ target: e.target.value })}>
               {labelCandidates(shared.cols).map((c) => <option key={c.name} value={c.name}>{c.name} ({c.unique} giá trị)</option>)}
             </select>
           </Field>}
-          {tCol && <Field label={tCol.unique > 2 ? `Lớp dương (= 1); các lớp khác gộp thành 0` : 'Lớp dương (= 1)'}>
+          {tCol && <Field label={<><Term k="lớp dương">Lớp dương</Term> (= 1){tCol.unique > 2 ? '; các lớp khác gộp thành 0' : ''}</>}>
             <select value={shared.positive} onChange={(e) => updateSharedCsv({ positive: e.target.value })}>
               {tCol.levels.map((l) => <option key={l} value={l}>{l}</option>)}
             </select>
           </Field>}
-          <fieldset className="fs"><legend>Biến số dùng cho mô hình (≥ 2; hai biến đầu là trục biểu đồ)</legend>
-            {shared.cols.filter(c => c.kind === 'numeric' && c.name !== shared.target).map(c => c.name).map((n) => (
+          <fieldset className="fs"><legend><Term k="biến">Biến</Term> dùng cho mô hình (≥ 2; hai biến đầu là trục biểu đồ; “Cột = mức” là cột chữ đã <Term k="mã hóa">mã hóa 0/1</Term>)</legend>
+            {featureSpecs(shared.table, shared.cols, shared.target).map(f => f.name).map((n) => (
               <label className="check" key={n}>
                 <input type="checkbox" checked={shared.features.includes(n)} onChange={(e) => updateSharedCsv({ features: e.target.checked ? [...shared.features, n] : shared.features.length > 2 ? shared.features.filter((x) => x !== n) : shared.features })} />
                 {n}
@@ -166,7 +170,8 @@ export function useData(opts: { fixed?: Source; seed?: number } = {}): DataState
           </fieldset>
           {!!custom?.zeroCols.length && <label className="check"><input type="checkbox" checked={zeroMissing} onChange={(e) => setZeroMissing(e.target.checked)} /> Coi 0 là thiếu ở {custom.zeroCols.join(', ')} (điền median train)</label>}
           {!!custom?.dropped && <p className="muted">Bỏ {custom.dropped} dòng thiếu nhãn.</p>}
-          {shared.features.length < 2 && <p className="warn">Cần ít nhất 2 biến số cho bài này.</p>}
+          {shared.features.length < 2 && <p className="warn">Cần ít nhất 2 biến cho bài này.</p>}
+          <ColumnReport table={shared.table} cols={shared.cols} target={shared.target} used={shared.features} />
         </>
       )}
       {src === 'diabetes' && raw && (
@@ -183,7 +188,7 @@ export function useData(opts: { fixed?: Source; seed?: number } = {}): DataState
         </>
       )}
       <p className="muted">
-        {built ? `${built.split.train.length + built.split.val.length + built.split.test.length} mẫu, chia 60/20/20 → train ${built.split.train.length}, validation ${built.split.val.length}, test ${built.split.test.length}. ` : ''}
+        {built ? <>{built.split.train.length + built.split.val.length + built.split.test.length} mẫu, chia 60/20/20 → <Term k="train" /> {built.split.train.length}, <Term k="validation" /> {built.split.val.length}, <Term k="test" /> {built.split.test.length}. Ô thiếu được điền <Term k="median" /> tính trên train. </> : ''}
         {src === 'diabetes' ? 'Dữ liệu Pima Indians Diabetes dùng cho học tập; kết quả không phải chẩn đoán.' : src === 'custom' ? numericOnly ? 'Dùng các biến số, không yêu cầu nhãn phân loại.' : 'Bài này phân loại 2 lớp: lớp dương so với phần còn lại.' : 'Dữ liệu mô phỏng cho học tập.'}
         {src !== 'synthetic' && built && built.ds.featureNames.length > 2 ? ' Biểu đồ 2D chỉ chiếu hai biến đầu; mô hình dùng tất cả biến đã chọn.' : ''}
       </p>

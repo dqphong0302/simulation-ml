@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { Term } from '../../learning/Term';
 import { buildTree, treeDepth, treePredict, type Criterion, type TreeNode } from '../../core/algorithms/tree';
 import { evaluate, fmt } from '../../core/algorithms/metrics';
 import { Chart, Field, Table } from '../../app/ui';
@@ -39,10 +40,10 @@ export function TreeLab({ d }: { d: LabData }) {
       <section className="controls">
         {d.panel}
         <div className="box">
-          <Field label="Tiêu chí chia">
+          <Field label={<Term k="gini">Tiêu chí chia</Term>}>
             <select value={criterion} onChange={(e) => setCriterion(e.target.value as Criterion)}><option value="gini">Gini</option><option value="entropy">Entropy</option></select>
           </Field>
-          <Field label="Độ sâu hiển thị">
+          <Field label={<Term k="độ sâu">Độ sâu hiển thị</Term>}>
             <select value={show} onChange={(e) => setShow(Number(e.target.value))}>{DEPTHS.map((x) => <option key={x}>{x}</option>)}</select>
           </Field>
         </div>

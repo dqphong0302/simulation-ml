@@ -1,6 +1,7 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { DATA_ACCEPT, EXPLORE_ROWS, sampleTable, validateDataFile } from '../core/datasets/importData';
-import type { FreeTable } from '../core/datasets/freecsv';
+import { inspectColumns, type FreeTable } from '../core/datasets/freecsv';
+import { ColumnReport } from './ColumnReport';
 import { setSessionData, useSessionData } from '../core/datasets/session';
 
 interface Draft { table: FreeTable; sheets: string[]; sheet: string; notes: string[] }
@@ -54,6 +55,8 @@ export function DataImport() {
     setSheets([]); setSheet(''); setDelimiter(''); read(f, undefined, '');
   };
   const sampled = !!draft && count < draft.table.cells.length;
+  // Báo cáo cột tính trên tối đa 5.000 dòng đầu để xem trước nhanh.
+  const preview = useMemo(() => { if (!draft) return null; const t = { ...draft.table, cells: draft.table.cells.slice(0, 5000) }; return { t, cols: inspectColumns(t) }; }, [draft]);
   const apply = () => {
     if (!file || !draft || (sampled && !consent)) return;
     const table = sampleTable(draft.table, count);
@@ -79,6 +82,7 @@ export function DataImport() {
       {draft.notes.map(n => <p className="muted" key={n}>{n}</p>)}
       <p className="muted">10 dòng đầu; kiểm tra tiêu đề và dấu phân cách trước khi dùng.</p>
       <div className="import-table"><table className="tbl"><thead><tr>{draft.table.names.map(n => <th key={n}>{n}</th>)}</tr></thead><tbody>{draft.table.cells.slice(0, 10).map((r, i) => <tr key={i}>{r.map((c, j) => <td key={j} title={c}>{c.length > 120 ? `${c.slice(0, 120)}…` : c}</td>)}</tr>)}</tbody></table></div>
+      {preview && <ColumnReport table={preview.t} cols={preview.cols} open />}
       <label htmlFor={`${id}-count`}>Số dòng dùng trong phiên <select id={`${id}-count`} aria-label="Số dòng sử dụng" value={count} onChange={e => { setCount(Number(e.target.value)); setConsent(false); }}>
         {[...new Set([Math.min(2000, draft.table.cells.length), Math.min(5000, draft.table.cells.length), Math.min(EXPLORE_ROWS, draft.table.cells.length)])].map(n => <option value={n} key={n}>{n.toLocaleString('vi')} dòng{n === draft.table.cells.length ? ' — toàn bộ' : ' — lấy mẫu ngẫu nhiên, seed 42'}</option>)}
       </select></label>
