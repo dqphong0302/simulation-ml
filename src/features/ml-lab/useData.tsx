@@ -115,7 +115,7 @@ export function useData(opts: { fixed?: Source; seed?: number } = {}): DataState
     const pos = shared?.positive ?? '';
     const ds: Dataset = {
       featureNames: cols.map((c) => label(names[c])),
-      classNames: src === 'custom' ? numericOnly ? ['Dữ liệu', 'Dữ liệu'] : [`Nhóm xanh (${shared!.target} ≠ ${pos})`, `Nhóm cam (${shared!.target} = ${pos})`] : ['Nhóm xanh (Outcome 0)', 'Nhóm cam (Outcome 1)'],
+      classNames: src === 'custom' ? numericOnly ? ['Tất cả mẫu', 'Không dùng nhãn'] : [`Nhóm xanh (${shared!.target} ≠ ${pos})`, `Nhóm cam (${shared!.target} = ${pos})`] : ['Nhóm xanh (Outcome 0)', 'Nhóm cam (Outcome 1)'],
       samples: [...split.train, ...split.val, ...split.test],
     };
     const dataLabel = src === 'custom'
