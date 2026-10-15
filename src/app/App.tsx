@@ -29,6 +29,7 @@ import { LessonPrimer, LessonLearning } from '../learning/LessonLearning';
 import { LearningPath } from '../learning/LearningPath';
 import { Introduction, Capstone } from '../learning/StudyPages';
 import { ConceptSim } from '../features/concept-sim/ConceptSim';
+import { DataVolumeSim } from '../features/data-volume/DataVolumeSim';
 const TheoryDoc = lazy(() => import('../features/narrated-lessons/TheoryDoc').then(m => ({ default: m.TheoryDoc })));
 const EdaLab = lazy(() => import('../features/eda/EdaLab').then(m => ({ default: m.EdaLab })));
 const TeachableLab = lazy(() => import('../features/teachable-lab/TeachableLab').then(m => ({ default: m.TeachableLab })));
@@ -103,8 +104,10 @@ export function App() {
         <LessonPrimer lessonId={lesson.id} />
         {tab === 'lab' && <p className="practice-direction">Trước khi chỉnh tham số, hãy <a href={`#guided-${lesson.id}`} onClick={e => { e.preventDefault(); document.getElementById(`guided-${lesson.id}`)?.scrollIntoView({ behavior: 'smooth' }); }}>đọc thí nghiệm và ghi dự đoán bên dưới</a>. Đổi một yếu tố, rồi quay lại ghi kết quả.</p>}
         {tab === 'lab' && <ConceptSim lessonId={lesson.id} mode="lab" />}
+        {tab === 'lab' && <DataVolumeSim lessonId={lesson.id} mode="lab" />}
         {tab === 'lab' && <div className="lab-anim">{labFor(path)}</div>}
         {tab === 'lecture' && lectureFor(lesson.id, toLab)}
+        {tab === 'lecture' && <div className="lecture-sims"><ConceptSim lessonId={lesson.id} mode="theory" /><DataVolumeSim lessonId={lesson.id} mode="lecture" /></div>}
         {tab === 'theory' && <Suspense fallback={<p className="loading">Đang mở tài liệu lý thuyết…</p>}><TheoryDoc lessonId={lesson.id} title={lesson.title} group={lesson.group} /></Suspense>}
         <LessonLearning key={`${lesson.id}-${tab}`} lessonId={lesson.id} practice={tab === 'lab'} />
       </div>

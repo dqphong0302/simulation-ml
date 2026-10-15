@@ -1,0 +1,57 @@
+/* ===== Mô phỏng lượng dữ liệu (2D/3D) ===== */
+.dv-sim { background: var(--surface); border: 1px solid var(--border); border-top: 4px solid var(--chart-3); border-radius: var(--r-lg); box-shadow: var(--shadow-2); padding: 18px 20px 20px; margin: 0 0 20px; animation: fadeUp .45s var(--ease) both; }
+.dv-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+.dv-head h2 { font-size: 20px; margin: 0 0 6px; }
+.dv-sub { margin: 0; font-size: 13.5px; color: var(--text-2); line-height: 1.55; }
+.dv-seg { flex: none; display: inline-flex; padding: 3px; border-radius: var(--r-full); background: var(--surface-3); }
+.dv-seg button { height: 30px; min-width: 48px; border: 0; border-radius: var(--r-full); background: transparent; font-weight: 700; color: var(--text-2); }
+.dv-seg button.on { background: var(--surface); color: var(--text); box-shadow: var(--shadow-1, 0 1px 2px rgba(0,0,0,.08)); }
+.dv-body { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(270px, 1fr); gap: 18px; align-items: start; }
+.dv-stage { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r-md); padding: 6px; min-width: 0; }
+.dv-stage canvas { display: block; width: 100%; touch-action: pan-y; }
+.dv-stage canvas.grab { cursor: grab; touch-action: none; }
+.dv-stage canvas.grab:active { cursor: grabbing; }
+.dv-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; padding: 6px 6px 2px; font-size: 12px; color: var(--text-2); }
+.dv-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.dv-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
+.dv-legend i.ln { width: 18px; height: 0; border-radius: 0; border-top: 2.5px solid var(--text); }
+.dv-legend i.ln.dash { border-top: 1.6px dashed var(--text-2); }
+.dv-legend i.ln.ghost { border-top: 1.6px solid color-mix(in srgb, var(--chart-2) 50%, transparent); }
+.dv-rot { margin-left: auto; height: 28px; font-size: 12px; padding: 0 10px; }
+
+.dv-tankrow { display: flex; gap: 14px; align-items: center; margin-bottom: 12px; }
+.dv-tank { position: relative; flex: none; width: 46px; height: 78px; border: 2px solid var(--border-strong); border-top: 0; border-radius: 0 0 12px 12px; overflow: hidden; background: var(--surface-2); }
+.dv-liquid { position: absolute; left: 0; right: 0; bottom: 0; background: linear-gradient(180deg, color-mix(in srgb, var(--chart-3) 70%, white), var(--chart-3)); transition: height .5s var(--ease); }
+.dv-liquid::before { content: ''; position: absolute; left: -50%; top: -6px; width: 200%; height: 12px; border-radius: 45%; background: color-mix(in srgb, var(--chart-3) 55%, white); animation: dvWave 2.4s linear infinite; }
+.dv-drop { position: absolute; top: -10px; width: 6px; height: 9px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; background: var(--chart-3); opacity: 0; z-index: 1; }
+.dv-drop:nth-child(1) { left: 10px; } .dv-drop:nth-child(2) { left: 20px; animation-delay: .25s !important; } .dv-drop:nth-child(3) { left: 30px; animation-delay: .5s !important; }
+.dv-tank.pouring .dv-drop { animation: dvDrop .75s ease-in infinite; }
+@keyframes dvDrop { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 1; } 100% { transform: translateY(70px); opacity: 0; } }
+@keyframes dvWave { from { transform: translateX(0); } to { transform: translateX(25%); } }
+.dv-count { display: grid; gap: 2px; }
+.dv-count > span:first-child { font-size: 12px; color: var(--text-3); }
+.dv-count b { font-size: 26px; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.dv-count small { font-size: 13px; font-weight: 500; color: var(--text-3); }
+.dv-regime { justify-self: start; font-size: 11.5px; font-weight: 700; border-radius: var(--r-full); padding: 2px 9px; }
+.dv-regime.r0 { color: var(--danger); background: var(--danger-soft); }
+.dv-regime.r1 { color: var(--warn); background: var(--warn-soft); }
+.dv-regime.r2 { color: var(--ok); background: var(--ok-soft); }
+
+.dv-metrics { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 6px; margin-bottom: 8px; }
+.dv-m { display: grid; gap: 2px; padding: 7px 10px; border-radius: var(--r-sm); background: var(--surface-2); border: 1px solid var(--border); }
+.dv-m span { font-size: 11px; color: var(--text-3); line-height: 1.3; }
+.dv-m b { font-size: 15.5px; font-variant-numeric: tabular-nums; transition: color .3s; }
+.dv-m.k-test { border-left: 3px solid var(--chart-2); }
+.dv-m.k-train { border-left: 3px solid var(--chart-1); }
+.dv-m.k-ref { border-left: 3px dashed var(--chart-4); }
+.dv-m.gap { border-left: 3px solid var(--danger); }
+.dv-curve { display: block; width: 100%; height: auto; margin: 2px 0 6px; }
+.dv-curve .dv-grid { stroke: var(--border); stroke-width: 1; }
+.dv-curve .dv-tick { fill: var(--text-3); font-size: 9.5px; font-family: var(--font); }
+.dv-curve .dv-now { stroke: var(--text); stroke-width: 1.2; stroke-dasharray: 3 3; transition: all .3s var(--ease); }
+.dv-curve circle { transition: cx .3s var(--ease), cy .3s var(--ease); }
+.dv-wait { font-size: 13px; color: var(--text-3); }
+.dv-note { min-height: 4.8em; margin: 0 0 12px; font-size: 14px; line-height: 1.6; color: var(--text); }
+@media (max-width: 900px) { .dv-body { grid-template-columns: 1fr; } .dv-sim { padding: 14px; } .dv-head { flex-wrap: wrap; } }
+@media (prefers-reduced-motion: reduce) { .dv-liquid::before, .dv-tank.pouring .dv-drop { animation: none; } }
+.lecture-sims { margin-top: 20px; }
