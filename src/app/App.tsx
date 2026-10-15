@@ -100,11 +100,12 @@ export function App() {
     const toLab = () => { location.hash = `#${lesson.path}?tab=lab`; };
     page = (
       <div key={`${path}-${tab}`} className="tab-panel" role="tabpanel">
-        <LessonPrimer lessonId={lesson.id} />
+        {tab !== 'lecture' && <LessonPrimer lessonId={lesson.id} />}
         {tab === 'lab' && <ExperimentBrief lessonId={lesson.id} />}
         {tab === 'lab' && <Warmup lessonId={lesson.id} mode="lab" />}
         {tab === 'lab' && <div className="lab-anim" id={`lab-${lesson.id}`}>{labFor(path)}</div>}
         {tab === 'lecture' && lectureFor(lesson.id, toLab)}
+        {tab === 'lecture' && <LessonPrimer lessonId={lesson.id} />}
         {tab === 'lecture' && <Warmup lessonId={lesson.id} mode="lecture" />}
         {tab === 'theory' && <Suspense fallback={<p className="loading">Đang mở tài liệu lý thuyết…</p>}><TheoryDoc lessonId={lesson.id} title={lesson.title} group={lesson.group} /></Suspense>}
         <LessonLearning key={`${lesson.id}-${tab}`} lessonId={lesson.id} practice={tab === 'lab'} />

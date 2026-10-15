@@ -3,7 +3,7 @@ import './data-volume.css';
 import { LESSON_CFG, LEVELS, MAX_N, evaluate, ghostsFor, makePool, metricsFor, regime, type Cfg, type Metric, type Pool } from './model';
 import { paint2d, paint3d, readPal, type Pal } from './render';
 
-const SEEDS = 3, FALL_MS = 750, STEP_MS = 650;
+const SEEDS = 3, FALL_MS = 750, STEP_MS = 650, HOLD_MS = 3000;
 const reduced = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 const fmtN = (n: number) => n.toLocaleString('vi-VN');
 
@@ -86,7 +86,8 @@ export function DataVolumeSim({ lessonId, mode }: { lessonId: string; mode: 'lec
   const cfg = LESSON_CFG[lessonId];
   const [dim, setDim] = useState<'2d' | '3d'>(mode === 'lab' ? '3d' : '2d');
   const [li, setLi] = useState(0);
-  const [pouring, setPouring] = useState(false);
+  // Tự đổ dữ liệu và lặp lại khi đang trên màn hình; chỉ dừng khi người học bấm Dừng hoặc kéo thanh N.
+  const [pouring, setPouring] = useState(() => !reduced());
   const [speed, setSpeed] = useState(1);
   const [seed, setSeed] = useState(1);
   const [autoRot, setAutoRot] = useState(() => !reduced());
@@ -95,7 +96,7 @@ export function DataVolumeSim({ lessonId, mode }: { lessonId: string; mode: 'lec
   const [done, setDone] = useState(0);
   const root = useRef<HTMLElement>(null), canvas = useRef<HTMLCanvasElement>(null), wrap = useRef<HTMLDivElement>(null);
   const born = useRef(new Float64Array(MAX_N)), cam = useRef({ yaw: -.75, pitch: .5, drag: null as null | { x: number; y: number; yaw: number; pitch: number } });
-  const pal = useRef<Pal | null>(null), started = useRef(false);
+  const pal = useRef<Pal | null>(null);
 
   const pools = useMemo(() => cfg ? Array.from({ length: SEEDS }, (_, k) => makePool(cfg.family, seed + k)) : [], [cfg, seed]);
   const ms = useMemo(() => cfg ? metricsFor(cfg) : [], [cfg]);
@@ -114,8 +115,6 @@ export function DataVolumeSim({ lessonId, mode }: { lessonId: string; mode: 'lec
     io.observe(el);
     return () => io.disconnect();
   }, []);
-  // Bài giảng: lần đầu cuộn tới thì tự đổ dữ liệu.
-  useEffect(() => { if (visible && !started.current && mode === 'lecture' && !reduced()) { started.current = true; setPouring(true); } }, [visible, mode]);
 
   // Tính đường học dần dần để không chặn giao diện.
   useEffect(() => {
@@ -141,8 +140,9 @@ export function DataVolumeSim({ lessonId, mode }: { lessonId: string; mode: 'lec
   // Đổ dữ liệu: tăng mốc N theo nhịp.
   useEffect(() => {
     if (!pouring || !visible) return;
-    if (li >= LEVELS.length - 1) { setPouring(false); return; }
-    const id = window.setTimeout(() => setLi(i => Math.min(LEVELS.length - 1, i + 1)), STEP_MS / speed);
+    // Đổ đầy thì dừng một lúc cho người học nhìn, rồi đổ lại từ 8 mẫu.
+    const last = li >= LEVELS.length - 1;
+    const id = window.setTimeout(() => setLi(i => (last ? 0 : Math.min(LEVELS.length - 1, i + 1))), last ? HOLD_MS : STEP_MS / speed);
     return () => clearTimeout(id);
   }, [pouring, visible, li, speed]);
 
@@ -162,7 +162,7 @@ export function DataVolumeSim({ lessonId, mode }: { lessonId: string; mode: 'lec
     if (!cv || !wr || !cfg || !cur) return;
     let raf = 0, last = performance.now(), size = { w: 0, h: 0 };
     const frame = (now: number) => {
-      const dt = Math.min(.05, (now - last) / 1000); last = now;
+      const dt = Math.max(0, Math.min(.05, (now - last) / 1000)); last = now;
       if (dim === '3d' && autoRot && !cam.current.drag && visible) cam.current.yaw += dt * .35;
       const ctx = cv.getContext('2d'); if (!ctx || !pal.current) return;
       const b = born.current, fall = (i: number) => b[i] === 0 ? 1 : Math.max(0, Math.min(1, (now - b[i]) / FALL_MS));
@@ -188,11 +188,10 @@ export function DataVolumeSim({ lessonId, mode }: { lessonId: string; mode: 'lec
 
   if (!cfg || !cur) return null;
   const id = `dv-${mode}-${lessonId}`, full = Math.log(n / LEVELS[0]) / Math.log(MAX_N / LEVELS[0]);
-  const ended = li >= LEVELS.length - 1;
   const onDown = (e: React.PointerEvent) => { if (dim !== '3d') return; (e.target as Element).setPointerCapture(e.pointerId); cam.current.drag = { x: e.clientX, y: e.clientY, yaw: cam.current.yaw, pitch: cam.current.pitch }; canvas.current?.dispatchEvent(new Event('dv-kick')); };
   const onMove = (e: React.PointerEvent) => { const d = cam.current.drag; if (!d) return; cam.current.yaw = d.yaw - (e.clientX - d.x) * .01; cam.current.pitch = Math.max(-.2, Math.min(1.35, d.pitch + (e.clientY - d.y) * .008)); };
   const onUp = () => { if (cam.current.drag) { cam.current.drag = null; setAutoRot(false); } };
-  const togglePour = () => { if (ended) { setLi(0); setPouring(true); } else setPouring(p => !p); };
+  const togglePour = () => setPouring(p => !p);
   const gapIdx = ms.findIndex(m => m.kind === 'train'), testIdx = ms.findIndex(m => m.kind === 'test');
 
   return <section ref={root} className={`dv-sim dv-${mode}`} aria-labelledby={id}>
@@ -245,8 +244,8 @@ export function DataVolumeSim({ lessonId, mode }: { lessonId: string; mode: 'lec
           <input type="range" min={0} max={LEVELS.length - 1} step={1} value={li} onChange={e => { setPouring(false); setLi(Number(e.target.value)); }} aria-valuetext={`${n} mẫu`} />
         </label>
         <div className="sim-controls">
-          <button type="button" className="btn primary sm" onClick={togglePour}>{pouring ? '❚❚ Tạm dừng' : ended ? '↻ Đổ lại từ đầu' : '▶ Đổ dữ liệu'}</button>
-          <button type="button" className="btn sm" onClick={() => { setPouring(false); setLi(0); }} disabled={li === 0}>Về 8 mẫu</button>
+          <button type="button" className="btn primary sm" onClick={togglePour} aria-pressed={!pouring}>{pouring ? '❚❚ Dừng' : '▶ Tiếp tục đổ'}</button>
+          <button type="button" className="btn sm" onClick={() => setLi(0)} disabled={li === 0}>Về 8 mẫu</button>
           <button type="button" className="btn sm" onClick={() => { setSeed(s => s + SEEDS); setLi(0); setPouring(true); }} title="Lấy một luồng dữ liệu khác cùng phân phối">Lấy mẫu khác</button>
           <label className="sim-speed">Tốc độ
             <select value={speed} onChange={e => setSpeed(Number(e.target.value))}>

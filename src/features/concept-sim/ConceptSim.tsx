@@ -9,18 +9,22 @@ import { GENAI_SCENES } from './scenesGenai';
 
 export const SCENES: Record<string, Scene> = { ...ML_SCENES, ...DL_SCENES, ...GENAI_SCENES };
 const STEP_SECONDS = 3.2;
+/** Dừng ở khung cuối bao lâu trước khi tự chạy lại từ đầu. */
+const HOLD_SECONDS = 2;
 const reduced = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /**
- * Mô phỏng hoạt hình cơ chế của một bài. Chế độ "theory" tự chạy để xem cơ chế;
- * chế độ "lab" dừng sẵn, yêu cầu dự đoán rồi kéo tham số để kiểm chứng.
+ * Mô phỏng hoạt hình cơ chế của một bài: tự chạy và lặp lại, chỉ dừng khi người học bấm Dừng.
+ * Chế độ "lab" thêm câu hỏi dự đoán và gợi ý kéo tham số để kiểm chứng.
  * Mọi số liệu là dữ liệu tổng hợp có seed, chỉ để minh họa.
  */
 export function ConceptSim({ lessonId, mode }: { lessonId: string; mode: 'theory' | 'lab' }) {
   const scene = SCENES[lessonId];
   const n = scene?.steps.length ?? 1;
-  const [pos, setPos] = useState(() => (mode === 'lab' || reduced() ? n - .001 : 0));
-  const [playing, setPlaying] = useState(() => mode === 'theory' && !reduced());
+  const [pos, setPos] = useState(() => (reduced() ? n - .001 : 0));
+  // Tự chạy và lặp lại cho tới khi người học bấm Dừng (trừ khi hệ điều hành bật giảm chuyển động).
+  const [playing, setPlaying] = useState(() => !reduced());
+  const hold = useRef(0);
   const [speed, setSpeed] = useState(1);
   const [v, setV] = useState(scene?.param?.value ?? 0);
   const [t, setT] = useState(0);
@@ -40,12 +44,13 @@ export function ConceptSim({ lessonId, mode }: { lessonId: string; mode: 'theory
     if (!playing || !visible) return;
     let raf = 0, last = performance.now();
     const tick = (now: number) => {
-      const dt = Math.min(.1, (now - last) / 1000); last = now;
+      // Mốc rAF đầu tiên có thể sớm hơn performance.now(): chặn dt âm để vị trí không lùi dưới 0.
+      const dt = Math.max(0, Math.min(.1, (now - last) / 1000)); last = now;
       setT(x => x + dt);
       setPos(x => {
+        if (x >= n - .001) { hold.current += dt; if (hold.current < HOLD_SECONDS) return x; hold.current = 0; return 0; }
         const next = x + (dt * speed) / STEP_SECONDS;
-        if (next >= n) { setPlaying(false); return n - .001; }
-        return next;
+        return next >= n ? n - .001 : next;
       });
       raf = requestAnimationFrame(tick);
     };
@@ -54,9 +59,8 @@ export function ConceptSim({ lessonId, mode }: { lessonId: string; mode: 'theory
   }, [playing, visible, speed, n]);
 
   if (!scene) return null;
-  const s = Math.min(n - 1, Math.floor(pos)), p = Math.min(1, pos - s), [label, note] = scene.steps[s];
+  const s = Math.max(0, Math.min(n - 1, Math.floor(pos))), p = Math.min(1, pos - s), [label, note] = scene.steps[s];
   const goto = (i: number) => { const j = Math.max(0, Math.min(n - 1, i)); if (reduced()) { setPos(j + .999); setPlaying(false); } else { setPos(j); setPlaying(true); } };
-  const ended = !playing && pos >= n - .01;
   const prm = scene.param;
   const id = `sim-${mode}-${lessonId}`;
 
@@ -91,8 +95,8 @@ export function ConceptSim({ lessonId, mode }: { lessonId: string; mode: 'theory
         </label>}
         <div className="sim-controls">
           <button type="button" className="btn sm" onClick={() => goto(s - 1)} disabled={s === 0} aria-label="Bước trước">‹</button>
-          <button type="button" className="btn primary sm" onClick={() => { if (ended) { setPos(0); setPlaying(true); } else setPlaying(!playing); }}>
-            {playing ? '❚❚ Tạm dừng' : ended ? '↻ Chạy lại' : '▶ Chạy'}
+          <button type="button" className="btn primary sm" onClick={() => setPlaying(!playing)} aria-pressed={!playing}>
+            {playing ? '❚❚ Dừng' : '▶ Tiếp tục'}
           </button>
           <button type="button" className="btn sm" onClick={() => goto(s + 1)} disabled={s === n - 1} aria-label="Bước sau">›</button>
           <label className="sim-speed">Tốc độ
