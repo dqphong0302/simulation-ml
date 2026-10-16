@@ -82,16 +82,18 @@ export function Home() {
               <a className="lesson-thumbnail" href={`#${l.path}`} aria-label={`Xem bài ${l.title}`}>
                 <LessonVisual group={l.group} lessonId={l.id} label={l.title.split(':')[0]} />
               </a>
+              <div className="lesson-meta">
+                <ModeBadge mode={l.mode} short />
+                <span className="lesson-level">{String(orderLessons(LESSONS.filter(x => x.group === l.group)).findIndex(x => x.id === l.id) + 1).padStart(2, '0')} · {CORE_LESSONS.includes(l.id) ? 'Cơ bản' : 'Mở rộng · Tùy chọn'}</span>
+              </div>
               <div className="lesson-row-copy">
                 <h4>
                   <a id={`lesson-${l.id}`} href={`#${l.path}`}>
                     {l.title.split(':')[0]}
                   </a>
                 </h4>
-                <span className="lesson-level">{String(orderLessons(LESSONS.filter(x => x.group === l.group)).findIndex(x => x.id === l.id) + 1).padStart(2, '0')} · {CORE_LESSONS.includes(l.id) ? 'Cơ bản' : 'Mở rộng · Tùy chọn'}</span>
                 <p className="lesson-goal">{l.goal}</p>
               </div>
-              <ModeBadge mode={l.mode} short />
               <div className="lesson-row-actions">
                 <a
                   id={`lecture-${l.id}`}
@@ -106,10 +108,11 @@ export function Home() {
                   id={`theory-${l.id}`}
                   href={`#${l.path}?tab=theory`}
                   className="btn-action"
-                  aria-label={`Lý thuyết ${l.title.split(':')[0]}`}
+                  aria-label={`Lý thuyết và Python ${l.title.split(':')[0]}`}
+                  title="Lý thuyết · notebook Python"
                 >
                   <Icon name="file" size={15} />
-                  <span>Lý thuyết · Python</span>
+                  <span>Lý thuyết</span>
                 </a>
                 <a
                   id={`practice-${l.id}`}

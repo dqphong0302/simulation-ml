@@ -61,7 +61,6 @@
 .catalog-filters .chip { height: 38px; padding-inline: 12px; background: transparent; border-color: var(--border); font-weight: 500; }
 .catalog-filters .chip[aria-pressed="true"] { background: #15304c; border-color: #15304c; }
 .catalog-result { color: var(--text-3); font-size: 12px; margin: 14px 0; }
-.home .lesson-list.sleek-list { grid-template-columns: repeat(auto-fill, minmax(min(100%, 268px), 1fr)); gap: 14px; }
 .home .lesson-list.sleek-list .lesson-row { display: grid; grid-template-columns: 1fr auto; gap: 10px 12px; padding: 14px; border-radius: 14px; box-shadow: none; align-items: start; border-top: 3px solid var(--group-color); }
 .home .lesson-list.sleek-list .lesson-row:hover { border-color: color-mix(in srgb, var(--group-color) 45%, var(--border)); border-top-color: var(--group-color); box-shadow: 0 8px 22px color-mix(in srgb, var(--group-color) 14%, transparent); transform: translateY(-2px); }
 .home .lesson-list.sleek-list .lesson-row { transition: transform .2s var(--ease), box-shadow .2s, border-color .2s; }
@@ -94,6 +93,22 @@
 .home .catalog-group .lesson-row-copy { grid-row: 3; }
 .lesson-row-copy h4 { font-size: 16px; line-height: 1.35; margin: 0; }
 .home .catalog-group .lesson-row-actions { grid-row: 4; flex-wrap: wrap; }
+/* ===== Thẻ bài ở trang chủ: cân đối dạng dọc (ảnh 16:10, một hàng meta, một hàng nút) ===== */
+.home .lesson-list.sleek-list { grid-template-columns: repeat(auto-fill, minmax(min(100%, 248px), 1fr)); gap: 14px; }
+.home .lesson-list.sleek-list .lesson-row { display: flex; flex-direction: column; flex-wrap: nowrap; align-items: stretch; gap: 10px; padding: 12px; }
+.home .lesson-row .lesson-thumbnail { flex: none; }
+.home .lesson-thumbnail .lesson-visual { height: auto; aspect-ratio: 16 / 10; display: grid; place-items: center; }
+.home .lesson-thumbnail .lesson-visual svg { height: 78%; width: auto; max-width: 92%; }
+.home .lesson-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; }
+.home .lesson-meta .chip { font-size: 10px; flex: none; }
+.home .lesson-meta .lesson-level { margin: 0; padding: 0; background: none; font-size: 11.5px; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.home .lesson-row .lesson-row-copy { flex: 1; gap: 4px; }
+.home .lesson-row-copy .lesson-goal { -webkit-line-clamp: 2; }
+.home .lesson-row .lesson-row-actions { display: grid; grid-template-columns: auto auto 1fr; gap: 4px; padding-top: 10px; }
+.home .lesson-row-actions .btn-action { height: 32px; padding: 0 7px; gap: 4px; font-size: 11.5px; white-space: nowrap; justify-content: center; }
+.home .lesson-row-actions .practice { margin-left: 0; }
+.home .lesson-row { container-type: inline-size; }
+@container (max-width: 270px) { .home .lesson-row-actions .btn-action:not(.practice) svg { display: none; } .home .lesson-row-actions .btn-action { padding: 0 6px; } }
 @media (max-width: 480px) {
   .catalog-group-head { align-items: flex-start; gap: 10px; }
   .catalog-group-head h3 { font-size: 18px; }
@@ -152,7 +167,6 @@
 @media (max-width: 1100px) {
   .home .home-intro { padding: 28px; }
   .home .home-intro img { width: 175px; height: 175px; }
-  .home .lesson-list.sleek-list .lesson-row { padding: 18px; }
   .deck .deck-stage > .slide { gap: 24px; padding: 28px; }
 }
 @media (max-width: 900px) {
