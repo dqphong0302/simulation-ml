@@ -1,23 +1,21 @@
 import type { Label } from '../algorithms/dataset';
+import { parseCsvText } from './importData';
 
 export interface RawTable { names: string[]; rows: number[][]; y: Label[] } // thiếu giá trị = NaN
 
-/** Phân tích CSV đơn giản (dấu phẩy, không ngoặc kép). Ô rỗng/NULL/NA → NaN. Báo lỗi rõ ràng nếu sai cấu trúc. */
+/** Shared CSV framing; missing feature cells become NaN, but missing labels are never a negative class. */
 export function parseLabelledCsv(text: string, labelColumn: string): RawTable {
-  const lines = text.replace(/^﻿/, '').split(/\r?\n/).filter((l) => l.trim() !== '');
-  if (lines.length < 2) throw new Error('Tệp CSV không có dữ liệu.');
-  const header = lines[0].split(',').map((h) => h.trim());
+  const table = parseCsvText(text, ',');
+  const header = table.names;
   const li = header.indexOf(labelColumn);
   if (li < 0) throw new Error(`Không tìm thấy cột nhãn "${labelColumn}".`);
   const names = header.filter((_, i) => i !== li);
   const rows: number[][] = [];
   const y: Label[] = [];
-  lines.slice(1).forEach((line, n) => {
-    const cells = line.split(',').map((c) => c.trim());
-    if (cells.length !== header.length) throw new Error(`Dòng ${n + 2} có ${cells.length} cột, cần ${header.length}.`);
+  table.cells.forEach((cells, n) => {
     const isBlank = (c: string) => c === '' || /^(null|na|nan)$/i.test(c);
     const lab = Number(cells[li]);
-    if (lab !== 0 && lab !== 1) throw new Error(`Dòng ${n + 2}: nhãn phải là 0 hoặc 1.`);
+    if (!cells[li] || (lab !== 0 && lab !== 1)) throw new Error(`Dòng ${n + 2}: nhãn phải là 0 hoặc 1, không được để trống.`);
     const vals = cells.filter((_, i) => i !== li).map((c) => {
       if (isBlank(c)) return NaN;
       const v = Number(c);

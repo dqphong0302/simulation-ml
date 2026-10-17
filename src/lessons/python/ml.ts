@@ -82,7 +82,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import silhouette_score
 X, _ = make_blobs(n_samples=300, centers=3, cluster_std=1.2, random_state=42)
 X = StandardScaler().fit_transform(X)` },
-    { title: 'Tìm cụm và xem elbow', explanation: 'Inertia luôn giảm khi k tăng. Dùng elbow và silhouette cùng hiểu biết về dữ liệu, không coi cụm là lớp thật.', code: `ks = range(2, 8)
+    { title: 'Tìm cụm và xem elbow', explanation: 'Inertia tối ưu không tăng khi thêm tâm, nhưng các lần chạy độc lập có thể mắc nghiệm cục bộ nên không bảo đảm giảm đều. Dùng elbow và silhouette cùng hiểu biết dữ liệu, không coi cụm là lớp bệnh.', code: `ks = range(2, 8)
 inertias = []
 for k in ks:
     m = KMeans(n_clusters=k, n_init=10, random_state=42).fit(X)

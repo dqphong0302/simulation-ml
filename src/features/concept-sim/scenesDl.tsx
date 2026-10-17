@@ -169,9 +169,9 @@ const DIFF: Scene = {
   steps: [['Dữ liệu sạch', 'Một mẫu dữ liệu x₀ (ở đây là các điểm tạo hình trái tim).'],
     ['Thêm nhiễu dần', 'Mỗi bước trộn thêm một chút nhiễu Gauss: xₜ = √ᾱₜ·x₀ + √(1−ᾱₜ)·ε.'],
     ['Nhiễu thuần', 'Sau T bước, dữ liệu gần như nhiễu Gauss chuẩn.'],
-    ['Khử nhiễu ngược', 'Mạng học dự đoán ε ở từng bước; đi ngược từ nhiễu sẽ dựng lại một mẫu.']],
+    ['Tua ngược minh họa', 'Hình chỉ tua ngược phép trộn đã biết x₀ và ε, không học khử nhiễu. Diffusion thật cần mạng học quá trình ngược; không bảo đảm tìm lại đúng mẫu gốc.']],
   param: { label: 'Số bước T', min: 4, max: 60, step: 4, value: 20 },
-  predict: 'Với T rất nhỏ, mỗi bước khử nhiễu phải "nhảy" xa — chất lượng mẫu sẽ ra sao?',
+  predict: 'Giảm T làm chuyển cảnh thô hơn trong hình này. Có thể suy ra chất lượng mô hình tạo sinh thật từ đó không? Vì sao không?',
   draw: (f) => {
     const T = f.v, raw = f.s === 0 ? 0 : f.s === 1 ? f.e : f.s === 2 ? 1 : 1 - f.e, tq = Math.round(raw * T) / T;
     const ab = Math.cos(tq * Math.PI / 2) ** 2, jig = f.s === 2 ? .15 : 0;

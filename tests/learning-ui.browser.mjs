@@ -1,6 +1,6 @@
 import { chromium } from 'playwright';
 import assert from 'node:assert/strict';
-const baseURL = process.env.BASE_URL || 'http://127.0.0.1:5173';
+import { BASE_URL as baseURL } from './browser.config.mjs';
 
 async function goTo(page, i) {
   for (let guard = 0; guard < 40; guard++) {
@@ -27,9 +27,9 @@ try {
     assert.equal(await page.locator('#lo-trinh').count(), 0);
     assert.equal(await page.getByRole('button', { name: /Chuyển sang giao diện/ }).count(), 0);
     assert.equal(await page.evaluate(() => getComputedStyle(document.documentElement).colorScheme), 'light');
-    assert.equal(await page.locator('.lesson-row').count(), 23);
+    assert.equal(await page.locator('.lesson-row').count(), 26);
     assert.equal(await page.locator('.catalog-group').count(), 4);
-    assert.equal(await page.locator('.lesson-thumbnail svg').count(), 23);
+    assert.equal(await page.locator('.lesson-thumbnail svg').count(), 26);
     assert.equal(await page.locator('.home-data').count(), 0);
     assert.equal(await page.locator('.home-intro').count(), 0);
     await page.locator('#filter-foundation').click();
@@ -40,7 +40,7 @@ try {
     await page.locator('#home-search').fill('xyz-no-lesson');
     assert.equal(await page.locator('.lesson-row').count(), 0);
     await page.locator('#home-reset').click();
-    assert.equal(await page.locator('.lesson-row').count(), 23);
+    assert.equal(await page.locator('.lesson-row').count(), 26);
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `home overflow at ${width}`);
     await page.evaluate(() => window.scrollTo(0, 0));
     await page.screenshot({ path: `/tmp/simulation-home-${width}.png` });
@@ -81,5 +81,5 @@ try {
   await page.keyboard.press('Space');
   await page.waitForFunction(() => document.querySelector('audio')?.currentTime > .1);
   assert.deepEqual(errors, []);
-  console.log('PASS: responsive layout, 23 lessons, filters, accent-insensitive search, empty state, audio play/pause, scene navigation, keyboard start; no page errors.');
+  console.log('PASS: responsive layout, 26 lessons, filters, accent-insensitive search, empty state, audio play/pause, scene navigation, keyboard start; no page errors.');
 } finally { await browser.close(); }

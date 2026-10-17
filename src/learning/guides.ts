@@ -1,8 +1,10 @@
 import type { Guide, Question } from './model';
 import { EXTENSION_GUIDES } from './extensions';
+import { APPLICATION_GUIDES } from './applicationGuides';
 const q = (prompt: string, options: string[], answer: number, explanation: string): Question => ({ prompt, options, answer, explanation });
 export const GUIDES: Record<string, Guide> = {
   ...EXTENSION_GUIDES,
+  ...APPLICATION_GUIDES,
   PROJECT: {
     idea: 'Một báo cáo học máy tốt cho biết mô hình được thử trên dữ liệu nào, sai ở đâu và chưa chứng minh điều gì. Kết luận có giới hạn quan trọng hơn một điểm số đẹp.',
     takeaways: ['Dùng dữ liệu mẫu, không dùng hồ sơ người thật.', 'Giữ nguyên dữ liệu và mô hình khi so sánh hai ngưỡng.', 'Báo cáo cả bỏ sót và cảnh báo thừa.', 'Nêu cách kiểm tra ở quần thể khác trước khi nghĩ đến sử dụng thực tế.'],

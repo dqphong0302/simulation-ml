@@ -13,7 +13,7 @@ Learning rate quá lớn có thể dao động; quá nhỏ chậm. Adam không l
 ## Overfitting
 Theo dõi validation, dùng patience cho early stopping; không nhất thiết dừng ngay một lần loss tăng. L2, dropout và kiến trúc nhỏ hơn là các lựa chọn cần kiểm tra, không bảo đảm an toàn.
 ## Liên hệ y khoa
-Loss train thấp với validation cao gợi ý vấn đề tổng quát hóa, leakage hoặc lệch phân phối. Khả năng xấp xỉ hàm với đủ mạng không bảo đảm tìm được hàm đúng từ ít bệnh nhân.
+Loss train thấp với loss validation cao gợi ý overfitting hoặc khác biệt dữ liệu; chưa xác định nguyên nhân. Leakage thường làm điểm validation đẹp giả nên cũng phải kiểm tra thiết kế, không suy ra leakage chỉ từ khoảng cách loss. Khả năng xấp xỉ hàm không bảo đảm học được hàm hữu ích từ ít bệnh nhân.
 
 ## Thực hành có giới hạn
 Giữ dữ liệu và seed, chỉ thay một cấu hình rồi ghi điều quan sát được. Tách người/nguồn phù hợp nếu dữ liệu đo lặp; tiền xử lý và lựa chọn cấu hình phải nằm trong train/validation. Kiểm tra ở thời gian, thiết bị hoặc bệnh viện mới trước khi kết luận khả năng chuyển bối cảnh.
@@ -106,7 +106,7 @@ Ngưỡng phân vị 95 hoặc 99 chỉ là lựa chọn thống kê, không “
 ## Denoising
 Huấn luyện đầu vào bị nhiễu x̃ nhưng đích là x. Nhiễu giả phải phù hợp mục tiêu. Không bảo đảm bộ lọc giữ mọi chi tiết ECG hoặc không xóa tín hiệu hữu ích.
 ## Liên hệ y khoa
-Điện cực tuột có thể làm error tăng, không tự phân biệt lỗi thiết bị với loạn nhịp. MSE thấp không tự chứng minh cảnh báo hữu ích; cần đo sai sót, thời gian phát hiện, calibration và đánh giá quy trình.
+Điện cực tuột có thể làm error tăng, không tự phân biệt lỗi thiết bị với loạn nhịp. MSE thấp không tự chứng minh cảnh báo hữu ích; cần đo sai sót, thời gian phát hiện và đánh giá quy trình. Reconstruction error là điểm số, không phải xác suất; chỉ khi chuyển thành xác suất mới đặt câu hỏi calibration của xác suất đó.
 
 ## Thực hành có giới hạn
 Giữ dữ liệu và seed, chỉ thay một cấu hình rồi ghi điều quan sát được. Tách người/nguồn phù hợp nếu dữ liệu đo lặp; tiền xử lý và lựa chọn cấu hình phải nằm trong train/validation. Kiểm tra ở thời gian, thiết bị hoặc bệnh viện mới trước khi kết luận khả năng chuyển bối cảnh.
@@ -124,7 +124,7 @@ $$ q(z|x)=N(μ(x),diag(σ²(x)))
 $$ z = μ + σ⊙ε; ε ~ N(0,I)
 Encoder dự đoán μ và log-variance; độ phân tán latent không tự là độ bất định sinh học của bệnh nhân.
 ## ELBO
-Một loss dạng negative ELBO gồm reconstruction negative log-likelihood và KL:
+Với β=1, negative ELBO gồm reconstruction negative log-likelihood và KL. β khác 1 tạo mục tiêu β-VAE, không còn đúng negative ELBO chuẩn:
 $$ L = E_q[−log p(x|z)] + β KL(q(z|x)‖p(z))
 $$ KL = −½Σⱼ(1 + log σⱼ² − μⱼ² − σⱼ²)
 MSE là lựa chọn tương ứng giả định Gaussian với cách scale phù hợp, không công thức ELBO chung cho mọi dữ liệu. β thay đổi đánh đổi; KL không bảo đảm latent không có vùng sinh mẫu vô nghĩa.

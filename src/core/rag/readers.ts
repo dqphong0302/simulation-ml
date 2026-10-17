@@ -1,3 +1,5 @@
+import { parseCsvText } from '../datasets/importData';
+
 export interface ReadResult { text: string; paged: boolean; note?: string }
 
 /** Lỗi riêng: tệp cần OCR (PDF scan hoặc ảnh). */
@@ -7,10 +9,8 @@ export const LIMITS = { fileBytes: 10_000_000, textChars: 2_000_000, pdfPages: 1
 
 /** CSV → mỗi dòng thành một câu "cột: giá trị; …" để tìm kiếm được. */
 export function csvToText(csv: string): string {
-  const lines = csv.replace(/^﻿/, '').split(/\r?\n/).filter((l) => l.trim());
-  if (lines.length < 2) return csv;
-  const head = lines[0].split(',').map((h) => h.trim());
-  return lines.slice(1).map((l, i) => `Dòng ${i + 1}: ` + l.split(',').map((c, j) => `${head[j] ?? `cột ${j + 1}`}: ${c.trim()}`).join('; ')).join('\n\n');
+  const table = parseCsvText(csv);
+  return table.cells.map((row, i) => `Dòng ${i + 1}: ` + row.map((cell, j) => `${table.names[j]}: ${cell}`).join('; ')).join('\n\n');
 }
 
 /** Lấy văn bản thô từ word/document.xml: mỗi <w:p> một đoạn. Không suy ra số trang. */
@@ -30,7 +30,8 @@ export function docxXmlToText(xml: string): string {
   return paras.join('\n\n');
 }
 
-export async function readFileText(f: File): Promise<ReadResult> {
+export async function readFileText(f: File, signal?: AbortSignal): Promise<ReadResult> {
+  signal?.throwIfAborted();
   if (f.size > LIMITS.fileBytes) throw new Error(`Tệp quá lớn (tối đa ${LIMITS.fileBytes / 1e6} MB).`);
   const name = f.name.toLowerCase();
   let r: ReadResult;
@@ -48,18 +49,32 @@ export async function readFileText(f: File): Promise<ReadResult> {
     const pdfjs = await import('pdfjs-dist');
     const worker = (await import('pdfjs-dist/build/pdf.worker.min.mjs?url')).default;
     pdfjs.GlobalWorkerOptions.workerSrc = worker;
-    const pdf = await pdfjs.getDocument({ data: new Uint8Array(await f.arrayBuffer()), enableXfa: false }).promise;
-    if (pdf.numPages > LIMITS.pdfPages) throw new Error(`PDF quá dài (${pdf.numPages} trang, tối đa ${LIMITS.pdfPages}).`);
-    const pages: string[] = [];
-    for (let i = 1; i <= pdf.numPages; i++) {
-      const c = await (await pdf.getPage(i)).getTextContent();
-      pages.push(c.items.map((it) => ('str' in it ? it.str : '')).join(' ').replace(/\s+/g, ' ').trim());
+    const task = pdfjs.getDocument({ data: new Uint8Array(await f.arrayBuffer()), enableXfa: false });
+    const abort = () => { void task.destroy().catch(() => {}); };
+    signal?.addEventListener('abort', abort, { once: true });
+    try {
+      signal?.throwIfAborted();
+      const pdf = await task.promise;
+      if (pdf.numPages > LIMITS.pdfPages) throw new Error(`PDF quá dài (${pdf.numPages} trang, tối đa ${LIMITS.pdfPages}).`);
+      const pages: string[] = [];
+      let chars = 0;
+      for (let i = 1; i <= pdf.numPages; i++) {
+        signal?.throwIfAborted();
+        const c = await (await pdf.getPage(i)).getTextContent();
+        const text = c.items.map((it) => ('str' in it ? it.str : '')).join(' ').replace(/\s+/g, ' ').trim();
+        chars += text.length + 1;
+        if (chars > LIMITS.textChars) throw new Error('Văn bản sau khi đọc quá dài (tối đa 2 triệu ký tự).');
+        pages.push(text);
+      }
+      r = { text: pages.join('\f'), paged: true, note: 'Đã đọc lớp văn bản của PDF.' };
+      if (!pages.some((p) => p.length > 20)) throw new NeedsOcr('PDF gần như không có lớp văn bản (có thể là bản scan). Bạn có thể chạy OCR trên máy.');
+    } finally {
+      signal?.removeEventListener('abort', abort);
+      await task.destroy();
     }
-    void pdf.cleanup();
-    r = { text: pages.join('\f'), paged: true, note: 'Đã đọc lớp văn bản của PDF.' };
-    if (!pages.some((p) => p.length > 20)) throw new NeedsOcr('PDF gần như không có lớp văn bản (có thể là bản scan). Bạn có thể chạy OCR trên máy.');
   } else if (/\.(png|jpe?g|webp|bmp)$/.test(name)) throw new NeedsOcr('Đây là ảnh; cần OCR để lấy chữ.');
   else throw new Error('Định dạng chưa hỗ trợ (dùng TXT, Markdown, CSV, DOCX, PDF hoặc ảnh).');
+  signal?.throwIfAborted();
   if (r.text.length > LIMITS.textChars) throw new Error('Văn bản sau khi đọc quá dài (tối đa 2 triệu ký tự).');
   if (!r.text.trim()) throw new Error('Không đọc được văn bản.');
   return r;

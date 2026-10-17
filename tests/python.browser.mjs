@@ -1,7 +1,7 @@
 import { chromium } from 'playwright';
 import fs from 'node:fs/promises';
 import assert from 'node:assert/strict';
-const baseURL = process.env.BASE_URL || 'http://127.0.0.1:5173';
+import { BASE_URL as baseURL } from './browser.config.mjs';
 const source = await fs.readFile('src/lessons/index.ts', 'utf8');
 const lessons = [...source.matchAll(/id: '([^']+)', title: '([^']+)', path: '([^']+)'/g)].map(m => ({ id: m[1], path: m[3] }));
 const browser = await chromium.launch({ headless: true });
@@ -45,5 +45,5 @@ try {
     assert.equal(await page.locator('.catalog-group').count(), 4);
   }
   assert.deepEqual(errors, []);
-  console.log('PASS: 23 notebook downloads, explained code preview, separate data tab, 3 viewports, no page errors.');
+  console.log('PASS: 26 notebook downloads, explained code preview, separate data tab, 3 viewports, no page errors.');
 } finally { await browser.close(); }

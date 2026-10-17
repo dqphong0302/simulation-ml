@@ -24,9 +24,11 @@ export function profile(t: FreeTable, cols: ColumnInfo[]): Profile[] {
       const ok = v.filter((x) => !Number.isNaN(x)).sort((a, b) => a - b);
       const s = describe(ok);
       const q1 = quantile(ok, 0.25), q3 = quantile(ok, 0.75), iqr = q3 - q1;
-      const skew = s.std && s.mean !== null ? ok.reduce((a, x) => a + ((x - s.mean!) / s.std!) ** 3, 0) / ok.length : null;
+      // Moment skewness g1 uses population moments, independently of sample SD.
+      const momentSd = s.mean !== null ? Math.sqrt(ok.reduce((a, x) => a + (x - s.mean!) ** 2, 0) / ok.length) : 0;
+      const skew = momentSd > 0 && s.mean !== null ? ok.reduce((a, x) => a + ((x - s.mean!) / momentSd) ** 3, 0) / ok.length : null;
       return { kind: 'numeric', info, values, v, mean: s.mean, std: s.std, min: s.min, q1, median: s.median, q3, max: s.max, skew,
-        zeros: ok.length - ok.filter((x) => x !== 0).length, outliers: iqr > 0 ? ok.filter((x) => x < q1 - 1.5 * iqr || x > q3 + 1.5 * iqr).length : 0, zeroGap: zeroGap(v) };
+        zeros: ok.length - ok.filter((x) => x !== 0).length, outliers: ok.filter((x) => x < q1 - 1.5 * iqr || x > q3 + 1.5 * iqr).length, zeroGap: zeroGap(v) };
     }
     const freq = new Map<string, number>();
     values.forEach((c) => { if (!isBlank(c)) freq.set(c, (freq.get(c) ?? 0) + 1); });
@@ -101,7 +103,7 @@ export function DataProfile({ table, cols, target, fileName }: { table: FreeTabl
       if (p.info.coerced) w.push(`“${nm}”: ${p.info.coerced} ô không đọc được thành số (ví dụ: ${p.info.coercedExamples.map((x) => `“${x}”`).join(', ')}) — được coi là thiếu, hãy kiểm tra.`);
       if (p.kind === 'numeric') {
         if (p.zeroGap !== null) w.push(`“${nm}” có ${p.zeros} giá trị 0 nhưng không có giá trị nào giữa 0 và ${g(p.zeroGap)} — 0 có thể là mã hóa cho “thiếu”.`);
-        if (p.skew !== null && Math.abs(p.skew) > 2) w.push(`“${nm}” lệch mạnh (skew = ${p.skew.toFixed(1)}) — trung bình bị kéo xa median; cân nhắc biến đổi log.`);
+        if (p.skew !== null && Math.abs(p.skew) > 2) w.push(`“${nm}” có |skew| > 2 (g1 = ${p.skew.toFixed(1)}) — xem histogram và giá trị cực đoan; log chỉ phù hợp miền giá trị và mục tiêu nhất định.`);
         if (p.outliers > n * 0.05) w.push(`“${nm}” có ${p.outliers} giá trị ngoài 1,5·IQR (${((p.outliers / n) * 100).toFixed(0)}%).`);
       }
     });
@@ -114,7 +116,7 @@ export function DataProfile({ table, cols, target, fileName }: { table: FreeTabl
     return w;
   }, [P, n, overview, nums, corr, classMode, tP, target]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const statCols = ['Cột', 'Kiểu', 'Thiếu', 'Khác nhau', 'Trung bình', 'Độ lệch chuẩn', 'Min', 'Q1', 'Median', 'Q3', 'Max', 'Skew', 'Ngoại lai (IQR)', 'Giá trị phổ biến'];
+  const statCols = ['Cột', 'Kiểu', 'Thiếu', 'Khác nhau', 'Trung bình', 'SD mẫu (n−1)', 'Min', 'Q1', 'Median', 'Q3', 'Max', 'Skew (g1)', 'Ngoại lai (IQR)', 'Giá trị phổ biến'];
   const statRows = P.map((p) => p.kind === 'numeric'
     ? [p.info.name + (p.info.name === target ? ' (đích)' : ''), p.info.role === 'id' ? 'số (ID)' : p.info.units[0] ? `số (${p.info.units[0]})` : 'số', String(p.info.missing), String(p.info.unique), g(p.mean), g(p.std), g(p.min), g(p.q1), g(p.median), g(p.q3), g(p.max), g(p.skew), String(p.outliers), '']
     : [p.info.name + (p.info.name === target ? ' (đích)' : ''), ({ id: 'ID', date: 'ngày', text: 'văn bản', constant: 'hằng số', feature: 'phân loại' } as const)[p.info.role], String(p.info.missing), String(p.info.unique), '', '', '', '', '', '', '', '', '', p.top.slice(0, 3).map(([v, c]) => `${v} (${c})`).join(', ')]);
@@ -166,13 +168,13 @@ export function DataProfile({ table, cols, target, fileName }: { table: FreeTabl
 
       <h3>1. Thống kê từng cột</h3>
       <Table data={{ columns: statCols, rows: statRows }} />
-      <p className="muted">Trung bình xa median → phân bố lệch hoặc có ngoại lai. Skew &gt; 0: đuôi dài bên phải. Ngoại lai: ngoài [Q1 − 1,5·IQR; Q3 + 1,5·IQR].</p>
+      <p className="muted">Mean/SD dùng các giá trị hợp lệ; SD mẫu chia cho n hợp lệ − 1, không xác định khi n &lt; 2. Skew là moment g1, không hiệu chỉnh mẫu nhỏ. Xem histogram cùng mean/median trước khi kết luận hình dạng. Ngoài [Q1 − 1,5·IQR; Q3 + 1,5·IQR] chỉ là cờ thống kê, không tự là lỗi hay bệnh.</p>
 
       {classMode && tP && <>
         <h3>2. Phân bố cột đích “{target}”</h3>
         <div className="bars">{classes.map((c, k) => { const cnt = tP.values.filter((_, i) => classOf(i) === k).length; return (
           <div key={c} className="bar-row"><span>{c}</span><i style={{ width: `${(cnt / n) * 100}%`, background: cc(k) }} /><b>{cnt} · {((cnt / n) * 100).toFixed(0)}%</b></div>); })}</div>
-        {byClass && byClass.rows.length > 0 && <Table caption={`Trung bình (độ lệch chuẩn) từng biến theo nhóm “${target}”`} data={byClass} />}
+        {byClass && byClass.rows.length > 0 && <Table caption={`Trung bình (SD mẫu) từng biến theo nhóm “${target}”`} data={byClass} />}
       </>}
 
       <div className="profile-head">

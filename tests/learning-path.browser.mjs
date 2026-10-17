@@ -1,7 +1,7 @@
 import { chromium } from 'playwright';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-const base = process.env.BASE_URL || 'http://127.0.0.1:5175';
+import { BASE_URL as base } from './browser.config.mjs';
 const browser = await chromium.launch({ headless: true });
 try {
   const context = await browser.newContext({ reducedMotion: 'reduce' });

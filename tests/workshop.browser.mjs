@@ -1,0 +1,111 @@
+import { chromium, expect } from '@playwright/test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+
+import { BASE_URL as base } from './browser.config.mjs';
+const browser = await chromium.launch({ headless: true });
+try {
+  const page = await browser.newPage({ reducedMotion: 'reduce' });
+  const errors = [], failed = [], external = [];
+  page.on('pageerror', e => errors.push(e.message));
+  page.on('response', r => { if (r.status() >= 400) failed.push(r.url()); });
+  page.on('request', r => { if (r.url().startsWith('http') && !r.url().startsWith(base)) external.push(r.url()); });
+  let dismissNavigation = false;
+  page.on('dialog', dialog => dismissNavigation ? dialog.dismiss() : dialog.accept());
+  const download = async selector => {
+    const pending = page.waitForEvent('download'); await page.locator(selector).click();
+    const file = await pending; return { name: file.suggestedFilename(), text: await fs.readFile(await file.path(), 'utf8') };
+  };
+  await page.goto(`${base}/#/station?group=dl`);
+  await page.locator('#station-teach-SEG').click();
+  await expect(page.locator('#teaching-template')).toHaveValue('dl');
+  await expect(page.locator('#teaching-template-topic')).toHaveValue('SEG');
+  await expect(page.locator('#activity-resource-0')).toHaveValue('SEG');
+  await expect(page.locator('#activity-task-1')).toHaveValue(/Dice/);
+  await page.locator('#teaching-title').fill('Thực hành phân đoạn theo nhóm');
+  await page.locator('#activity-task-0').fill('Nhiệm vụ riêng: dự đoán Dice trước khi đổi ngưỡng.');
+  await page.locator('details').first().locator('summary').click();
+  await page.locator('#activity-note-0').fill('PRIVATE_TEACHER_SECRET_987');
+  const handout = await download('#teaching-export-interactive');
+  assert.ok(handout.name.startsWith('phieu-tuong-tac-'));
+  assert.ok(!handout.text.includes('teacherNote')); assert.ok(!handout.text.includes('PRIVATE_TEACHER_SECRET'));
+  const handoutJson = JSON.parse(handout.text);
+  await page.goto(`${base}/#/workshop`);
+  const importRaw = raw => page.locator('#workshop-import').setInputFiles({ name: 'worksheet.json', mimeType: 'application/json', buffer: Buffer.from(raw) });
+  await importRaw(handout.text);
+  await expect(page.locator('#workshop-title')).toHaveText('Thực hành phân đoạn theo nhóm');
+  await expect(page.locator('.workshop-task').first()).toContainText('Nhiệm vụ riêng');
+  await expect(page.locator('body')).not.toContainText('PRIVATE_TEACHER_SECRET');
+  await expect(page.locator('#workshop-resource-0')).toHaveAttribute('href', '#/dl/segmentation?tab=lab');
+  await expect(page.locator('#workshop-resource-0')).toHaveAttribute('target', '_blank');
+  await page.locator('#workshop-note-0').fill('Nhóm dự đoán Dice giảm khi lệch tâm lớn.');
+  await page.locator('#workshop-note-1').fill('Giữ ngưỡng, ghi TP/FP/FN trước và sau.');
+  await page.locator('#workshop-reflection').fill('Dữ liệu tổng hợp chưa chứng minh dùng cho bệnh nhân.');
+  const publicTeacher = { ...handoutJson, session: { ...handoutJson.session, activities: handoutJson.session.activities.map(a => ({ ...a, teacherNote: 'PRIVATE' })) } };
+  for (const raw of ['not JSON', JSON.stringify(publicTeacher), JSON.stringify({ version: 1, sessions: [] })]) {
+    await importRaw(raw); await expect(page.getByRole('alert')).toContainText('Chưa nhập');
+    await expect(page.locator('#workshop-note-0')).toHaveValue('Nhóm dự đoán Dice giảm khi lệch tâm lớn.');
+  }
+  const invalid = structuredClone(handoutJson); invalid.session.activities[0].resourceId = 'https://evil.example';
+  await importRaw(JSON.stringify(invalid));
+  await expect(page.getByRole('alert')).toContainText('Chưa nhập');
+  const report = await download('#workshop-export-md');
+  assert.ok(report.text.includes('Nhóm dự đoán Dice giảm')); assert.ok(!report.text.includes('PRIVATE'));
+  const work = await download('#workshop-export-json');
+  const workJson = JSON.parse(work.text);
+  assert.equal(workJson.kind, 'sml-student-work'); assert.deepEqual(workJson.packet, handoutJson);
+  assert.ok(!work.text.includes('PRIVATE'));
+  await page.reload();
+  await expect(page.locator('#workshop-note-0')).toHaveValue('');
+  await importRaw(work.text);
+  await expect(page.locator('#workshop-note-0')).toHaveValue('Nhóm dự đoán Dice giảm khi lệch tâm lớn.');
+  await expect(page.locator('#workshop-reflection')).toHaveValue('Dữ liệu tổng hợp chưa chứng minh dùng cho bệnh nhân.');
+  await expect(page.locator('.workshop-progress')).toContainText('2/4');
+  await page.locator('#workshop-note-0').fill('Sửa đổi cần giữ lại');
+  dismissNavigation = true;
+  await page.locator('#workshop-to-station').click();
+  await expect(page.locator('#workshop-note-0')).toHaveValue('Sửa đổi cần giữ lại');
+  await page.locator('a[href="#/teaching"]').first().click();
+  await expect(page.locator('#workshop-note-0')).toHaveValue('Sửa đổi cần giữ lại');
+  dismissNavigation = false;
+  await page.locator('#workshop-to-station').click();
+  await expect(page.getByRole('heading', { name: 'Trạm Tin học Y khoa', exact: true })).toBeVisible();
+  for (const [width, height] of [[1440,900], [768,1024], [390,844]]) {
+    await page.setViewportSize({ width, height });
+    for (const [group, topic] of [['start','INTRO'],['python','PYTHON'],['data','DATASETS'],['ml','TREE'],['dl','TRANSFER'],['genai','RAG']]) {
+      await page.goto(`${base}/#/station?group=${group}`);
+      await page.locator(`#station-workshop-${topic}`).click();
+      await expect(page.locator('.workshop-activities > li')).toHaveCount(4);
+      for (let i = 0; i < 4; i++) await expect(page.locator(`#workshop-resource-${i}`)).toHaveAttribute('href', new RegExp(topic === 'PYTHON' ? '#/python' : topic === 'INTRO' ? '#/intro' : topic === 'DATASETS' ? '#/datasets' : topic === 'TREE' ? '#/ml/tree' : topic === 'TRANSFER' ? '#/dl/transfer' : '#/rag'));
+      await expect(page.locator('h1')).toHaveCount(1);
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${topic} overflow ${width}`);
+      if (topic === 'PYTHON' || topic === 'TRANSFER') await page.screenshot({ path: `/tmp/sml-workshop-${topic}-${width}.png`, fullPage: true });
+    }
+    await page.goto(`${base}/#/teaching?group=ml&topic=BOOST`);
+    await expect(page.locator('#activity-resource-0')).toHaveValue('BOOST');
+    await expect(page.locator('#activity-task-1')).toHaveValue(/learning rate|learning_rate|cây/);
+    await page.locator('#teaching-template').selectOption('dl');
+    await page.locator('#teaching-template-topic').selectOption('CNN');
+    await page.locator('#teaching-new').click();
+    await expect(page.locator('#activity-resource-0')).toHaveValue('CNN');
+    await expect(page.locator('#activity-task-1')).not.toHaveValue(/Boosting/);
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+  }
+  await page.goto(`${base}/#/workshop?topic=NOT_A_TOPIC`);
+  await expect(page.getByRole('alert')).toContainText('không tồn tại');
+  await expect(page.locator('#workshop-resource-0')).toHaveAttribute('href', '#/eda?tab=lab');
+  await page.goto(`${base}/#/datasets`);
+  const csv = 'patient_id,length,width,site,label\n' + Array.from({ length: 60 }, (_, i) => `${i},${i + 1},${i % 10 + 3},${i % 3 ? 'A' : 'B'},${i % 2 ? 'yes' : 'no'}`).join('\n');
+  await page.getByLabel('Chọn file dữ liệu', { exact: true }).setInputFiles({ name: 'workshop-measurements.csv', mimeType: 'text/csv', buffer: Buffer.from(csv) });
+  await page.getByRole('button', { name: 'Dùng dữ liệu này', exact: true }).click();
+  await expect(page.locator('.data-fit')).toContainText('workshop-measurements.csv');
+  await page.goto(`${base}/#/teaching?group=ml&topic=TREE`);
+  await expect(page.locator('#activity-task-1')).toHaveValue(/Dữ liệu của bạn: workshop-measurements\.csv/);
+  await expect(page.locator('#activity-task-1')).not.toHaveValue(/glucose|bệnh nhân mắc/);
+  await page.goto(`${base}/#/workshop?topic=TREE`);
+  await expect(page.locator('.workshop-task').nth(1)).toContainText('Dữ liệu của bạn: workshop-measurements.csv');
+  await importRaw(handout.text);
+  await expect(page.locator('.workshop-task').first()).toHaveText(handoutJson.session.activities[0].task);
+  assert.deepEqual(errors, []); assert.deepEqual(failed, []); assert.deepEqual(external, []);
+  console.log('PASS workshop: topic-specific teacher packs, custom handout -> student -> notes -> portable JSON/Markdown -> restore, private-note exclusion, invalid imports preserve work, six groups × three viewports, no page/network errors.');
+} finally { await browser.close(); }

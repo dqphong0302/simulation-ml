@@ -7,7 +7,7 @@ Khám phá dữ liệu lâm sàng (Clinical Exploratory Data Analysis - EDA) là
 - **Đơn vị quan sát (Observation Unit)**: mỗi dòng tương ứng với một thực thể y tế (một bệnh nhân cụ thể, một đợt nhập viện, một lần thăm khám ngoại trú hoặc một mẫu sinh thiết).
 - **Kiểu biến sinh học**: biến liên tục (nồng độ glucose huyết tương đói, huyết áp tâm thu, chỉ số khối cơ thể BMI), biến đếm (số lần mang thai, số cơn đau thắt ngực trong tháng), biến danh nghĩa (nhóm máu, giới tính sinh học), biến thứ bậc (phân độ suy tim NYHA I–IV, giai đoạn ung thư TNM), dữ liệu thời gian (thời gian sống sót sau can thiệp) và văn bản tự do (bệnh sử, ghi chú điều trị).
 - **Biến kết cuộc lâm sàng (Clinical Outcome)**: biến mục tiêu cần dự báo (ví dụ: mắc đái tháo đường, biến cố tim mạch chính MACE trong 5 năm, tái nhập viện sau 30 ngày, tử vong nội viện).
-- **Đơn vị đo chuẩn y khoa**: mg/dL so với mmol/L (đối với glucose), mmHg (huyết áp), kg/m² (BMI), pg/mL (troponin, insulin). Cùng một giá trị số nhưng sai biệt về đơn vị đo giữa các phòng xét nghiệm sẽ dẫn đến sai lệch chẩn đoán nghiêm trọng.
+- **Đơn vị đo**: mg/dL so với mmol/L (glucose), mmHg (huyết áp), kg/m² (BMI). Luôn đọc tên xét nghiệm, đơn vị và phương pháp trong metadata; không áp cùng hệ số đổi cho mọi chất. Cùng giá trị số nhưng khác đơn vị không phải cùng kết quả.
 
 ## Đo xu hướng trung tâm trong quần thể bệnh nhân
 $$ Trung bình mẫu x̄ = (1/n) Σ xᵢ
@@ -20,7 +20,7 @@ $$ Độ lệch chuẩn s = √( Σ (xᵢ − x̄)² / (n − 1) )
 - **Khoảng biến thiên (Range = Max − Min)**: phản ánh khoảng trải rộng tuyệt đối nhưng cực kỳ nhạy cảm với các ca bệnh biến chứng hiếm gặp hoặc sai số nhập liệu.
 - **Phân vị (Percentiles) & Tứ phân vị**: Q1 (bách phân vị 25), Q2 (trung vị - 50%), Q3 (bách phân vị 75).
 $$ Khoảng tứ phân vị IQR = Q3 − Q1
-IQR bao hàm 50% số bệnh nhân ở vùng trung tâm của phân bố, đại diện cho khoảng biến thiên sinh học bền vững. Quy tắc Tukey xác định các giá trị vượt ra ngoài khoảng [Q1 − 1,5·IQR; Q3 + 1,5·IQR] là ứng viên ngoại lai lâm sàng cần bác sĩ xác minh.
+Khoảng Q1 tới Q3 mô tả vùng trung tâm theo phân vị; không nhất thiết chứa đúng 50% số dòng khi có giá trị trùng hoặc mẫu nhỏ. IQR là độ rộng của khoảng đó. Giá trị ngoài [Q1 − 1,5·IQR; Q3 + 1,5·IQR] là ngoại lai thống kê theo Tukey, cần đối chiếu nguồn và bối cảnh chứ không tự là bất thường lâm sàng.
 Khoảng IQR và hàng rào Tukey mô tả mẫu dữ liệu, **không phải khoảng tham chiếu xét nghiệm, ngưỡng chẩn đoán hay khoảng an toàn sinh lý**. Khoảng tham chiếu của phòng xét nghiệm phụ thuộc phương pháp đo và quần thể tham chiếu; không suy ra từ dữ liệu bệnh nhân hiện có.
 
 ## Hình dạng phân bố và Biến thiên sinh học
@@ -38,7 +38,7 @@ Bảng tần suất và tỷ lệ phần trăm được trực quan bằng biể
 - **Hai biến số liên tục**: biểu đồ phân tán (scatter plot) kết hợp hệ số tương quan tuyến tính Pearson:
 $$ r = Σ (xᵢ − x̄)(yᵢ − ȳ) / √( Σ (xᵢ − x̄)² · Σ (yᵢ − ȳ)² )
 r ∈ [−1, 1] đo liên hệ tuyến tính; ngoại lai có thể kéo lệch r. Pearson vẫn tính được khi dữ liệu không chuẩn; các giả định cho kiểm định/khoảng tin cậy cần xét riêng. Spearman hữu ích cho liên hệ đơn điệu hoặc biến thứ bậc, nhưng cũng có thể bỏ sót quan hệ chữ U. Luôn xem scatter trước và phân biệt mô tả tương quan với suy luận thống kê.
-- **Biến định lượng theo phân nhóm bệnh**: so sánh trung vị, khoảng tứ phân vị và tỷ số tương quan η² (tỷ lệ phương sai của chỉ số sinh học được giải thích bởi tình trạng bệnh).
+- **Biến định lượng theo phân nhóm bệnh**: so sánh trung vị, khoảng tứ phân vị và η² (phần tổng biến thiên trong mẫu nằm giữa các trung bình nhóm). Đây là liên hệ mô tả, không phải phần biến thiên do bệnh gây ra.
 - **Hai biến định tính**: lập bảng chéo 2×2 (contingency table) phân tích tần số kết hợp kiểm định Chi bình phương (Chi-square) hoặc Fisher exact test.
 > Định luật kinh điển trong dịch tễ học: Tương quan thống kê không đồng nghĩa với Mối quan hệ nhân quả (Correlation is NOT Causation). Hai chỉ số sinh học cùng tăng có thể đơn thuần do chúng cùng chịu ảnh hưởng của tuổi tác hoặc tình trạng viêm mạn tính nền.
 
@@ -61,6 +61,10 @@ Ví dụ học tập: dự đoán một biến cố giả lập trong 30 ngày t
 - Một dòng là một lần khám; một bệnh nhân có thể có nhiều dòng. **Số lần khám không bằng số bệnh nhân độc lập**.
 - Chỉ dùng đặc trưng đo được trước hoặc tại mốc dự đoán. Kết quả xét nghiệm trả sau mốc đó chưa phải thông tin sẵn có.
 - Nếu không biết bệnh nhân có được theo dõi đủ 30 ngày, không tự gán “không có biến cố”. Mất theo dõi và kiểm duyệt cần thiết kế phân tích riêng.
+
+## Tần suất, tỷ lệ và mẫu số
+Nếu 20 trong 100 bệnh nhân có kết quả dương thì tỷ lệ trong mẫu là 20%. Nếu chỉ 40 người được xét nghiệm, 20/40 = 50% trong nhóm được đo, không phải 50% toàn bộ 100 người. Luôn nêu tử số, mẫu số, số thiếu và đơn vị đếm (người hay lượt khám). Tần suất trong mẫu là dữ kiện quan sát, không tự là xác suất bệnh của từng người.
+Với dữ liệu [2,4,4,10], mean=5, median=4, mode=4, SD mẫu=√12≈3,46. Đơn vị là ngày nếu cột là số ngày nằm viện. Không diễn giải mean=5 là mọi người đều nằm viện 5 ngày.
 
 ## Từ điển dữ liệu và nhật ký chất lượng
 Mỗi cột cần tên, ý nghĩa, kiểu, đơn vị, nguồn, thời điểm đo, mã thiếu và quy tắc kiểm tra. Ví dụ glucose_value phải đi cùng glucose_unit; patient_id dùng để nhóm, visit_date dùng để xác định thời gian, event_30d là kết cuộc sau lần khám.
@@ -91,23 +95,23 @@ Tiền xử lý dữ liệu y sinh học chuyển bảng thô thành đặc trư
 ## Chia dữ liệu theo mục tiêu sử dụng trước khi fit
 1. **Chia theo bệnh nhân**: Khi đánh giá trên bệnh nhân mới, tất cả lần khám của một người thuộc cùng một tập. Chia theo dòng có thể đưa thông tin của cùng người vào cả train và test, làm đánh giá quá lạc quan. GroupShuffleSplit tách nhóm nhưng không tự bảo đảm tỷ lệ nhãn bằng nhau; cần kiểm tra tỷ lệ kết cuộc trong từng tập.
 2. **Quy tắc fit tham số**: Toàn bộ các tham số tiền xử lý — trung vị điền thiếu, độ lệch chuẩn, ngưỡng cắt ngoại lai, danh sách biến phân loại — **chỉ được tính toán trên tập Train**.
-3. **Áp dụng bất biến cho Validation/Test**: Lấy nguyên vẹn các tham số đã fit ở Train để biến đổi cho tập Validation và Test. Việc tính toán tham số trên toàn bộ bộ dữ liệu là vi phạm nghiêm trọng lỗi rò rỉ thông tin (Data Leakage), làm mô hình đánh mất độ tin cậy khi triển khai thực tế tại bệnh viện.
+3. **Áp dụng cùng tham số cho Validation/Test**: Lấy nguyên vẹn các tham số đã fit ở Train để biến đổi cho tập Validation và Test. Học tham số tiền xử lý trên toàn bộ dữ liệu làm thông tin của tập đánh giá tham gia xây dựng mô hình; điểm đánh giá có thể lạc quan. Mức ảnh hưởng phụ thuộc dữ liệu và quy trình, không suy ra bằng một tỷ lệ cố định.
 
 ## Cơ chế dữ liệu khuyết thiếu trong Hồ sơ Bệnh án Điện tử (EHR)
 Trong dữ liệu y tế có thể gặp cả ba cơ chế. Đây là giả định về quá trình thu thập, không phải nhãn tự suy ra chắc chắn từ tỷ lệ ô thiếu:
 - **MCAR (Missing Completely At Random)**: khả năng thiếu không phụ thuộc dữ liệu đã quan sát hoặc chưa quan sát. Ví dụ lỗi ngẫu nhiên của quy trình nếu độc lập với người và giá trị đo. Xóa dòng giảm thông tin; điền trung vị vẫn làm thay đổi phân bố và không phản ánh độ bất định.
-- **MAR (Missing At Random)**: Thiếu phụ thuộc vào các biến số khác đã được quan sát (ví dụ: bệnh nhân cao tuổi ít khi được chỉ định xét nghiệm gắng sức).
+- **MAR (Missing At Random)**: sau khi điều kiện hóa trên thông tin đã quan sát, khả năng thiếu không còn phụ thuộc giá trị chưa quan sát. Ví dụ giả định việc chỉ định phụ thuộc tuổi đã ghi nhận, nhưng không còn phụ thuộc kết quả chưa đo sau khi đã xét tuổi. Chỉ thấy thiếu khác nhau theo tuổi chưa chứng minh MAR.
 - **MNAR (Missing Not At Random)**: sau khi điều kiện hóa trên thông tin quan sát, khả năng thiếu vẫn phụ thuộc giá trị chưa quan sát. Không thể phân biệt chắc chắn MAR và MNAR chỉ bằng dữ liệu quan sát. Cần hiểu quy trình chỉ định, nêu giả định và làm phân tích độ nhạy.
 Chiến lược xử lý:
 - **Không tự ý coi số 0 là giá trị đo**: Trong Pima Indians Diabetes, nồng độ Glucose = 0 hay BMI = 0 là điều không thể có về sinh lý học. Cần chuyển các giá trị 0 này thành NaN (khuyết thiếu) trước khi xử lý.
-- **Điền trung vị (Median Imputation)**: Bền vững trước các ca bệnh nặng có chỉ số cực đoan.
+- **Điền trung vị (Median Imputation)**: ít bị ảnh hưởng bởi giá trị cực đoan hơn điền mean; không tái tạo giá trị thật và có thể giảm biến thiên.
 - **Cờ thiếu (Missingness Indicator)**: có thể hữu ích cho dự đoán khi thiếu mang thông tin về quy trình khám, nhưng có thể mất tác dụng khi chuyển bệnh viện hoặc chính sách chỉ định đổi. Cần đánh giá ngoài mẫu; không xem đây là cách sửa thiên lệch cho mọi phân tích nhân quả.
 - **Phương pháp nâng cao**: KNN imputation hoặc iterative imputation học từ train. Multiple imputation tạo nhiều bộ dữ liệu và gộp ước lượng/độ bất định; một lần điền đa biến không tương đương đầy đủ với multiple imputation.
 
 ## Xử lý ngoại lai: Lỗi nhập liệu vs Trường hợp Bệnh lý Nặng
 Trước khi loại bỏ bất kỳ điểm ngoại lai nào, nhà khoa học dữ liệu y tế phải phối hợp với bác sĩ để phân loại:
 - **Giá trị nghi lỗi kỹ thuật / nhập liệu**: ví dụ tuổi âm, đơn vị không phù hợp hoặc kết quả rất cực đoan → đối chiếu nguồn, đơn vị và bối cảnh trước khi sửa/gán thiếu. Không tự kết luận một giá trị cực đoan là bất khả thi chỉ từ quy tắc thống kê.
-- **Ngoại lai do bệnh lý nguy kịch thực sự**: bệnh nhân shock nhiễm khuẩn, toan ceton đái tháo đường với đường huyết 900 mg/dL hoặc cơn tăng huyết áp kịch phát 240 mmHg. Loại bỏ các ca này sẽ khiến mô hình mất khả năng nhận diện các tình huống cấp cứu đe dọa tính mạng!
+- **Giá trị cực đoan thật**: có thể phản ánh một nhóm bệnh nhân hoặc trạng thái sinh học ít gặp, không phải lỗi nhập liệu. Loại các ca hợp lệ chỉ vì ngoài hàng rào thống kê có thể làm mất thông tin và giảm tính đại diện. Cần xác minh với nguồn dữ liệu; không dùng hàng rào IQR để chẩn đoán hoặc xác định mức độ cấp cứu.
 - **Clipping**: có thể cắt theo ngưỡng thống kê học từ train nếu có lý do và kiểm tra tác động. Hàng rào 1,5·IQR **không phải ngưỡng sinh lý an toàn**. Cắt mất mức độ nặng có thể làm hỏng tín hiệu dự đoán; ưu tiên xác minh lỗi và thử biến đổi phù hợp trước.
 
 ## Chuẩn hóa thang đo (Feature Scaling)
@@ -115,22 +119,23 @@ $$ Chuẩn hóa Z-score: x' = (x − μ_train) / σ_train
 $$ Chuẩn hóa Min-Max: x' = (x − min_train) / (max_train − min_train)
 Ví dụ lâm sàng: Nếu huyết áp có μ_train = 120 mmHg, σ_train = 15 mmHg, thì một bệnh nhân có huyết áp 150 mmHg sẽ có z-score = (150 − 120)/15 = +2,0. Bệnh nhân có huyết áp 150 mmHg ở tập Test cũng sẽ được chuẩn hóa bằng chính μ và σ này.
 Chuẩn hóa thường hữu ích cho KNN, SVM, K-means, PCA và mạng nơ-ron khi các biến có thang khác nhau. Không phải điều kiện bắt buộc trong mọi bài toán: cần cân nhắc liệu thang đo gốc có ý nghĩa. Cây quyết định thường không cần bước này. Min-Max có thể cho giá trị ngoài [0,1] ở test nếu test vượt khoảng train.
+Z-score và Min-Max là biến đổi affine từng biến: đổi vị trí/thang đo nhưng không tự sửa độ lệch hoặc biến phân bố thành chuẩn. Nếu muốn thử log, chỉ dùng cho miền giá trị phù hợp và giải thích ý nghĩa sau biến đổi. Cột hằng và cột hoàn toàn thiếu cần xử lý riêng, không chia cho 0.
 
 ## Mã hóa biến danh nghĩa y khoa
-- **One-Hot Encoding**: dùng cho các biến phân loại không có thứ bậc (như nhóm thuốc điều trị, khoa phòng điều trị). Cần giữ một nhóm tham chiếu (reference group) cho các mô hình hồi quy tuyến tính/logistic để tránh hiện tượng đa cộng tuyến hoàn hảo.
-- **Ordinal Encoding**: dùng cho các biến có thứ bậc lâm sàng tự nhiên (như mức độ khó thở NYHA I < II < III < IV, thang điểm đau VAS 0–10).
-- Xử lý các mã bệnh/danh mục mới xuất hiện ở tập Test bằng cách gom vào nhóm "khác/không xác định".
+- **One-Hot Encoding**: biến danh nghĩa thành các cột chỉ báo. Với hồi quy không điều chuẩn có intercept, bỏ một mức tham chiếu tránh phụ thuộc tuyến tính hoàn hảo. Không phải mọi thuật toán hoặc mô hình điều chuẩn đều cần bỏ một mức.
+- **Ordinal Encoding**: mã hóa biến có thứ tự đã biết, như NYHA I–IV. Mã 1,2,3,4 đưa vào mô hình tuyến tính còn áp giả định khoảng cách bằng nhau; thứ tự tự nhiên không bảo đảm khoảng cách đó có ý nghĩa.
+- Mức mới ở Test cần chính sách rõ: báo lỗi, mức "khác" được thiết kế trước, hoặc bỏ qua theo encoder. OneHotEncoder(handle_unknown='ignore') tạo toàn 0 cho khối biến chưa biết, không tự học thêm cột "khác".
 
-## Thiết kế Thử nghiệm Tiền xử lý theo Chuẩn Y học Bằng chứng
+## So sánh cách tiền xử lý trong thí nghiệm học tập
 Mỗi lần can thiệp tiền xử lý (ví dụ: đổi từ điền median sang MICE, hoặc thêm cờ chỉ báo thiếu), giữ nguyên phân đoạn Train/Validation và thuật toán, sau đó so sánh AUC, Brier score và Net Benefit trên tập Validation. Thay đổi đồng thời nhiều kỹ thuật sẽ gây nhiễu và không thể quy trách nhiệm lâm sàng cho bước cải tiến.
 
 ## Ba cạm bẫy y tế phổ biến nhất
 - Coi ô trống xét nghiệm là giá trị 0 hoặc ngược lại coi giá trị 0 phi sinh lý là dữ liệu thật.
 - Xóa bỏ hàng loạt bệnh nhân nặng vì coi họ là "ngoại lai thống kê".
-- Rò rỉ dữ liệu cấp đợt khám (Visit-level leakage) khiến AI đạt độ chính xác 99% trong phòng lab nhưng thất bại hoàn toàn khi thử nghiệm lâm sàng thực địa.
+- Rò rỉ dữ liệu cấp đợt khám có thể làm đánh giá quá lạc quan; mức độ ảnh hưởng phụ thuộc dữ liệu, không có một tỷ lệ accuracy cố định.
 
 ## Tự kiểm tra tư duy lâm sàng
-- Tại sao việc chuẩn hóa toàn bộ dữ liệu trước khi chia tập Train/Test lại bị coi là sai phạm học thuật trong các công bố y khoa quốc tế?
+- Vì sao học mean/SD trên toàn bộ dữ liệu trước khi chia Train/Test gây rò rỉ? Điều đó khác đổi đơn vị theo quy tắc đã biết như thế nào?
 - Một xét nghiệm Troponin chỉ được thực hiện trên 20% bệnh nhân của khoa cấp cứu. Nếu xóa bỏ 80% bệnh nhân còn lại, tập dữ liệu sẽ bị lệch mẫu như thế nào?
 
 ## Train, validation, test và kiểm tra ngoài bối cảnh
@@ -146,6 +151,13 @@ Quy tắc đổi đơn vị đã biết có thể áp dụng nhất quán trư�
 ## Đọc kết quả và độ bất định
 Accuracy có thể cao dù bỏ sót nhiều ca khi kết cuộc hiếm. Phân biệt **discrimination** (AUROC), **calibration** (xác suất dự báo có phù hợp tần suất quan sát không) và **clinical utility** (lợi ích/hại tại ngưỡng hành động). Brier score đo sai số xác suất, chịu ảnh hưởng cả phân biệt lẫn hiệu chỉnh; không phải thước đo calibration thuần túy.
 Kiểm tra sensitivity, specificity, PPV/NPV ở ngưỡng nêu rõ; không mặc định 0,5 là ngưỡng có ý nghĩa y khoa. Khoảng tin cậy và phân tích theo phân nhóm cần đủ mẫu. Net benefit chỉ có ý nghĩa khi xác định đúng quyết định và đánh đổi lợi ích/hại; notebook tổng hợp không xác lập ngưỡng điều trị.
+
+## Đọc một file Excel hoặc CSV chưa quen
+1. Giữ bản gốc, chọn đúng sheet và hàng tiêu đề; kiểm tra một dòng là bệnh nhân, lần khám hay mẫu xét nghiệm. Ô gộp và tiêu đề nhiều tầng cần đưa về bảng chữ nhật trước khi nhập.
+2. Kiểm tra số đang lưu dạng chữ, dấu thập phân/phân cách hàng nghìn, ngày-tháng-năm và mã thiếu. "01/02" không đủ để biết ngày/tháng nếu thiếu quy ước nguồn; không đoán âm thầm.
+3. Đối chiếu kiểu cột với ý nghĩa: mã 001 là định danh, không phải số đo bằng 1; nhóm máu không có thứ tự hơn/kém. Tách giá trị khỏi đơn vị và chỉ quy đổi theo metadata đã xác minh.
+4. Xem trước vài dòng và số dòng/cột; xác nhận các cảnh báo. Công cụ suy đoán kiểu không tự hiểu đúng mọi file, mọi đơn vị hay kết cuộc y khoa.
+5. EDA không bắt buộc có nhãn đích. Khi học mô hình, tự xác định bài toán: dự đoán số, phân loại, hay tìm cấu trúc không nhãn; không ép mọi bảng thành phân loại nhị phân.
 
 ## Đáp án gợi ý và sản phẩm cần nộp
 1. Chuẩn hóa trước chia tập dùng thông tin phân bố của test để xây mô hình; pipeline fit trong train tránh lỗi này. Phép đổi đơn vị theo quy tắc cố định đã biết không giống học tham số từ test.
@@ -197,7 +209,7 @@ Delimiter/XML không chặn hoàn toàn prompt injection. Yêu cầu “không b
 ## Ví dụ SOAP
 Subjective là thông tin chủ quan do người bệnh kể; Objective là dữ kiện khách quan quan sát/đo; Assessment là đánh giá; Plan là kế hoạch. Ví dụ trên dữ liệu giả lập cần không thêm triệu chứng hoặc xét nghiệm chưa có. Đây là học cấu trúc ghi chép, không xin y lệnh.
 ## Dữ liệu và API
-App này gọi trực tiếp endpoint người dùng cấu hình; nội dung đã chọn được gửi ra ngoài và có thể phát sinh phí. Khóa trong trình duyệt không thể giữ như bí mật máy chủ; dùng khóa thử nghiệm giới hạn quyền/hạn mức, không nhúng khóa vào source. Triển khai cho lớp lớn nên có backend quản lý quyền, hạn mức và log.
+App này gọi trực tiếp endpoint người dùng cấu hình; nội dung đã chọn được gửi ra ngoài và có thể phát sinh phí. Khóa trong trình duyệt không thể giữ như bí mật máy chủ; dùng khóa thử nghiệm giới hạn quyền/hạn mức, không nhúng khóa vào source. Lab này không cung cấp hệ thống quản trị khóa/quyền dùng cho bệnh viện; việc đó nằm ngoài phạm vi học tập.
 Không dùng thông tin sức khỏe người thật. Bỏ tên chưa bảo đảm ẩn danh. HIPAA là khung Hoa Kỳ với phạm vi cụ thể; HHS mô tả Safe Harbor và Expert Determination, không có quy tắc xóa vài trường là tuân thủ mọi luật.
 ## Liên hệ y khoa
 401/403 có thể là xác thực/quyền; 404 là tài nguyên/endpoint; 429 là hạn mức. Không dùng hệ thống học tập làm fallback cấp cứu. Trách nhiệm tổ chức, nhà phát triển và người sử dụng phụ thuộc vai trò/quy định; không quy toàn bộ trách nhiệm pháp lý cho một bác sĩ.

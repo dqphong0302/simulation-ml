@@ -2,9 +2,10 @@ import { DataImport } from './DataImport';
 import { Icon } from './icons';
 import { DataFit } from '../learning/DataFit';
 
-export function LibraryTabs({ active }: { active: 'library' | 'data' }) {
+export function LibraryTabs({ active }: { active: 'library' | 'data' | 'python' }) {
   return <nav className="library-tabs" aria-label="Thư viện và dữ liệu">
     <a href="#/" aria-current={active === 'library' ? 'page' : undefined}><Icon name="file" size={16} /> Thư viện bài học</a>
+    <a id="library-python-tab" href="#/python" aria-current={active === 'python' ? 'page' : undefined}><Icon name="file" size={16} /> Python &amp; Colab</a>
     <a href="#/datasets" aria-current={active === 'data' ? 'page' : undefined}><Icon name="database" size={16} /> Nhập dữ liệu</a>
   </nav>;
 }

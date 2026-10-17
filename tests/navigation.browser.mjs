@@ -2,7 +2,7 @@ import { chromium } from 'playwright';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 
-const baseURL = process.env.BASE_URL || 'http://127.0.0.1:5173';
+import { BASE_URL as baseURL } from './browser.config.mjs';
 const source = await fs.readFile('src/lessons/index.ts', 'utf8');
 const lessons = [...source.matchAll(/id: '([^']+)', title: '([^']+)', path: '([^']+)'/g)]
   .map(m => ({ id: m[1], title: m[2], path: m[3] }));
@@ -12,7 +12,7 @@ try {
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
   await page.goto(baseURL);
-  for (const [group, count] of [['foundation', 2], ['ml', 10], ['dl', 8], ['genai', 3], ['all', 23]]) {
+  for (const [group, count] of [['foundation', 2], ['ml', 11], ['dl', 10], ['genai', 3], ['all', 26]]) {
     await page.locator(`#filter-${group}`).click();
     assert.equal(await page.locator('.lesson-row').count(), count);
   }
@@ -37,5 +37,5 @@ try {
   await page.keyboard.press('Escape');
   assert.equal(await page.locator('#menu-toggle').getAttribute('aria-expanded'), 'false');
   assert.deepEqual(errors, []);
-  console.log('PASS: all category filters, 23 lab routes, skip link, mobile search and Escape; no page errors.');
+  console.log('PASS: all category filters, 26 lab routes, skip link, mobile search and Escape; no page errors.');
 } finally { await browser.close(); }

@@ -1,7 +1,7 @@
 import { chromium } from 'playwright';
 import fs from 'node:fs/promises';
 import assert from 'node:assert/strict';
-const baseURL = process.env.BASE_URL || 'http://127.0.0.1:5173';
+import { BASE_URL as baseURL } from './browser.config.mjs';
 
 const source=await fs.readFile('src/lessons/index.ts','utf8');
 const lessons=[...source.matchAll(/id: '([^']+)', title: '([^']+)', path: '([^']+)'/g)].map(m=>({id:m[1],title:m[2],path:m[3]}));

@@ -87,7 +87,8 @@ export function describe(values: (number | null)[]): Stats {
   const v = values.filter((x): x is number => x !== null && Number.isFinite(x)).sort((a, b) => a - b);
   if (v.length === 0) return { n: values.length, missing: values.length, mean: null, std: null, min: null, max: null, median: null };
   const mean = v.reduce((s, x) => s + x, 0) / v.length;
-  const std = Math.sqrt(v.reduce((s, x) => s + (x - mean) ** 2, 0) / v.length);
+  // Thống kê mô tả: SD mẫu (ddof=1, như pandas.std), không phải SD của scaler.
+  const std = v.length > 1 ? Math.sqrt(v.reduce((s, x) => s + (x - mean) ** 2, 0) / (v.length - 1)) : null;
   const mid = Math.floor(v.length / 2);
   return { n: values.length, missing: values.length - v.length, mean, std, min: v[0], max: v[v.length - 1], median: v.length % 2 ? v[mid] : (v[mid - 1] + v[mid]) / 2 };
 }

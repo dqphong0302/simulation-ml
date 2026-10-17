@@ -1,4 +1,5 @@
 import { gaussian, makeRng } from '../../core/algorithms/rng';
+import { quantile } from '../../core/algorithms/dataset';
 import { Axes, Bx, C, CLASS, Dot, Ln, Path, Tx, at, blobs, clamp, ease, fmt, lerp, poly, softmax, stagger, type P, type Scene } from './kit';
 
 /* ---------- Dữ liệu dùng chung (tổng hợp, có seed) ---------- */
@@ -31,10 +32,12 @@ const EDA: Scene = {
         <Tx x={sx(mu) + 4} y={36} a="start" c={C.b} w={700} o={lines}>mean {fmt(mu, 0)}</Tx>
         <Tx x={sx(md) - 4} y={52} a="end" c={C.c} w={700} o={lines}>median {fmt(md, 0)}</Tx>
         {/* Box plot thu gọn */}
-        {(() => { const s = [...all].sort((x, y) => x - y), q1 = s[Math.floor(s.length * .25)], q3 = s[Math.floor(s.length * .75)];
-          return <g style={{ opacity: lines }}><Ln x1={sx(s[0])} y1={195} x2={sx(s[s.length - 1])} y2={195} c={C.ink2} />
+        {(() => { const s = [...all].sort((x, y) => x - y), q1 = quantile(s, .25), q3 = quantile(s, .75), iqr = q3 - q1;
+          const inside = s.filter(x => x >= q1 - 1.5 * iqr && x <= q3 + 1.5 * iqr);
+          return <g style={{ opacity: lines }}><Ln x1={sx(inside[0])} y1={195} x2={sx(inside[inside.length - 1])} y2={195} c={C.ink2} />
             <Bx x={sx(q1)} y={185} w={sx(q3) - sx(q1)} h={20} c={C.surf} stroke={C.ink2} r={2} /><Ln x1={sx(md)} y1={185} x2={sx(md)} y2={205} c={C.c} w={2.5} />
-            <Tx x={36} y={213} a="start" s={9} c={C.mute}>box plot</Tx></g>; })()}
+            {s.filter(x => x < q1 - 1.5 * iqr || x > q3 + 1.5 * iqr).map((x, i) => <Dot key={i} x={sx(x)} y={195} r={3} c={C.bad} />)}
+            <Tx x={36} y={213} a="start" s={9} c={C.mute}>box plot Tukey</Tx></g>; })()}
       </>}
       {out && <><Dot x={sx(f.v)} y={lerp(10, 140, f.e)} r={6 + Math.sin(f.t * 6) * 1.2} c={C.bad} /><Tx x={sx(f.v)} y={lerp(4, 128, f.e)} c={C.bad} w={700}>ngoại lai</Tx></>}
     </>;
@@ -46,17 +49,18 @@ const ROWS = [[45, 132, 27], [61, null, 31], [38, 98, null], [72, 160, 29], [29,
 const COLS = ['Tuổi', 'Glucose', 'BMI'];
 const DATA: Scene = {
   steps: [['Tìm ô thiếu', 'Ô trống nhấp nháy: thiếu do không đo, do mất hồ sơ hay do quy trình? Lý do thiếu quan trọng hơn con số.'],
-    ['Điền median của train', 'Ví dụ đơn giản: điền median tính trên tập train. Nên giữ thêm cờ "đã thiếu".'],
-    ['Chuẩn hóa thang đo', 'Tuổi và glucose khác đơn vị; đưa về cùng thang để thuật toán theo khoảng cách không bị một biến lấn át.'],
-    ['Chia train/test', 'Tách test trước khi học median, min-max… để tránh rò rỉ thông tin.']],
+    ['Chia train/test', 'Minh họa giữ các dòng cuối làm test, không phải cách chia mặc định cho mọi dữ liệu. Chia trước khi học median và min-max.'],
+    ['Điền median của train', 'Chỉ học median từ train, dùng cùng median điền cho cả train và test. Cờ thiếu có thể giữ thông tin về quy trình đo.'],
+    ['Chuẩn hóa thang đo', 'Học min/max từ train rồi áp dụng cho cả hai tập. Test có thể ngoài [0,1]; không tính lại thang bằng test.']],
   param: { label: 'Tỷ lệ test', min: .125, max: .5, step: .125, value: .25, fmt: v => `${Math.round(v * 100)}%` },
   predict: 'Nếu tính median trên cả bảng (gồm test), điều gì bị rò rỉ sang lúc đánh giá?',
   draw: (f) => {
-    const nTest = Math.round(f.v * ROWS.length), med = COLS.map((_, j) => median(ROWS.map(r => r[j]).filter((x): x is number => x !== null)));
-    const split = at(f, 3), fillIn = at(f, 1), norm = at(f, 2);
+    const nTest = Math.round(f.v * ROWS.length), train = ROWS.slice(0, ROWS.length - nTest);
+    const med = COLS.map((_, j) => median(train.map(r => r[j]).filter((x): x is number => x !== null)));
+    const split = at(f, 1), fillIn = at(f, 2), norm = at(f, 3);
     const yOf = (i: number) => { const test = i >= ROWS.length - nTest; return 34 + i * 19 + (test ? 14 * split : 0); };
-    const lo = COLS.map((_, j) => Math.min(...ROWS.map(r => r[j] ?? med[j])));
-    const hi = COLS.map((_, j) => Math.max(...ROWS.map(r => r[j] ?? med[j])));
+    const lo = COLS.map((_, j) => Math.min(...train.map(r => r[j] ?? med[j])));
+    const hi = COLS.map((_, j) => Math.max(...train.map(r => r[j] ?? med[j])));
     return <>
       {COLS.map((c, j) => <Tx key={c} x={50 + j * 52} y={24} w={700} c={C.ink}>{c}</Tx>)}
       {ROWS.map((r, i) => <g key={i}>{r.map((v, j) => {

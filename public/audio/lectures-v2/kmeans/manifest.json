@@ -34,9 +34,9 @@
     },
     {
       "id": "s2",
-      "audio": "/audio/guide/kmeans/s2.mp3",
-      "duration": 8.96,
-      "caption": "Mỗi vòng có hai bước. Gán từng điểm vào tâm gần nhất, rồi dời tâm về trung bình của các điểm trong cụm. Lặp lại cho tới khi không điểm nào đổi cụm.",
+      "audio": "/audio/lectures-v2/kmeans/2a6af5dc94be6862.mp3",
+      "duration": 11.76,
+      "caption": "Mỗi vòng gán điểm vào tâm gần nhất rồi cập nhật tâm bằng trung bình của cụm. Ta dừng khi ổn định, đạt sai số thay đổi cho phép hoặc hết số vòng. Khởi tạo khác nhau có thể cho nghiệm khác.",
       "preset": {
         "title": "Hai bước lặp lại",
         "bullets": [
@@ -63,14 +63,15 @@
     },
     {
       "id": "s3",
-      "audio": "/audio/guide/kmeans/s3.mp3",
-      "duration": 10,
-      "caption": "Khi tăng k, tổng khoảng cách tới tâm luôn giảm. Hãy tìm điểm mà đường cong bắt đầu thoải, giống khuỷu tay. Và nhớ rằng cụm tìm được chưa chắc trùng với nhóm bệnh.",
+      "audio": "/audio/lectures-v2/kmeans/ea84dc3f273c245e.mp3",
+      "duration": 13.76,
+      "caption": "Inertia là tổng khoảng cách bình phương đến tâm. Giá trị tối ưu không tăng khi thêm tâm, nhưng những lần chạy độc lập có thể mắc nghiệm cục bộ. Đường elbow không nhất thiết có góc gãy rõ và không tự cho số nhóm bệnh.",
       "preset": {
         "title": "Chọn k bằng đồ thị khuỷu tay",
         "bullets": [
-          "Inertia luôn giảm khi k tăng",
-          "Chọn chỗ đường cong bắt đầu thoải"
+          "Inertia tối ưu không tăng khi thêm tâm",
+          "Nghiệm cục bộ có thể làm đường thực nghiệm không giảm đều",
+          "Elbow là gợi ý, không xác định nhóm bệnh"
         ],
         "icon": "📉"
       }

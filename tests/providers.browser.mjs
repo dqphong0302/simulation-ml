@@ -1,0 +1,127 @@
+import { chromium, expect } from '@playwright/test';
+import assert from 'node:assert/strict';
+import JSZip from 'jszip';
+
+import { BASE_URL as base } from './browser.config.mjs';
+const browser = await chromium.launch({ headless: true });
+try {
+  const page = await browser.newPage();
+  const errors = [], requests = [], external = [];
+  page.on('pageerror', e => errors.push(e.message));
+  page.on('request', r => { if (r.url().startsWith('http') && !r.url().startsWith(`${base}/`) && !r.url().startsWith('https://provider.test/')) external.push(r.url()); });
+  let releaseEmbedding;
+  let delayEmbedding = false;
+  await page.route('https://provider.test/v1/**', async route => {
+    const request = route.request();
+    if (request.method() === 'OPTIONS') return route.fulfill({ status: 204, headers: { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'access-control-allow-methods': 'POST' } });
+    const data = request.postDataJSON(); requests.push({ url: request.url(), data });
+    if (request.url().endsWith('/embeddings')) {
+      if (delayEmbedding) await new Promise(resolve => { releaseEmbedding = resolve; });
+      await route.fulfill({ json: { data: data.input.map((_, i) => ({ index: i, embedding: [1, i + 1] })) }, headers: { 'access-control-allow-origin': '*' } }).catch(() => {});
+    } else await route.fulfill({ body: 'data: {"choices":[{"delta":{"content":"Phản hồi mẫu"}}]}', contentType: 'text/event-stream', headers: { 'access-control-allow-origin': '*' } });
+  });
+  await page.goto(base);
+  await page.evaluate(() => {
+    localStorage.setItem('sml.persist', '1');
+    const connection = { baseUrl: 'https://provider.test/v1', model: 'test-model', apiKey: 'DO_NOT_RESTORE' };
+    const chat = { ...connection, label: 'Cấu hình A', temperature: 'bad', topP: 1, maxTokens: 128, stream: true };
+    localStorage.setItem('sml.profiles', JSON.stringify({ chatA: chat, embed: connection }));
+  });
+  await page.goto(`${base}/#/genai?tab=lab`); await page.reload();
+  const key = page.getByLabel('API key (chỉ giữ trong bộ nhớ phiên)', { exact: true });
+  await expect(key).toHaveValue('');
+  await expect(page.getByLabel('Model (nhập tay)', { exact: true })).toHaveValue('test-model');
+  await expect(page.getByLabel('Temperature = 0.7', { exact: true })).toHaveValue('0.7');
+  await key.fill('SESSION_ONLY');
+  await page.getByLabel('Câu hỏi', { exact: true }).fill('Kiểm tra');
+  await page.getByLabel('Tôi hiểu nội dung trên', { exact: false }).check();
+  await page.getByRole('button', { name: 'Gửi', exact: true }).click();
+  await expect(page.locator('.main')).toContainText('Phản hồi mẫu');
+  await expect(page.getByRole('button', { name: 'Gửi', exact: true })).toBeEnabled();
+  assert.ok(!(await page.evaluate(() => localStorage.getItem('sml.profiles'))).includes('SESSION_ONLY'));
+  await page.getByLabel('Base URL (HTTPS', { exact: false }).fill('https://other.test/v1');
+  await expect(key).toHaveValue('');
+
+  await page.goto(`${base}/#/rag?tab=lab`);
+  await page.getByLabel('Hoặc dán văn bản', { exact: true }).fill('Python giúp đọc bảng dữ liệu. Dữ liệu tổng hợp để học lập trình.');
+  await page.getByRole('button', { name: 'Thêm văn bản', exact: true }).click();
+  await page.getByLabel('Câu hỏi', { exact: true }).fill('Python');
+  await page.getByRole('button', { name: 'Tìm top-3', exact: true }).click();
+  await expect(page.getByRole('table', { name: 'Các đoạn được truy xuất' })).toBeVisible();
+  await page.getByLabel('Câu hỏi', { exact: true }).fill('Câu hỏi khác');
+  await expect(page.getByRole('table', { name: 'Các đoạn được truy xuất' })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Hỏi', exact: true })).toHaveCount(0);
+  await page.getByLabel('Ngữ nghĩa (embedding)', { exact: true }).check();
+  await page.getByLabel('API key (chỉ bộ nhớ phiên)', { exact: true }).fill('EMBED_SESSION');
+  await page.getByLabel('Tôi đồng ý gửi nội dung các đoạn ra ngoài.', { exact: true }).check();
+  delayEmbedding = true;
+  await page.getByRole('button', { name: 'Lập chỉ mục vector', exact: true }).click();
+  await expect.poll(() => !!releaseEmbedding).toBe(true);
+  await page.getByLabel('Hoặc dán văn bản', { exact: true }).fill('Một tài liệu mới về thống kê.');
+  await page.getByRole('button', { name: 'Thêm văn bản', exact: true }).click();
+  releaseEmbedding(); delayEmbedding = false;
+  await expect(page.getByRole('button', { name: 'Lập chỉ mục vector', exact: true })).toBeEnabled();
+  await expect(page.locator('.main')).not.toContainText('Đã lập chỉ mục');
+  releaseEmbedding = undefined; delayEmbedding = true;
+  await page.getByRole('button', { name: 'Lập chỉ mục vector', exact: true }).click();
+  await expect.poll(() => !!releaseEmbedding).toBe(true);
+  await page.getByLabel('Tôi đồng ý gửi nội dung các đoạn ra ngoài.', { exact: true }).uncheck();
+  releaseEmbedding(); delayEmbedding = false;
+  await expect(page.getByRole('button', { name: 'Lập chỉ mục vector', exact: true })).toBeDisabled();
+  await expect(page.locator('.main')).not.toContainText('Đã lập chỉ mục');
+  await page.getByLabel('Tôi đồng ý gửi nội dung các đoạn ra ngoài.', { exact: true }).check();
+  await page.getByRole('button', { name: 'Lập chỉ mục vector', exact: true }).click();
+  await expect(page.locator('.main')).toContainText('Đã lập chỉ mục 2 đoạn');
+  const before = requests.length;
+  await page.getByLabel('Tôi đồng ý gửi nội dung các đoạn ra ngoài.', { exact: true }).uncheck();
+  await page.getByRole('button', { name: 'Tìm top-3', exact: true }).click();
+  await expect(page.locator('.main')).toContainText('Cần đồng ý gửi câu hỏi');
+  assert.equal(requests.length, before);
+  await page.getByLabel('Tôi đồng ý gửi nội dung các đoạn ra ngoài.', { exact: true }).check();
+  await page.getByRole('button', { name: 'Tìm top-3', exact: true }).click();
+  await expect(page.getByRole('table', { name: 'Các đoạn được truy xuất' })).toBeVisible();
+  for (const [width, height] of [[1440,900],[768,1024],[390,844]]) {
+    await page.setViewportSize({ width, height });
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+    await page.screenshot({ path: `/tmp/sml-provider-review-${width}.png`, fullPage: true });
+  }
+  // Real local readers/OCR: only the provider transport above is mocked.
+  await page.reload();
+  const png = await page.evaluate(() => {
+    const canvas = document.createElement('canvas'); canvas.width = 900; canvas.height = 180;
+    const ctx = canvas.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, 900, 180);
+    ctx.fillStyle = '#000'; ctx.font = 'bold 70px Arial'; ctx.fillText('PYTHON DATA', 40, 115);
+    return canvas.toDataURL('image/png').split(',')[1];
+  });
+  const selectFile = file => page.locator('.controls input[type="file"]').setInputFiles(file);
+  await selectFile({ name: 'teaching.png', mimeType: 'image/png', buffer: Buffer.from(png, 'base64') });
+  await page.getByRole('button', { name: 'Chạy OCR', exact: true }).click();
+  await expect(page.locator('.main')).toContainText('OCR xong', { timeout: 120_000 });
+  await expect(page.locator('.controls li')).toContainText(['teaching.png (OCR)']);
+  await page.getByLabel('Câu hỏi', { exact: true }).fill('PYTHON');
+  await page.getByRole('button', { name: 'Tìm top-3', exact: true }).click();
+  await expect(page.getByRole('table', { name: 'Các đoạn được truy xuất' })).toContainText(/PYTHON/i);
+  const zip = new JSZip();
+  zip.file('word/document.xml', '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body><w:p><w:r><w:t>Teaching with synthetic data.</w:t></w:r></w:p></w:body></w:document>');
+  await selectFile({ name: 'teaching.docx', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', buffer: await zip.generateAsync({ type: 'nodebuffer' }) });
+  await expect(page.locator('.controls li')).toHaveCount(2);
+  const content = 'BT /F1 18 Tf 30 100 Td (Synthetic teaching PDF: Python and data.) Tj ET';
+  const objects = ['<< /Type /Catalog /Pages 2 0 R >>', '<< /Type /Pages /Kids [3 0 R] /Count 1 >>', '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 600 200] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>', '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>', `<< /Length ${content.length} >>\nstream\n${content}\nendstream`];
+  let pdf = '%PDF-1.4\n'; const offsets = [0];
+  objects.forEach((object, i) => { offsets.push(Buffer.byteLength(pdf)); pdf += `${i + 1} 0 obj\n${object}\nendobj\n`; });
+  const xref = Buffer.byteLength(pdf);
+  pdf += `xref\n0 6\n0000000000 65535 f \n${offsets.slice(1).map(offset => `${String(offset).padStart(10, '0')} 00000 n \n`).join('')}trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`;
+  await selectFile({ name: 'teaching.pdf', mimeType: 'application/pdf', buffer: Buffer.from(pdf) });
+  await expect(page.locator('.controls li')).toHaveCount(3);
+  await page.getByLabel('Câu hỏi', { exact: true }).fill('Synthetic');
+  await page.getByRole('button', { name: 'Tìm top-3', exact: true }).click();
+  await expect(page.getByRole('table', { name: 'Các đoạn được truy xuất' })).toContainText('teaching.pdf');
+  await selectFile({ name: 'cancelled.png', mimeType: 'image/png', buffer: Buffer.from(png, 'base64') });
+  await page.getByRole('button', { name: 'Chạy OCR', exact: true }).click();
+  await page.getByRole('button', { name: 'Hủy', exact: true }).click();
+  await expect(page.locator('.main')).toContainText('Đã hủy OCR.');
+  await expect(page.locator('.controls li')).toHaveCount(3);
+  assert.deepEqual(errors, []);
+  assert.deepEqual(external, []);
+  console.log('PASS API UI: safe profiles/keys, EOF stream, stale RAG invalidation, index cancellation, vector consent, 3 viewports; provider mocked. Real local PNG OCR + cancel, DOCX/PDF read and retrieval; no external requests/page errors.');
+} finally { await browser.close(); }

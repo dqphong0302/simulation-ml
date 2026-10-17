@@ -1,12 +1,15 @@
 import { DL_THEORY } from './dl';
 import { ML_THEORY } from './ml';
 import { OTHER_THEORY } from './other';
+import { composeTheory } from './curriculum';
+import { APPLICATION_THEORY } from './applications';
 
 /**
  * Tài liệu lý thuyết cho từng bài, viết bằng markdown rút gọn:
  * "## " tiêu đề mục · "- " gạch đầu dòng · "1. " danh sách số · "$$ " dòng công thức · "> " ghi chú · **đậm** · dòng trống ngăn đoạn.
  */
-export const THEORY: Record<string, string> = { ...OTHER_THEORY, ...ML_THEORY, ...DL_THEORY };
+const reviewedDetails = { ...OTHER_THEORY, ...ML_THEORY, ...DL_THEORY, ...APPLICATION_THEORY };
+export const THEORY: Record<string, string> = Object.fromEntries(Object.entries(reviewedDetails).map(([id, detail]) => [id, composeTheory(id, detail)]));
 
 export type Block =
   | { t: 'p'; text: string } | { t: 'h'; text: string; id: string } | { t: 'ul' | 'ol'; items: string[] }

@@ -1,10 +1,11 @@
 import { chromium } from 'playwright';
 import assert from 'node:assert/strict';
+import { BASE_URL as base } from './browser.config.mjs';
 const browser=await chromium.launch({headless:true,args:['--use-fake-device-for-media-stream','--use-fake-ui-for-media-stream']});
 try{
   const page=await browser.newPage();const errors=[];
   page.on('pageerror',e=>errors.push(e.message));
-  await page.goto('http://127.0.0.1:5173/#/ml/teachable?tab=lab');
+  await page.goto(`${base}/#/ml/teachable?tab=lab`);
   assert.equal(await page.locator('video').evaluate(v=>v.srcObject),null);
   await page.locator('#tm-start-camera').click();
   await page.getByRole('button',{name:'Chụp vào lớp 1',exact:true}).waitFor();
@@ -16,7 +17,7 @@ try{
   await page.locator('#tm-start-camera').click();
   await page.getByRole('button',{name:'Chụp vào lớp 1',exact:true}).waitFor();
   await page.evaluate(()=>{window.testMedia=document.querySelector('video').srcObject;location.hash='/';});
-  await page.locator('.hero').waitFor();
+  await page.locator('#home-title').waitFor();
   assert.ok(await page.evaluate(()=>window.testMedia.getTracks().every(t=>t.readyState==='ended')));
   assert.deepEqual(errors,[]);
   console.log('PASS: webcam opt-in, capture, explicit stop and route cleanup (synthetic camera).');

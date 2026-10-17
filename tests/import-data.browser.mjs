@@ -2,7 +2,7 @@ import { chromium, expect } from '@playwright/test';
 import assert from 'node:assert/strict';
 import * as XLSX from 'xlsx';
 
-const baseURL = process.env.BASE_URL || 'http://127.0.0.1:5173';
+import { BASE_URL as baseURL } from './browser.config.mjs';
 const browser = await chromium.launch({ headless: true });
 const csv = n => 'length,width,label\n' + Array.from({ length: n }, (_, i) => `${i + 1},${i % 17 + 1},${i % 2 ? 'A' : 'B'}`).join('\n');
 const upload = (page, name, text) => page.getByLabel('Chọn file dữ liệu', { exact: true }).setInputFiles({ name, mimeType: 'application/octet-stream', buffer: Buffer.isBuffer(text) ? text : Buffer.from(text) });

@@ -1,16 +1,16 @@
 import { chromium, expect } from '@playwright/test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-const base=process.env.BASE_URL||'http://127.0.0.1:5175';
+import { BASE_URL as base } from './browser.config.mjs';
 const browser=await chromium.launch({headless:true});
 try {
   const page=await browser.newPage({reducedMotion:'reduce'});
   const errors=[];
   page.on('pageerror',e=>errors.push(e.message));
   await page.goto(base);
-  const order=['KNN','TREE','LOGREG','COMPARE','TEACHABLE','LINREG','KMEANS','PCA','FOREST','SVM'];
+  const order=['KNN','TREE','LOGREG','COMPARE','TEACHABLE','LINREG','KMEANS','PCA','FOREST','BOOST','SVM'];
   assert.deepEqual(await page.locator('.catalog-group-ml h4 a').evaluateAll(nodes=>nodes.map(n=>n.id.replace('lesson-',''))),order);
-  assert.deepEqual(await page.locator('.catalog-group-ml .lesson-level').allTextContents(),order.map((id,i)=>`${String(i+1).padStart(2,'0')} · ${i<5?'Cơ bản':'Mở rộng · Tùy chọn'}`));
+  assert.deepEqual(await page.locator('.catalog-group-ml .lesson-level').allTextContents(),order.map((id,i)=>`${String(i+1).padStart(2,'0')} · ${i<5?'Cơ bản':id==='BOOST'?'Ứng dụng · Có hướng dẫn':'Mở rộng · Tùy chọn'}`));
   await page.locator('#filter-ml').click();
   await page.locator('#home-search').fill('PCA');
   assert.match(await page.locator('.lesson-level').innerText(),/^08/);

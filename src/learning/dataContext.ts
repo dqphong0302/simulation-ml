@@ -4,7 +4,7 @@ import { modelLimitsFor } from '../core/datasets/importData';
 import type { SessionData } from '../core/datasets/session';
 import type { Guide } from './model';
 
-export const TABLE_NOTEBOOKS = new Set(['EDA', 'DATA', 'KNN', 'TREE', 'LOGREG', 'COMPARE', 'LINREG', 'KMEANS', 'PCA', 'FOREST', 'SVM', 'MLP']);
+export const TABLE_NOTEBOOKS = new Set(['EDA', 'DATA', 'KNN', 'TREE', 'LOGREG', 'COMPARE', 'LINREG', 'KMEANS', 'PCA', 'FOREST', 'BOOST', 'SVM', 'MLP']);
 const numericLabs = new Set(['DATA', 'LINREG', 'KMEANS', 'PCA', 'AE', 'VAE']);
 const tableLabs = new Set([...TABLE_NOTEBOOKS, 'AE', 'VAE']);
 const cache = new WeakMap<SessionData, ReturnType<typeof analyze>>();

@@ -1,12 +1,11 @@
 import { checkEndpoint, redact } from '../security/url';
+import { ProviderError, responseFailure } from './errors';
+import { readSseData } from './sse';
+export { ProviderError } from './errors';
 
 export interface ChatProfile { label: string; baseUrl: string; model: string; apiKey: string; temperature: number; topP: number; maxTokens: number; stream: boolean }
 export interface Msg { role: 'system' | 'user' | 'assistant'; content: string }
 export interface ChatResult { text: string; ms: number; usage?: { prompt?: number; completion?: number; total?: number } }
-
-export class ProviderError extends Error {
-  constructor(public kind: 'config' | 'http' | 'network' | 'abort' | 'format', message: string, public status?: number) { super(message); }
-}
 
 export function chatUrl(base: string): string {
   const c = checkEndpoint(base);
@@ -59,26 +58,18 @@ export async function chat(p: ChatProfile, messages: Msg[], onDelta: (t: string)
   };
   try {
     if (p.stream && res.body) {
-      const reader = res.body.getReader();
-      const dec = new TextDecoder();
-      let buf = '';
-      for (;;) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        buf += dec.decode(value, { stream: true });
-        const lines = buf.split('\n');
-        buf = lines.pop() ?? '';
-        for (const line of lines) {
-          const l = line.trim();
-          if (!l.startsWith('data:')) continue;
-          const data = l.slice(5).trim();
-          if (data === '[DONE]') continue;
-          const j = JSON.parse(data);
-          const d = j.choices?.[0]?.delta?.content;
-          if (typeof d === 'string') { text += d; onDelta(d); }
-          readUsage(j.usage);
-        }
+      let received = false;
+      for await (const data of readSseData(res.body)) {
+        if (data.trim() === '[DONE]') break;
+        const j = JSON.parse(data);
+        if (!j || typeof j !== 'object' || j.error || !Array.isArray(j.choices)) throw new ProviderError('format', 'Luồng không đúng định dạng Chat Completions.');
+        received = true;
+        const d = j.choices[0]?.delta?.content;
+        if (d !== undefined && d !== null && typeof d !== 'string') throw new ProviderError('format', 'Nội dung streaming không phải văn bản.');
+        if (typeof d === 'string') { text += d; onDelta(d); }
+        readUsage(j.usage);
       }
+      if (!received) throw new ProviderError('format', 'Luồng không có phản hồi Chat Completions.');
     } else {
       const j = await res.json();
       text = j.choices?.[0]?.message?.content;
@@ -87,9 +78,7 @@ export async function chat(p: ChatProfile, messages: Msg[], onDelta: (t: string)
       onDelta(text);
     }
   } catch (e) {
-    if (e instanceof ProviderError) throw e;
-    if ((e as Error).name === 'AbortError') throw new ProviderError('abort', 'Đã dừng yêu cầu.');
-    throw new ProviderError('format', 'Luồng phản hồi bị ngắt hoặc sai định dạng.');
+    throw responseFailure(e);
   }
   return { text, ms: Math.round(performance.now() - t0), usage };
 }

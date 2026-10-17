@@ -30,7 +30,7 @@ export function AutoencoderLab({ d }: { d: LabData }) {
           <div className="row"><button onClick={() => run(1)}>1 epoch</button><button onClick={() => run(100)}>+100</button><button className="primary" aria-pressed={running} onClick={() => setRunning(!running)}>{running ? 'Dừng' : 'Chạy'}</button><button onClick={reset}>Đặt lại</button></div></div></section>
       <section className="main">
         <p className="badge">Huấn luyện thật trên dữ liệu nhỏ</p>
-        <p>Autoencoder nén 2 biến thành 1 số (bottleneck) rồi dựng lại. Tròn = điểm gốc (chuẩn hóa); tam giác = điểm sau tái dựng. Các điểm tái dựng nằm trên một đường cong vì chỉ có 1 số để mô tả mỗi điểm. Lỗi lớn nghĩa là 1 chiều chưa đủ giữ thông tin.</p>
+        <p>Autoencoder nén 2 biến thành 1 số (bottleneck) rồi dựng lại. Tròn = điểm gốc (chuẩn hóa); tam giác = điểm sau tái dựng. Các điểm tái dựng nằm trên một đường cong vì latent chỉ có 1 chiều. Lỗi lớn có thể do nén mất thông tin, chưa học đủ hoặc dữ liệu khác phân phối; không tự xác nhận có bệnh.</p>
         <Plot pts={[...X, ...rec]} groups={[...X.map(() => 0), ...rec.map(() => 1)]} xl={`${d.ds.featureNames[0]} (chuẩn hóa)`} yl={`${d.ds.featureNames[1]} (chuẩn hóa)`} />
         <Table data={table} /><Chart spec={chart} />
         <p className="muted">VAE và GAN cũng đã có trong khoá: xem bài VAE (latent là một phân phối) và bài GAN (sinh đối kháng) ở nhóm Deep Learning.</p>
@@ -96,7 +96,7 @@ export function VaeLab({ d }: { d: LabData }) {
           <div className="row"><button onClick={() => run(1)}>1 epoch</button><button onClick={() => run(100)}>+100</button><button className="primary" aria-pressed={running} onClick={() => setRunning(!running)}>{running ? 'Dừng' : 'Chạy'}</button><button onClick={reset}>Đặt lại</button></div></div></section>
       <section className="main">
         <p className="badge">Huấn luyện thật trên dữ liệu nhỏ — VAE với latent 1 chiều</p>
-        <p>VAE mã hóa mỗi điểm thành phân phối N(μ, σ²) trên latent z, lấy mẫu z bằng reparameterization rồi giải mã. Loss = tái dựng + β·KL(q(z|x) ‖ N(0,1)). Tròn = dữ liệu thật; tam giác = điểm <b>mới sinh</b> bằng cách lấy z ~ N(0,1) rồi giải mã. β lớn ép latent về N(0,1) nên sinh mẫu dễ hơn nhưng tái dựng kém hơn.</p>
+        <p>VAE mã hóa mỗi điểm thành phân phối N(μ, σ²) trên latent z, lấy mẫu z bằng reparameterization rồi giải mã. Loss = tái dựng + β·KL(q(z|x) ‖ N(0,1)). Tròn = dữ liệu tham chiếu; tam giác = điểm <b>mới sinh</b> bằng cách lấy z ~ N(0,1) rồi giải mã. β tăng trọng số KL, có thể đánh đổi với tái dựng; không bảo đảm chất lượng sinh hoặc từng metric thay đổi đơn điệu.</p>
         <Plot pts={[...X, ...gen]} groups={[...X.map(() => 0), ...gen.map(() => 1)]} xl={`${d.ds.featureNames[0]} (chuẩn hóa)`} yl={`${d.ds.featureNames[1]} (chuẩn hóa)`} />
         <Table data={table} /><Chart spec={chart} />
         <p className="muted">Mô hình rất nhỏ trên 2 biến; mẫu sinh nằm gần một đường cong vì latent chỉ có 1 chiều. Đây là minh họa nguyên lý, không phải mô hình sinh ảnh/văn bản.</p>

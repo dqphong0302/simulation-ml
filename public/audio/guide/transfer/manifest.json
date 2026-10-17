@@ -1,0 +1,97 @@
+{
+  "lessonId": "TRANSFER",
+  "voice": "clone-duyenhamy",
+  "version": "2026.10-applications",
+  "scenes": [
+    {
+      "id": "s1",
+      "audio": "/audio/lectures-v2/transfer/f98d920c34a3acee.mp3",
+      "duration": 11.62,
+      "caption": "Học chuyển giao tái sử dụng bộ trích xuất đặc trưng đã học. Ta thay đầu phân loại cho nhiệm vụ mới. Nguồn và đích khác nhau nên lợi ích phải được đo, không suy ra từ tên mô hình.",
+      "teaching": true,
+      "preset": {
+        "title": "Tái sử dụng điều đã học",
+        "bullets": [
+          "Backbone trích xuất đặc trưng",
+          "Đầu mới cho nhiệm vụ đích",
+          "Nguồn khác đích cần kiểm tra"
+        ]
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/lectures-v2/transfer/2cb2852357884bd2.mp3",
+      "duration": 12.26,
+      "caption": "Đầu tiên có thể đóng băng backbone và chỉ học đầu mới. Đóng băng gradient không tự giữ mọi trạng thái mạng. Với BatchNorm, cần quản lý cả chế độ train và eval theo thiết kế.",
+      "teaching": true,
+      "preset": {
+        "title": "Đóng băng và chỉ học đầu",
+        "bullets": [
+          "Giữ trọng số backbone",
+          "Đầu mới được cập nhật",
+          "Quản lý cả trạng thái BatchNorm"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/lectures-v2/transfer/01e34b4af238a7f6.mp3",
+      "duration": 14.26,
+      "caption": "Fine tuning mở một phần hoặc toàn bộ trọng số đã học để học tiếp. Tạo bộ tối ưu chứa đúng tham số và thử learning rate nhỏ. Kết quả vẫn có thể xấu đi nếu dữ liệu ít, lệch hoặc cấu hình chưa phù hợp.",
+      "teaching": true,
+      "preset": {
+        "title": "Mở khối cuối để fine-tune",
+        "bullets": [
+          "Mở phần trọng số có chủ đích",
+          "Tạo optimizer đúng tham số",
+          "Thử learning rate nhỏ"
+        ]
+      }
+    },
+    {
+      "id": "s4",
+      "audio": "/audio/lectures-v2/transfer/ef36b6b5031f72b5.mp3",
+      "duration": 12.9,
+      "caption": "Một trọng số được mở thay đổi theo gradient và learning rate. Khi đóng băng, nó giữ nguyên. Bảng trên web dùng số đặt trước để nhìn phép tính, không phải checkpoint MobileNet hay một phiên học ảnh thật.",
+      "teaching": true,
+      "preset": {
+        "title": "Một bước cập nhật nhìn thấy được",
+        "bullets": [
+          "w mới bằng w cũ trừ learning rate nhân gradient",
+          "Đóng băng thì trọng số không đổi",
+          "Web dùng số giả để minh họa"
+        ]
+      }
+    },
+    {
+      "id": "s5",
+      "audio": "/audio/lectures-v2/transfer/ed7c288429df7d18.mp3",
+      "duration": 12.1,
+      "caption": "Ảnh gần trùng làm kiểm tra quá dễ. Với ảnh y khoa cần thiết kế chia bệnh nhân và nơi chụp phù hợp. Điểm cao trên đồ vật hoặc hình tổng hợp chưa chứng minh dùng được cho bệnh nhân.",
+      "teaching": true,
+      "preset": {
+        "title": "Ảnh mới phải thật sự mới",
+        "bullets": [
+          "Ảnh gần trùng không ở hai tập",
+          "Tách theo bệnh nhân hoặc phiên chụp phù hợp",
+          "Không suy từ ảnh đồ vật sang chẩn đoán"
+        ]
+      }
+    },
+    {
+      "id": "s6",
+      "audio": "/audio/lectures-v2/transfer/881fe5b410627b61.mp3",
+      "duration": 16.42,
+      "caption": "Notebook thực sự học một CNN nhỏ trên ảnh hình học nguồn rồi chuyển sang miền đích tổng hợp. Bạn kiểm tra trọng số khi đóng băng và khi mở khối cuối. Teachable Machine là nhánh thực hành với MobileNet học sẵn, nhưng chưa mở backbone để fine tune.",
+      "teaching": true,
+      "preset": {
+        "title": "Từ mô phỏng sang Colab",
+        "bullets": [
+          "Pretrain CNN nhỏ trên nguồn giả",
+          "Học đầu rồi mở khối cuối",
+          "Teachable Machine thử MobileNet học sẵn"
+        ]
+      }
+    }
+  ]
+}

@@ -6,6 +6,7 @@ import { GUIDES } from './guides';
 import { adaptGuide } from './dataContext';
 import { useSessionData } from '../core/datasets/session';
 import { STUDY_PROMPTS } from './model';
+import { LESSON_CFG } from '../features/data-volume/model';
 
 const KEY = 'warmup-collapsed';
 const readCollapsed = () => { try { return localStorage.getItem(KEY) === '1'; } catch { return false; } };
@@ -25,7 +26,7 @@ export function Warmup({ lessonId, mode }: { lessonId: string; mode: 'lecture' |
       <div>
         <p className="eyebrow">{mode === 'lab' ? 'Khởi động · khoảng 3 phút · không bắt buộc' : 'Mô phỏng minh họa bài giảng'}</p>
         <div className="warmup-tabs" role="tablist" aria-label="Chọn mô phỏng">
-          {tabs.map(([id, label]) => <button key={id} type="button" role="tab" aria-selected={tab === id} className={tab === id ? 'on' : ''}
+          {tabs.filter(([id]) => id !== 'volume' || !!LESSON_CFG[lessonId]).map(([id, label]) => <button key={id} type="button" role="tab" aria-selected={tab === id} className={tab === id ? 'on' : ''}
             onClick={() => { setTab(id); if (collapsed) toggle(); }}>{label}</button>)}
         </div>
       </div>

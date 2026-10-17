@@ -1,0 +1,67 @@
+{
+  "KMEANS": {
+    "s2": {
+      "caption": "Mỗi vòng gán điểm vào tâm gần nhất rồi cập nhật tâm bằng trung bình của cụm. Ta dừng khi ổn định, đạt sai số thay đổi cho phép hoặc hết số vòng. Khởi tạo khác nhau có thể cho nghiệm khác."
+    },
+    "s3": {
+      "bullets": ["Inertia tối ưu không tăng khi thêm tâm", "Nghiệm cục bộ có thể làm đường thực nghiệm không giảm đều", "Elbow là gợi ý, không xác định nhóm bệnh"],
+      "caption": "Inertia là tổng khoảng cách bình phương đến tâm. Giá trị tối ưu không tăng khi thêm tâm, nhưng những lần chạy độc lập có thể mắc nghiệm cục bộ. Đường elbow không nhất thiết có góc gãy rõ và không tự cho số nhóm bệnh."
+    }
+  },
+  "SVM": {
+    "s1": {
+      "title": "Lề và các điểm hỗ trợ",
+      "bullets": ["Biên mềm cân bằng lề và phạt vi phạm", "Support vector có thể ở trên hoặc bên trong lề"],
+      "caption": "SVM biên mềm cân bằng độ rộng lề với mức phạt các điểm vi phạm lề. Support vector góp phần xác định nghiệm, có thể nằm trên lề hoặc bên trong lề, kể cả phía phân loại sai. Lề không phải khoảng an toàn y khoa."
+    },
+    "s2": {
+      "bullets": ["C điều khiển mức phạt vi phạm lề", "Chọn bằng validation, không có C tốt cho mọi bảng"],
+      "caption": "C điều khiển mức phạt vi phạm lề, không chỉ điểm phân loại sai. C lớn phạt mạnh hơn nhưng không bảo đảm phân loại đúng mọi điểm. Chọn C bằng validation cùng với scaling và kernel."
+    }
+  },
+  "GPT": {
+    "s1": {
+      "caption": "Bạn huấn luyện một Transformer rất nhỏ. Web tách token theo khoảng trắng, còn notebook mẫu dùng ký tự. Token thành vector, kết hợp vị trí rồi qua attention và mạng truyền thẳng để dự đoán token tiếp theo. Các mô hình lớn có thể dùng tokenizer khác."
+    },
+    "s2": {
+      "title": "Học dự đoán token tiếp theo",
+      "bullets": ["Loss đo độ khớp nhiệm vụ dự đoán token", "Loss không bảo đảm giảm đều hoặc chứng minh hiểu nội dung"],
+      "caption": "Huấn luyện tối ưu dự đoán token tiếp theo trên corpus. Loss có thể dao động, không bảo đảm giảm đều. Loss thấp có thể chỉ là ghi nhớ; cần dữ liệu giữ riêng để đánh giá khả năng tiếp nối ngoài tập học."
+    },
+    "s3": {
+      "bullets": ["Temperature đổi độ nhọn phân phối lấy mẫu", "Temperature thấp không bảo đảm đúng hoặc an toàn", "Không suy ra năng lực y khoa từ độ trôi chảy"],
+      "caption": "Temperature thấp làm phân phối lấy mẫu tập trung hơn, cao thường cho lựa chọn đa dạng hơn. Không mức nào bảo đảm câu trả lời đúng hoặc an toàn. Có thể thử temperature trong notebook; mô hình nhỏ hay lớn đều cần kiểm chứng nội dung y khoa."
+    }
+  },
+  "GENCON": {
+    "s2": {
+      "bullets": ["Temperature điều chỉnh phân phối lấy mẫu", "Top-p giữ tập đạt ngưỡng xác suất tích lũy, rồi chuẩn hóa lại"],
+      "caption": "Softmax biến logits thành xác suất token. Temperature thấp làm phân phối nhọn hơn. Top p giữ tập nhỏ nhất theo thứ tự xác suất giảm dần có tổng đạt ngưỡng, gồm cả token làm vượt ngưỡng, rồi chuẩn hóa lại. Đây không phải xác suất câu trả lời đúng."
+    },
+    "s3": {
+      "bullets": ["Embedding biểu diễn nội dung bằng vector", "Cosine đo góc, không chứng minh đồng nghĩa hoặc đúng sự thật"],
+      "caption": "Embedding biểu diễn nội dung thành vector. Cosine cao cho biết hướng vector gần nhau theo mô hình, không bảo đảm đồng nghĩa hay đúng ý. Hai câu có và không có một triệu chứng vẫn có thể gần nhau. Hình ở đây chỉ là vector minh họa."
+    }
+  },
+  "RAG": {
+    "s2": {
+      "bullets": ["BM25 theo từ khóa, chạy cục bộ", "Embedding theo vector qua API, không mặc định tốt hơn"],
+      "caption": "BM25 truy xuất theo từ khóa và chạy cục bộ. Embedding dùng biểu diễn vector, có thể tìm quan hệ ngữ nghĩa nhưng không mặc định tốt hơn BM25 ở mọi câu hỏi. Chọn embedding sẽ gửi nội dung đoạn tới dịch vụ đã cấu hình."
+    }
+  },
+  "GAN": {
+    "s2": {
+      "caption": "Hai mạng được huấn luyện luân phiên. Mục tiêu là đưa phân phối sinh gần dữ liệu tham chiếu, nhưng quá trình không bảo đảm hội tụ hoặc tiến bộ đều. Cần xem chất lượng, đa dạng và dấu hiệu bỏ sót các vùng phân phối."
+    }
+  },
+  "MLP": {
+    "s3": {
+      "caption": "Trong mạng feedforward này, lớp ẩn có phi tuyến giúp tạo ranh giới cong. Train loss giảm còn validation loss tăng gợi ý overfitting, nhưng cũng cần xem dao động và khác biệt dữ liệu. Không suy ra nguyên nhân chắc chắn từ một vài bước."
+    }
+  },
+  "AE": {
+    "s3": {
+      "caption": "Autoencoder có thể giảm chiều phi tuyến hoặc tạo điểm bất thường từ lỗi tái dựng. Mẫu lạ có thể lỗi cao, nhưng mẫu bệnh cũng có thể tái dựng tốt. Muốn phát hiện cần tập kiểm tra và định nghĩa sai sót, không chỉ một ngưỡng lỗi."
+    }
+  }
+}

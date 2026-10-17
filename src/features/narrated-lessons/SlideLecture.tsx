@@ -4,9 +4,10 @@ import { SlideDeck } from './SlideDeck';
 import { useState } from 'react';
 import teachable from '../../lessons/teachable-script.json';
 import { EDA_SCENES } from '../../lessons/eda-script';
+import applicationScripts from '../../lessons/application-scripts.json';
 
 /** Bản slide chữ khi chưa tải được audio. */
-const TEXT_FALLBACK: Record<string, (TeachingPreset & { caption: string })[]> = { TEACHABLE: teachable, EDA: EDA_SCENES };
+const TEXT_FALLBACK: Record<string, (TeachingPreset & { caption: string })[]> = { TEACHABLE: teachable, EDA: EDA_SCENES, ...applicationScripts };
 
 /** Slide chữ không có audio: khung 16:9, mũi tên qua lại, phụ đề bên dưới. */
 export function TextSlides({ lessonId, scenes, onPractice }: { lessonId: string; scenes: (TeachingPreset & { caption: string })[]; onPractice: () => void }) {

@@ -6,8 +6,9 @@ import { ease, H, W, type Scene } from './kit';
 import { ML_SCENES } from './scenesMl';
 import { DL_SCENES } from './scenesDl';
 import { GENAI_SCENES } from './scenesGenai';
+import { APPLICATION_SCENES } from './scenesApplications';
 
-export const SCENES: Record<string, Scene> = { ...ML_SCENES, ...DL_SCENES, ...GENAI_SCENES };
+export const SCENES: Record<string, Scene> = { ...ML_SCENES, ...DL_SCENES, ...GENAI_SCENES, ...APPLICATION_SCENES };
 const STEP_SECONDS = 3.2;
 /** Dừng ở khung cuối bao lâu trước khi tự chạy lại từ đầu. */
 const HOLD_SECONDS = 2;

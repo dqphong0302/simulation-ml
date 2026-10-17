@@ -2,7 +2,7 @@
 // - Áp dụng scripts/lecture-revisions.json lên public/audio/lectures-v2/<bài>/manifest.json.
 // - Tạo manifest cho bài chỉ có kịch bản chữ (EDA) từ src/lessons/eda-script.json.
 // Chạy lại an toàn: clip đã có (cùng mã băm lời thoại) được dùng lại; clip chỉ được xuất bản sau khi mã hóa thành công.
-// Dùng: node scripts/revise-lecture-audio.mjs [--dry] [BÀI ...]
+// Dùng: node scripts/revise-lecture-audio.mjs [--dry] [--theory-review] [--keep-unused] [--sentences] [BÀI ...]
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -12,6 +12,8 @@ import { spawnSync } from 'node:child_process';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const args = process.argv.slice(2);
 const dry = args.includes('--dry');
+const theoryReview = args.includes('--theory-review');
+const keepUnused = args.includes('--keep-unused');
 const only = args.filter((a) => !a.startsWith('--'));
 const sshArgs = ['-o', 'ConnectTimeout=10', '-F', '/Users/phongdang/home-server/.ssh/config', 'tts'];
 const VOICE = 'clone-duyenhamy';
@@ -60,7 +62,7 @@ function synthesize(rel, caption, label, bySentence = false) {
   const t0 = Date.now();
   fs.mkdirSync(path.dirname(mp3), { recursive: true });
   const temp = `${mp3}.pending.mp3`;
-  if (bySentence) {
+  if (bySentence || args.includes('--sentences')) {
     const parts = caption.split(/(?<=[.?!])\s+/).filter(Boolean);
     const dir = fs.mkdtempSync(path.join(path.dirname(mp3), '.parts-'));
     try {
@@ -85,15 +87,31 @@ function writeManifest(lesson, manifest) {
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(`${target}.pending`, JSON.stringify(manifest, null, 2) + '\n');
   fs.renameSync(`${target}.pending`, target);
+  // Keep the fallback lecture consistent too, reusing the same measured clips.
+  if (theoryReview) {
+    const special = { KNN: 'knn', TREE: 'tree', LOGREG: 'logistic' };
+    const fallback = path.join(root, 'public/audio', special[lesson] ?? `guide/${lesson.toLowerCase()}`, 'manifest.json');
+    if (fs.existsSync(fallback)) {
+      const old = JSON.parse(fs.readFileSync(fallback, 'utf8'));
+      old.scenes = old.scenes.map(s => {
+        const revised = manifest.scenes.find(r => r.id === s.id);
+        return revised ? { ...s, caption: revised.caption, preset: revised.preset, audio: revised.audio, duration: revised.duration } : s;
+      });
+      fs.writeFileSync(fallback, JSON.stringify(old, null, 2) + '\n');
+    } else {
+      fs.mkdirSync(path.dirname(fallback), { recursive: true });
+      fs.writeFileSync(fallback, JSON.stringify(manifest, null, 2) + '\n');
+    }
+  }
   // Dọn clip không còn được manifest nào dùng (chỉ trong thư mục lectures-v2 của bài).
   const used = new Set(manifest.scenes.map((s) => path.basename(s.audio)));
-  for (const f of fs.readdirSync(dir)) if (f.endsWith('.mp3') && !used.has(f)) { fs.unlinkSync(path.join(dir, f)); console.log(`  xóa clip cũ ${lesson}/${f}`); }
+  if (!keepUnused) for (const f of fs.readdirSync(dir)) if (f.endsWith('.mp3') && !used.has(f)) { fs.unlinkSync(path.join(dir, f)); console.log(`  xóa clip cũ ${lesson}/${f}`); }
 }
 
 const want = (id) => !only.length || only.includes(id);
 
 // 1) Sửa các bài đã xuất bản.
-const revisions = JSON.parse(fs.readFileSync(path.join(root, 'scripts/lecture-revisions.json'), 'utf8'));
+const revisions = JSON.parse(fs.readFileSync(path.join(root, theoryReview ? 'scripts/theory-lecture-revisions.json' : 'scripts/lecture-revisions.json'), 'utf8'));
 for (const [lesson, scenes] of Object.entries(revisions)) {
   if (!want(lesson)) continue;
   const file = path.join(root, 'public/audio/lectures-v2', lesson.toLowerCase(), 'manifest.json');
@@ -126,5 +144,16 @@ if (want('EDA')) {
     return { id: `eda-${i + 1}`, audio, duration: synthesize(audio, sc.caption, `EDA ${i + 1}`, true), caption: sc.caption, teaching: true, preset: { title: sc.title, bullets: sc.bullets } };
   });
   writeManifest('EDA', { lessonId: 'EDA', voice: VOICE, version: '2026.10-expanded', scenes: out });
+}
+// New application lessons: the same authored source feeds text fallback and audio.
+const applications = JSON.parse(fs.readFileSync(path.join(root, 'src/lessons/application-scripts.json'), 'utf8'));
+for (const [lesson, scenes] of Object.entries(applications)) {
+  if (!want(lesson)) continue;
+  console.log(`TẠO ${lesson}`);
+  const out = scenes.map((sc, i) => {
+    const audio = clipFor(lesson, sc.caption);
+    return { id: `s${i + 1}`, audio, duration: synthesize(audio, sc.caption, `${lesson} ${i + 1}`, true), caption: sc.caption, teaching: true, preset: { title: sc.title, bullets: sc.bullets } };
+  });
+  writeManifest(lesson, { lessonId: lesson, voice: VOICE, version: '2026.10-applications', scenes: out });
 }
 console.log(dry ? 'Chạy thử xong (không ghi gì).' : 'Xong.');

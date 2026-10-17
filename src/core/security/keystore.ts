@@ -1,44 +1,43 @@
 import { useSyncExternalStore } from 'react';
 import type { ChatProfile } from '../providers/chat';
-import type { EmbedProfile } from '../providers/embed';
+import { PERSIST_KEY, PROFILES_KEY, profilesWithoutKeys, restoreProfiles, type Profiles } from './profiles';
 
 /** Key chỉ nằm trong biến module (bộ nhớ phiên); không bao giờ qua storage, export hay serialize. */
-interface Session { chatA: ChatProfile; chatB: ChatProfile; embed: EmbedProfile }
-const NOKEY = 'sml.profiles';
+type Session = Profiles;
 const base: ChatProfile = { label: 'Cấu hình A', baseUrl: '', model: '', apiKey: '', temperature: 0.7, topP: 1, maxTokens: 512, stream: true };
 let session: Session = { chatA: { ...base }, chatB: { ...base, label: 'Cấu hình B' }, embed: { baseUrl: '', model: '', apiKey: '' } };
 const subs = new Set<() => void>();
+export const getSessionSnapshot = (): Session => session;
+const notify = () => subs.forEach(f => f());
 
 /** Chỉ endpoint/model/tham số được nhớ cục bộ (nếu người học bật), tuyệt đối không có key. */
 export function loadProfilesWithoutKeys(): void {
   try {
-    const raw = localStorage.getItem(NOKEY);
+    const raw = localStorage.getItem(PROFILES_KEY);
     if (!raw) return;
-    const p = JSON.parse(raw);
-    for (const k of ['chatA', 'chatB'] as const) if (p[k]) session[k] = { ...session[k], ...p[k], apiKey: '' };
-    if (p.embed) session.embed = { ...session.embed, ...p.embed, apiKey: '' };
-    session = { ...session };
+    session = restoreProfiles(raw, session);
+    notify();
   } catch { /* bỏ qua */ }
 }
 function saveNoKeys(): void {
   try {
-    if (localStorage.getItem('sml.persist') !== '1') return;
-    const strip = <T extends { apiKey: string }>(o: T) => ({ ...o, apiKey: '' });
-    localStorage.setItem(NOKEY, JSON.stringify({ chatA: strip(session.chatA), chatB: strip(session.chatB), embed: strip(session.embed) }));
+    if (localStorage.getItem(PERSIST_KEY) !== '1') return;
+    localStorage.setItem(PROFILES_KEY, JSON.stringify(profilesWithoutKeys(session)));
   } catch { /* bỏ qua */ }
 }
 
 export function setSession<K extends keyof Session>(k: K, v: Session[K]): void {
-  const old = session[k] as { baseUrl: string };
-  const next = v as { baseUrl: string; apiKey: string };
+  const old = session[k];
+  const next = { ...v };
   // Đổi endpoint thì không mang key cũ sang.
-  if (old.baseUrl !== next.baseUrl && next.apiKey === (old as unknown as { apiKey: string }).apiKey) next.apiKey = '';
-  session = { ...session, [k]: v };
+  if (old.baseUrl !== next.baseUrl && next.apiKey === old.apiKey) next.apiKey = '';
+  session = { ...session, [k]: next };
   saveNoKeys();
-  subs.forEach((f) => f());
+  notify();
 }
 export function clearKeys(): void {
   session = { chatA: { ...session.chatA, apiKey: '' }, chatB: { ...session.chatB, apiKey: '' }, embed: { ...session.embed, apiKey: '' } };
-  subs.forEach((f) => f());
+  notify();
 }
-export const useSession = (): Session => useSyncExternalStore((f) => { subs.add(f); return () => subs.delete(f); }, () => session);
+const subscribe = (f: () => void) => { subs.add(f); return () => { subs.delete(f); }; };
+export const useSession = (): Session => useSyncExternalStore(subscribe, getSessionSnapshot);

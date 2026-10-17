@@ -120,9 +120,9 @@ OLS tối thiểu hóa tổng bình phương phần dư. βⱼ là thay đổi t
 ## Đọc sai số
 RMSE có cùng đơn vị y và nhạy với sai số lớn; MAE là độ lệch tuyệt đối trung bình.
 $$ R² = 1 − Σᵢ(yᵢ−ŷᵢ)² / Σᵢ(yᵢ−ȳ)²
-R² test có thể âm, nghĩa là kém hơn dự đoán bằng trung bình test theo định nghĩa này. R² không phân rã phần chưa giải thích thành nguyên nhân di truyền hay môi trường.
+R² test có thể âm, nghĩa là kém hơn dự đoán bằng trung bình test theo định nghĩa này. Nếu y không có biến thiên, công thức có mẫu số 0 và không xác định; thư viện có thể dùng quy ước thay thế. R² không phân rã phần chưa giải thích thành nguyên nhân di truyền hay môi trường.
 ## Giả định và độ bất định
-Tuyến tính theo tham số, sai số có kỳ vọng 0 có điều kiện và xử lý phụ thuộc giữa quan sát là quan trọng cho suy luận. Đồng phương sai liên quan sai số chuẩn OLS thường dùng. Phân phối chuẩn không phải điều kiện Gauss–Markov để BLUE; có ích cho suy luận chính xác ở mẫu nhỏ. Có thể cần sai số chuẩn robust hoặc mô hình đo lặp.
+Tuyến tính theo tham số, ma trận thiết kế đủ hạng và sai số có kỳ vọng 0 có điều kiện là các giả định quan trọng. Phương sai sai số đồng nhất và không tương quan giữa quan sát thuộc các điều kiện Gauss–Markov thông thường để OLS là ước lượng tuyến tính không chệch có phương sai nhỏ nhất (BLUE). Không cần sai số phân phối chuẩn để có kết quả đó; giả định chuẩn hỗ trợ suy luận chính xác ở mẫu nhỏ. Nếu phương sai thay đổi hoặc có đo lặp, cần phương pháp sai số chuẩn/mô hình phù hợp, không mặc định công thức OLS thông thường vẫn đúng.
 ## Liên hệ y khoa
 Dự báo một số đo ở người trưởng thành không tự áp dụng cho trẻ em hoặc nơi đo khác. Ridge/Lasso có thể giảm phương sai nhưng không chứng minh biến được chọn là nguyên nhân bệnh.
 
@@ -201,7 +201,7 @@ Học từ ảnh mẫu giúp thấy dữ liệu huấn luyện ảnh hưởng d�
 ## Học chuyển giao và cài đặt thực tế
 Transfer learning tái sử dụng một mô hình đã học, rồi fit đầu phân loại hoặc fine-tune. Lab này dùng runtime Teachable Machine, checkpoint trích xuất đặc trưng và đầu phân loại học từ ảnh mẫu. Kết quả chuyển giao cần kiểm tra trên ảnh mới; không mặc định đặc trưng học ở miền khác phù hợp mọi ảnh y khoa.
 ## Dữ liệu và lối tắt
-Chụp mỗi lớp trên nền riêng khiến mô hình học nền thay vì vật. Chia ảnh mới theo phiên chụp/người/thiết bị phù hợp, tránh các ảnh gần trùng trong cả train và test. Thêm ảnh không bảo đảm cải thiện nếu tăng nhiễu hoặc lệch mẫu.
+Chụp mỗi lớp trên nền riêng có thể khiến mô hình học nền thay vì vật; cần thử đổi nền để khảo sát, không suy ra cơ chế chỉ từ cách chụp. Chia ảnh mới theo phiên chụp/người/thiết bị phù hợp, tránh các ảnh gần trùng trong cả train và test. Thêm ảnh không bảo đảm cải thiện nếu tăng nhiễu hoặc lệch mẫu.
 ## Liên hệ y khoa
 Ảnh y khoa có thể chứa nhãn bệnh viện, thước đo hoặc dấu thiết bị liên quan nhãn. Đây là các lối tắt cần điều tra. Bản đồ Grad-CAM hỗ trợ khảo sát nhưng không chứng minh mô hình nhìn đúng tổn thương.
 ## Tự suy nghĩ

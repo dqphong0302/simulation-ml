@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { THEORY, parseTheory } from '../../lessons/theory';
+import { THEORY, parseTheory, type Block } from '../../lessons/theory';
 import { LESSONS, GROUPS, type Group } from '../../lessons';
 import { download } from '../../core/reporting/files';
 import { Icon } from '../../app/icons';
@@ -23,6 +23,10 @@ export function TheoryDoc({ lessonId, title, group }: { lessonId: string; title:
   const lesson = LESSONS.find((l) => l.id === lessonId);
   const subject = GROUPS.find((g) => g.id === group)?.title ?? 'Bài học';
   const heads = useMemo(() => blocks.filter((b): b is Extract<typeof b, { t: 'h' }> => b.t === 'h'), [blocks]);
+  const advancedAt = blocks.findIndex(b => b.t === 'h' && b.text.startsWith('Mở rộng ·'));
+  const core = advancedAt < 0 ? blocks : blocks.slice(0, advancedAt);
+  const advanced = advancedAt < 0 ? [] : blocks.slice(advancedAt);
+  const tocHeads = advancedAt < 0 ? heads : heads.filter(h => core.includes(h) || h === advanced[0]);
   const body = useReveal<HTMLDivElement>([blocks]);
   const mins = Math.max(1, Math.round((src?.split(/\s+/).length ?? 0) / 200));
 
@@ -45,12 +49,24 @@ export function TheoryDoc({ lessonId, title, group }: { lessonId: string; title:
   const jump = (id: string) => {
     const el = document.getElementById(id);
     if (!el) return;
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const parent = el.closest('details');
+    if (parent) parent.open = true;
+    el.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
     setActive(id);
+  };
+  const renderBlock = (b: Block, i: number) => {
+    switch (b.t) {
+      case 'h': return <h3 key={i} id={b.id} className="rv">{b.text}</h3>;
+      case 'p': return <p key={i} className="rv">{inline(b.text)}</p>;
+      case 'ul': return <ul key={i} className="rv">{b.items.map((x, j) => <li key={j}>{inline(x)}</li>)}</ul>;
+      case 'ol': return <ol key={i} className="rv">{b.items.map((x, j) => <li key={j}>{inline(x)}</li>)}</ol>;
+      case 'f': return <div key={i} className="formula rv" role="math" aria-label={b.text}>{b.text}</div>;
+      case 'note': return <aside key={i} className="theory-note rv">{inline(b.text)}</aside>;
+    }
   };
 
   return (
-    <><ConceptSim lessonId={lessonId} mode="theory" /><p className="optional-note">Python là phần tùy chọn: hãy thử mô phỏng trước, rồi chạy notebook khi muốn khám phá thêm.</p><PythonPractice lessonId={lessonId} /><details className="optional-theory"><summary>Đọc thêm: công thức và lý thuyết chuyên sâu</summary><article className="theory" aria-labelledby={`theory-${lessonId}`}>
+    <><ConceptSim lessonId={lessonId} mode="theory" /><article className="theory" aria-labelledby={`theory-${lessonId}`}>
       <header className="theory-head">
         <div className="th-copy">
           <h2 id={`theory-${lessonId}`} className="sr-only">{title} — tài liệu lý thuyết</h2>
@@ -64,7 +80,7 @@ export function TheoryDoc({ lessonId, title, group }: { lessonId: string; title:
           </ul>
         </div>
         <div className="th-actions">
-          <button className="btn sm" onClick={() => download(new Blob([`# ${title}\n${src}`], { type: 'text/markdown;charset=utf-8' }), `ly-thuyet-${lessonId.toLowerCase()}.md`)}>
+          <button id={`download-theory-${lessonId}`} className="btn sm" onClick={() => download(new Blob([`# ${title}\n${src}`], { type: 'text/markdown;charset=utf-8' }), `ly-thuyet-${lessonId.toLowerCase()}.md`)}>
             <Icon name="file" size={14} /> Tải tài liệu (.md)
           </button>
           <a className="btn primary sm" href={`#${lesson?.path}?tab=lab`}>
@@ -78,9 +94,9 @@ export function TheoryDoc({ lessonId, title, group }: { lessonId: string; title:
           <nav className="theory-toc" aria-label="Mục lục">
             <p className="toc-label">Nội dung</p>
             <ol>
-              {heads.map((h, i) => (
+              {tocHeads.map((h, i) => (
                 <li key={h.id}>
-                  <button type="button" aria-current={active === h.id ? 'true' : undefined} className={active === h.id ? 'on' : ''} onClick={() => jump(h.id)}>
+                  <button id={`toc-${lessonId}-${i}`} type="button" aria-current={active === h.id ? 'true' : undefined} className={active === h.id ? 'on' : ''} onClick={() => jump(h.id)}>
                     <span className="toc-n">{String(i + 1).padStart(2, '0')}</span>
                     <span className="toc-t">{h.text}</span>
                   </button>
@@ -90,19 +106,10 @@ export function TheoryDoc({ lessonId, title, group }: { lessonId: string; title:
           </nav>
         )}
         <div className="theory-body" ref={body}>
-          {blocks.map((b, i) => {
-            switch (b.t) {
-              case 'h': return <h3 key={i} id={b.id} className="rv">{b.text}</h3>;
-              case 'p': return <p key={i} className="rv">{inline(b.text)}</p>;
-              case 'ul': return <ul key={i} className="rv">{b.items.map((x, j) => <li key={j}>{inline(x)}</li>)}</ul>;
-              case 'ol': return <ol key={i} className="rv">{b.items.map((x, j) => <li key={j}>{inline(x)}</li>)}</ol>;
-              case 'f': return <div key={i} className="formula rv" role="math" aria-label={b.text}>{b.text}</div>;
-              case 'note': return <aside key={i} className="theory-note rv">{inline(b.text)}</aside>;
-              default: return null;
-            }
-          })}
+          <section className="theory-core" aria-label="Kiến thức cơ bản">{core.map(renderBlock)}</section>
+          {advanced.length > 0 && <details id={`theory-advanced-${lessonId}`} className="optional-theory"><summary>Đọc thêm: công thức và lý thuyết chuyên sâu</summary>{advanced.map(renderBlock)}</details>}
         </div>
       </div>
-    </article></details></>
+    </article><p className="optional-note">Python là phần tùy chọn: đọc ý chính và thử mô phỏng trước, rồi chạy notebook khi muốn khám phá thêm.</p><PythonPractice lessonId={lessonId} /></>
   );
 }

@@ -1,0 +1,97 @@
+{
+  "lessonId": "SEG",
+  "voice": "clone-duyenhamy",
+  "version": "2026.10-applications",
+  "scenes": [
+    {
+      "id": "s1",
+      "audio": "/audio/lectures-v2/seg/9b15f21565a0c0a5.mp3",
+      "duration": 11.3,
+      "caption": "Phân loại trả một nhãn cho cả ảnh. Phân đoạn chỉ ra từng pixel thuộc vùng nào bằng mặt nạ. Hình tròn trong ví dụ là dữ liệu tổng hợp, không đại diện một tổn thương thật.",
+      "teaching": true,
+      "preset": {
+        "title": "Một nhãn hay nhãn từng pixel?",
+        "bullets": [
+          "Phân loại trả nhãn cả ảnh",
+          "Phân đoạn trả mặt nạ",
+          "Ví dụ là hình tổng hợp"
+        ]
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/lectures-v2/seg/7efd12f7d06dbc51.mp3",
+      "duration": 13.86,
+      "caption": "U Net có encoder giảm kích thước và decoder đưa đặc trưng về bản đồ đầu ra. Skip connection nối các đặc trưng cùng độ phân giải. Nó không sao chép nhãn tham chiếu và không tự bảo đảm biên đúng.",
+      "teaching": true,
+      "preset": {
+        "title": "U-Net: xuống, lên và nối skip",
+        "bullets": [
+          "Encoder học đặc trưng",
+          "Decoder khôi phục độ phân giải",
+          "Skip nối đặc trưng cùng mức"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/lectures-v2/seg/c6165785c60d25cf.mp3",
+      "duration": 12.02,
+      "caption": "Ngưỡng biến điểm từng pixel thành mặt nạ. Tăng ngưỡng làm vùng dương không lớn thêm, nhưng Dice có thể tăng hoặc giảm. Kéo ngưỡng không thay trọng số và không nên chọn ngưỡng bằng test.",
+      "teaching": true,
+      "preset": {
+        "title": "Điểm số trở thành mặt nạ",
+        "bullets": [
+          "Sigmoid cho điểm từng pixel",
+          "Ngưỡng đổi quyết định",
+          "Không huấn luyện lại khi kéo ngưỡng"
+        ]
+      }
+    },
+    {
+      "id": "s4",
+      "audio": "/audio/lectures-v2/seg/be16d5703f0234e5.mp3",
+      "duration": 13.78,
+      "caption": "Dice bằng hai lần số pixel dương đúng chia tổng số pixel dương của hai mask. IoU là giao chia hợp. Phải nêu cách gộp nhiều ảnh và quy ước khi cả hai mặt nạ trống; không chỉ báo một con số đẹp.",
+      "teaching": true,
+      "preset": {
+        "title": "Dice và IoU đo vùng chồng lấn",
+        "bullets": [
+          "Dice dùng hai lần vùng giao",
+          "IoU dùng vùng hợp",
+          "Báo cách gộp và quy ước mask trống"
+        ]
+      }
+    },
+    {
+      "id": "s5",
+      "audio": "/audio/lectures-v2/seg/bc65da57700fdb3a.mp3",
+      "duration": 13.62,
+      "caption": "Nếu ảnh chủ yếu là nền, đoán toàn nền vẫn có pixel accuracy cao nhưng bỏ hết vùng cần tìm. Hãy xem vùng sai, cấu trúc nhỏ và biên. Nhãn chuyên gia cũng cần quy trình và kiểm tra bất đồng.",
+      "teaching": true,
+      "preset": {
+        "title": "Nhiều nền có thể đánh lừa accuracy",
+        "bullets": [
+          "Nền chiếm đa số có thể che vùng bị bỏ sót",
+          "Xem vùng sai và biên",
+          "Nhãn chuyên gia cần quy trình rõ"
+        ]
+      }
+    },
+    {
+      "id": "s6",
+      "audio": "/audio/lectures-v2/seg/0db1946e0b734998.mp3",
+      "duration": 14.5,
+      "caption": "Web dùng bản đồ điểm đặt tay để thử ngưỡng và tính Dice. Notebook Colab huấn luyện U Net rút gọn có skip connection trên ảnh tổng hợp. Cả hai đều dành cho học tập, không chứng minh hiệu quả phân đoạn y khoa.",
+      "teaching": true,
+      "preset": {
+        "title": "Học U-Net nhỏ trên Colab",
+        "bullets": [
+          "Web dùng bản đồ điểm đặt tay",
+          "Colab huấn luyện U-Net rút gọn",
+          "Ảnh giả không chứng minh hiệu quả y khoa"
+        ]
+      }
+    }
+  ]
+}

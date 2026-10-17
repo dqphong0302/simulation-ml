@@ -83,7 +83,7 @@ export function KnnLab({ d }: { d: LabData }) {
           </p>
         )}
         <p className="muted">
-          {scale ? 'Khi chuẩn hóa, hai biến có tầm ảnh hưởng tương đương lên khoảng cách.' : 'Khi chưa chuẩn hóa, biến có thang đo lớn hơn (ví dụ Glucose ~100 so với BMI ~30) lấn át khoảng cách.'}{' '}
+          {scale ? 'Z-score cân bằng thang biến thiên trên train, không bảo đảm các biến quan trọng ngang nhau.' : 'Không scaling, biến có độ chênh lệch số lớn có thể chi phối khoảng cách; mức trung bình lớn một mình chưa đủ kết luận.'}{' '}
           Biểu đồ 2D chỉ chiếu hai biến; khoảng cách được tính trên mọi biến đã chọn.
         </p>
 

@@ -2,14 +2,15 @@ import { chromium } from 'playwright';
 import assert from 'node:assert/strict';
 import JSZip from 'jszip';
 import fs from 'node:fs/promises';
+import { BASE_URL as base } from './browser.config.mjs';
 
 const browser = await chromium.launch({headless:true});
 try {
   const page = await browser.newPage({reducedMotion:'reduce'});
   const errors = []; const external=[];
   page.on('pageerror', e=>errors.push(e.message));
-  page.on('request', r=>{if(r.url().startsWith('http') && !r.url().startsWith('http://127.0.0.1:5173/')) external.push(r.url());});
-  await page.goto('http://127.0.0.1:5173/#/ml/teachable?tab=lab');
+  page.on('request', r=>{if(r.url().startsWith('http') && !r.url().startsWith(`${base}/`)) external.push(r.url());});
+  await page.goto(`${base}/#/ml/teachable?tab=lab`);
   await page.locator('#tm-train').waitFor();
   console.log('TM page ready');
   assert.equal(await page.locator('#tm-train').isDisabled(), true);

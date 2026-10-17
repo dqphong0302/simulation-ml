@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
 import { loadProfilesWithoutKeys } from '../core/security/keystore';
+import { PERSIST_KEY as FLAG, PROFILES_KEY as PROFILES } from '../core/security/profiles';
 
-const FLAG = 'sml.persist', PROFILES = 'sml.profiles';
 const persistEnabled = (): boolean => { try { return localStorage.getItem(FLAG) === '1'; } catch { return false; } };
 
 interface Ctx {

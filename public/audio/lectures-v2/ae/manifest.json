@@ -63,9 +63,9 @@
     },
     {
       "id": "s3",
-      "audio": "/audio/guide/ae/s3.mp3",
-      "duration": 8.32,
-      "caption": "Autoencoder có thể dùng để giảm chiều theo cách phi tuyến, hoặc phát hiện điểm bất thường vì những điểm lạ thường có lỗi tái dựng lớn.",
+      "audio": "/audio/lectures-v2/ae/ae12da97717ca312.mp3",
+      "duration": 15.14,
+      "caption": "Autoencoder có thể giảm chiều phi tuyến hoặc tạo điểm bất thường từ lỗi tái dựng. Mẫu lạ có thể lỗi cao, nhưng mẫu bệnh cũng có thể tái dựng tốt. Muốn phát hiện cần tập kiểm tra và định nghĩa sai sót, không chỉ một ngưỡng lỗi.",
       "preset": {
         "title": "Dùng để làm gì",
         "bullets": [

@@ -15,13 +15,13 @@
       "Median: giá trị đứng giữa khi sắp xếp",
       "Lệch xa nhau → phân bố lệch hoặc có ngoại lai"
     ],
-    "caption": "Trung bình là tổng chia cho số mẫu, còn median là giá trị đứng giữa khi sắp xếp. Chỉ cần vài giá trị rất lớn, trung bình đã bị kéo lên, trong khi median gần như đứng yên. Vì vậy với các biến lệch như insulin hay thu nhập, median thường đáng tin hơn."
+    "caption": "Trung bình là tổng chia số giá trị hợp lệ. Median là trung vị sau khi sắp xếp, lấy trung bình hai giá trị giữa nếu số lượng chẵn. Giá trị cực đoan thường ảnh hưởng mean nhiều hơn median; chọn số tóm tắt theo phân bố và câu hỏi, không mặc định median luôn tốt hơn."
   },
   {
     "title": "Độ phân tán: độ lệch chuẩn và IQR",
     "bullets": [
-      "Độ lệch chuẩn σ: dữ liệu cách trung bình bao xa",
-      "IQR = Q3 − Q1: độ rộng của 50% ở giữa",
+      "SD mẫu s dùng mẫu số n hợp lệ − 1",
+      "IQR = Q3 − Q1: độ rộng khoảng phân vị trung tâm",
       "Biểu đồ hộp gói gọn Q1, median, Q3, ngoại lai"
     ],
     "caption": "Hai lớp học có cùng điểm trung bình vẫn có thể rất khác nhau: một lớp đồng đều, một lớp chênh lệch lớn. Độ lệch chuẩn và khoảng tứ phân vị cho biết dữ liệu trải rộng đến đâu. Biểu đồ hộp gói gọn Q1, median, Q3 và các điểm ngoại lai trong một hình."
@@ -33,7 +33,7 @@
       "Đối xứng, lệch phải, hai đỉnh",
       "Hình dạng gợi ý cách xử lý ở bước sau"
     ],
-    "caption": "Hãy luôn vẽ histogram trước khi kết luận. Phân bố có thể đối xứng, lệch về một phía, hoặc có hai đỉnh. Hai đỉnh thường báo hiệu dữ liệu đang trộn hai nhóm khác nhau, còn phân bố lệch mạnh gợi ý mình nên cân nhắc biến đổi log ở bước sau."
+    "caption": "Histogram phụ thuộc cách chia khoảng. Nhiều đỉnh có thể do các nhóm trộn, đơn vị hoặc cách đo, chưa chứng minh có nhiều nhóm bệnh. Với biến dương lệch mạnh có thể thử log nếu phù hợp mục tiêu, không tự biến đổi chỉ vì nhìn thấy lệch."
   },
   {
     "title": "Biến phân loại: đếm tần suất",
@@ -58,9 +58,9 @@
     "bullets": [
       "Tách thống kê theo cột đích",
       "Histogram chồng nhau theo nhóm",
-      "Biến tách nhóm tốt thường có ích cho mô hình"
+      "Khác biệt giữa nhóm chưa chứng minh giá trị dự đoán ngoài mẫu"
     ],
-    "caption": "Khi tô histogram theo nhóm, ví dụ có và không có tiểu đường, mình thấy glucose tách hai nhóm rõ hơn huyết áp. Biến tách nhóm tốt thường có ích cho mô hình. Đồng thời hãy xem tỷ lệ các nhóm, vì dữ liệu mất cân bằng khiến accuracy dễ gây hiểu lầm."
+    "caption": "Tô histogram theo nhóm giúp xem phân bố khác nhau thế nào. Khác biệt trong bảng chưa chứng minh dự đoán tốt ở người mới; phải xét thời điểm đo, rò rỉ và đánh giá độc lập. Luôn báo số người được đo và tỷ lệ nhóm, không chỉ một chỉ số accuracy."
   },
   {
     "title": "Kiểm tra chất lượng dữ liệu",

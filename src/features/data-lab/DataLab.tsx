@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
-import { describe, histogram, pearson, quantile, type Stats } from '../../core/algorithms/dataset';
+import { describe, histogram, pearson, type Stats } from '../../core/algorithms/dataset';
+import { preprocessDemo, type DemoScale } from '../../core/algorithms/preprocessDemo';
 import { makeRng } from '../../core/algorithms/rng';
 import { fmt } from '../../core/algorithms/metrics';
 import { Chart, Field, Table } from '../../app/ui';
@@ -12,7 +13,8 @@ export function DataLab({ d }: { d: LabData }) {
   const [miss, setMiss] = useState(10);
   const [outl, setOutl] = useState(3);
   const [impute, setImpute] = useState<Impute>('median');
-  const [clip, setClip] = useState(true);
+  const [clip, setClip] = useState(false);
+  const [scale, setScale] = useState<DemoScale>('none');
   const [feat, setFeat] = useState(0);
   const [zeroAsMissing, setZeroAsMissing] = useState(true);
 
@@ -39,26 +41,16 @@ export function DataLab({ d }: { d: LabData }) {
     };
   }, [d, miss, outl, zeroAsMissing]);
 
-  const cleaned = useMemo(() => {
-    const cols = base.names.map((_, j) => base.rows.map((r) => r[j]));
-    // Mọi phép fit (trung bình, trung vị, ngưỡng IQR) chỉ dùng tập train.
-    const fitted = cols.map((c) => {
-      const v = c.filter((x): x is number => x !== null).sort((a, b) => a - b);
-      const q1 = quantile(v, 0.25), q3 = quantile(v, 0.75), iqr = q3 - q1, st = describe(v);
-      return { fill: impute === 'mean' ? st.mean ?? 0 : st.median ?? 0, lo: q1 - 1.5 * iqr, hi: q3 + 1.5 * iqr };
-    });
-    let rows = base.rows.map((r, i) => ({ x: r, y: base.y[i] }));
-    if (impute === 'drop') rows = rows.filter((r) => r.x.every((v) => v !== null));
-    return rows.map((r) => ({ y: r.y, x: r.x.map((v, j) => { const val = v ?? fitted[j].fill; return clip ? Math.min(fitted[j].hi, Math.max(fitted[j].lo, val)) : val; }) }));
-  }, [base, impute, clip]);
+  const processed = useMemo(() => preprocessDemo(base.rows, impute, clip, scale), [base, impute, clip, scale]);
 
   const statRow = (name: string, s: Stats) => [name, String(s.n), String(s.missing), fmt(s.mean, 2), fmt(s.std, 2), fmt(s.min, 2), fmt(s.median, 2), fmt(s.max, 2)];
   const states = d.source === 'synthetic' ? ['gốc (sạch)', 'sau làm bẩn', 'sau tiền xử lý'] : ['dữ liệu đọc được', 'sau tiền xử lý'];
-  const table = { columns: ['Biến — trạng thái', 'n', 'Thiếu', 'Trung bình', 'Độ lệch chuẩn', 'Min', 'Median', 'Max'],
+  const table = { columns: ['Biến — trạng thái', 'Tổng dòng', 'Thiếu', 'Trung bình', 'SD mẫu (n−1)', 'Min', 'Median', 'Max'],
     rows: base.names.flatMap((n, j) => [
       ...(base.clean ? [statRow(`${n} — ${states[0]}`, describe(base.clean.map((r) => r[j])))] : []),
       statRow(`${n} — ${base.clean ? states[1] : states[0]}`, describe(base.rows.map((r) => r[j]))),
-      statRow(`${n} — ${states[states.length - 1]}`, describe(cleaned.map((r) => r.x[j]))),
+      statRow(`${n} — ${states[states.length - 1]}`, describe(processed.rows.map((r) => r[j]))),
+      ...(scale === 'none' ? [] : [statRow(`${n} — ${scale === 'zscore' ? 'Z-score' : 'Min-Max'}`, describe(processed.scaled.map(r => r[j])))]),
     ]) };
 
   const colVals = (rows: Cell[][], j: number) => rows.map((r) => r[j]).filter((v): v is number => v !== null);
@@ -68,6 +60,7 @@ export function DataLab({ d }: { d: LabData }) {
   const chart = { title: `Phân bố ${base.names[feat]} theo nhóm (tập train, giá trị đọc được)`, xLabel: base.names[feat], yLabel: 'Số mẫu',
     series: [{ name: d.ds.classNames[0], points: hist(0) }, { name: d.ds.classNames[1], points: hist(1) }] };
   const pos = base.y.filter((y) => y === 1).length;
+  const keptPos = processed.retainedIndices.filter(i => base.y[i] === 1).length;
   const corr = base.names.map((n, j) => { const ok = base.rows.map((r, i) => [r[j], base.y[i]] as const).filter((p): p is [number, 0 | 1] => p[0] !== null); return [n, fmt(pearson(ok.map((p) => p[0]), ok.map((p) => p[1])), 3)]; });
 
   return (
@@ -89,6 +82,8 @@ export function DataLab({ d }: { d: LabData }) {
           <Field label="Xử lý giá trị thiếu"><select value={impute} onChange={(e) => setImpute(e.target.value as Impute)}>
             <option value="mean">Điền trung bình</option><option value="median">Điền median</option><option value="drop">Xóa dòng thiếu</option></select></Field>
           <label className="check"><input type="checkbox" checked={clip} onChange={(e) => setClip(e.target.checked)} /> Cắt bất thường theo IQR (1.5×)</label>
+          <p className="muted">Không mặc định cắt: điểm ngoài IQR có thể là ca thật. Chỉ bật khi có lý do và kiểm tra ảnh hưởng.</p>
+          <Field label="So sánh thang đo (minh họa trên train)"><select id="data-demo-scale" value={scale} onChange={e => setScale(e.target.value as DemoScale)}><option value="none">Thang gốc</option><option value="zscore">Z-score</option><option value="minmax">Min-Max</option></select></Field>
         </div>
         <div className="box"><Field label="Biến xem phân bố"><select value={feat} onChange={(e) => setFeat(Number(e.target.value))}>
           {base.names.map((n, i) => <option key={n} value={i}>{n}</option>)}</select></Field></div>
@@ -98,7 +93,10 @@ export function DataLab({ d }: { d: LabData }) {
           {pos / base.n < 0.4 && ' Dữ liệu lệch nhãn nên accuracy một mình có thể gây hiểu lầm; hãy xem recall và precision.'}</p>
         <Chart spec={chart} />
         <h3>So sánh trước/sau tiền xử lý</h3>
+        <p>Sau xử lý giữ {processed.rows.length}/{base.n} dòng. Tỷ lệ lớp {d.ds.classNames[1]}: {processed.rows.length ? `${(100 * keptPos / processed.rows.length).toFixed(1)}% (${keptPos}/${processed.rows.length})` : 'không xác định vì không còn dòng'}.</p>
+        {processed.emptyColumns.length > 0 && <p role="alert">Không có giá trị train hợp lệ ở: {processed.emptyColumns.map(j => base.names[j]).join(', ')}. Không thể học giá trị điền; giữ thiếu, không tự thay bằng 0.</p>}
         <Table data={table} />
+        <p className="muted">SD mô tả dùng n hợp lệ − 1; Z-score dùng SD mẫu số n như StandardScaler. Cột hằng biến thành 0; cột không có dữ liệu vẫn thiếu. Đây là minh họa, không thay đổi pipeline của các lab khác.</p>
         <Table caption="Tương quan Pearson giữa từng biến và nhãn (bỏ qua ô thiếu; chỉ mô tả, không kết luận nhân quả)" data={{ columns: ['Biến', 'r với nhãn'], rows: corr }} />
         <p className="muted">Xóa dòng thiếu làm giảm n và có thể lệch nhóm; điền trung bình bị kéo bởi giá trị bất thường, median ít bị ảnh hưởng hơn. Giá trị điền và ngưỡng IQR chỉ tính từ train để không rò rỉ sang validation/test.</p>
       </section>

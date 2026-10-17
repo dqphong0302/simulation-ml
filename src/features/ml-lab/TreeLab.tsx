@@ -54,7 +54,7 @@ export function TreeLab({ d }: { d: LabData }) {
         <h3>So sánh độ sâu</h3>
         <Table data={table} />
         <Chart spec={chart} />
-        <p>Validation tốt nhất ở độ sâu <b>{best.md}</b>. Khi train tăng mà validation không tăng (hoặc giảm), cây đang học thuộc nhiễu — overfitting. Cây này dùng dữ liệu chưa chuẩn hóa vì không phụ thuộc thang đo.</p>
+        <p>Validation tốt nhất trong các độ sâu đã thử ở <b>{best.md}</b>, không phải độ sâu tối ưu cho mọi dữ liệu. Train tăng mà validation giảm gợi ý overfitting; cần xét dao động và cách chia. Cây dùng dữ liệu chưa chuẩn hóa vì phép chia theo ngưỡng thường không cần scaling.</p>
       </section>
     </div>
   );

@@ -1,0 +1,50 @@
+{
+  "voice": "clone-duyenhamy",
+  "clips": [
+    {
+      "id": "colab",
+      "src": "/audio/python-basics/colab-9295c890721f.mp3",
+      "duration": 24.18
+    },
+    {
+      "id": "variables",
+      "src": "/audio/python-basics/variables-c8a18c46cf29.mp3",
+      "duration": 17.53
+    },
+    {
+      "id": "input",
+      "src": "/audio/python-basics/input-4bc28eea67ea.mp3",
+      "duration": 18.47
+    },
+    {
+      "id": "conditions",
+      "src": "/audio/python-basics/conditions-96fb99486148.mp3",
+      "duration": 16.51
+    },
+    {
+      "id": "bmi",
+      "src": "/audio/python-basics/bmi-8d967600d3ee.mp3",
+      "duration": 20.93
+    },
+    {
+      "id": "loops",
+      "src": "/audio/python-basics/loops-559b1436a583.mp3",
+      "duration": 17.97
+    },
+    {
+      "id": "functions",
+      "src": "/audio/python-basics/functions-11e6c18a40fc.mp3",
+      "duration": 19.74
+    },
+    {
+      "id": "csv",
+      "src": "/audio/python-basics/csv-afd4f6e1fa16.mp3",
+      "duration": 24.5
+    },
+    {
+      "id": "statistics",
+      "src": "/audio/python-basics/statistics-850a52d28c5b.mp3",
+      "duration": 22.75
+    }
+  ]
+}

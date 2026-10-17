@@ -70,7 +70,7 @@ export function TransformerLab() {
       </section>
       <section className="main">
         <p className="badge">Huấn luyện thật — một khối Transformer decoder rất nhỏ, đầu vào theo âm tiết</p>
-        <p>Kiến trúc: embedding + vị trí → self-attention một đầu có causal mask → mạng truyền thẳng (FFN) có kết nối tắt → lớp ra dự đoán âm tiết tiếp theo. Bỏ LayerNorm và chỉ có một khối để dễ theo dõi. Mô hình chỉ học lại các mẫu trong vài câu ở corpus; nó không hiểu y khoa và không giống LLM thật về quy mô.</p>
+        <p>Kiến trúc: embedding + vị trí → self-attention một đầu có causal mask → mạng truyền thẳng (FFN) có kết nối tắt → lớp ra dự đoán token tiếp theo. Web tách token theo khoảng trắng; notebook mẫu dùng ký tự. Bỏ LayerNorm và chỉ có một khối để dễ theo dõi. Loss thấp trên vài câu có thể chỉ là ghi nhớ, không chứng minh hiểu y khoa.</p>
         <Table data={table} />
         {losses.length > 0 && <Chart spec={chart} />}
 

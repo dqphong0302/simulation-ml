@@ -4,7 +4,8 @@ import { DL_PYTHON } from './dl';
 import { FOUNDATION_PYTHON } from './foundation';
 import { GENAI_PYTHON } from './genai';
 import type { PythonLesson } from './types';
-export const PYTHON_LESSONS: Record<string, PythonLesson> = { ...ML_PYTHON, ...DL_PYTHON, ...FOUNDATION_PYTHON, ...GENAI_PYTHON };
+import { APPLICATION_PYTHON } from './applications';
+export const PYTHON_LESSONS: Record<string, PythonLesson> = { ...ML_PYTHON, ...DL_PYTHON, ...FOUNDATION_PYTHON, ...GENAI_PYTHON, ...APPLICATION_PYTHON };
 export const COLAB_URL = 'https://colab.research.google.com/';
 export const setupCode = 'import numpy as np\nimport matplotlib.pyplot as plt\n';
 export function makeNotebook(id: string) {

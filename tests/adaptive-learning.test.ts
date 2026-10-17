@@ -9,7 +9,7 @@ const data: SessionData = { id:1,name:'my-study.csv',originalRows:60,sampled:fal
 const sources = () => [...TABLE_NOTEBOOKS].map(id => ({id,code:makeUploadedNotebook(id,data).cells.filter(c=>c.cell_type==='code').map(c=>c.source.join('')).filter(s=>!s.startsWith('%pip')).join('\n\n')}));
 describe('data-adaptive learning', () => {
   it('orders ML explicitly without mutating the catalogue', () => {
-    expect(orderLessons(LESSONS.filter(l=>l.group==='ml')).map(l=>l.id)).toEqual(['KNN','TREE','LOGREG','COMPARE','TEACHABLE','LINREG','KMEANS','PCA','FOREST','SVM']);
+    expect(orderLessons(LESSONS.filter(l=>l.group==='ml')).map(l=>l.id)).toEqual(['KNN','TREE','LOGREG','COMPARE','TEACHABLE','LINREG','KMEANS','PCA','FOREST','BOOST','SVM']);
     expect(LESSONS[3].id).toBe('KMEANS');
   });
   it('uses actual columns and flags limitations without assuming clinical meaning', () => {

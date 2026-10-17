@@ -1,26 +1,28 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useReducer, useState } from 'react';
+import { useLatestTask } from '../../app/useLatestTask';
+import { documentReducer } from '../../core/rag/documents';
 import { chat, ProviderError } from '../../core/providers/chat';
 import { embed } from '../../core/providers/embed';
 import { NeedsOcr, readFileText } from '../../core/rag/readers';
 import { ocrFile, type OcrProgress } from '../../core/rag/ocr';
-import { bm25, buildContext, checkCitations, chunkDoc, fingerprint, ragSystemPrompt, vectorSearch, type Chunk, type Doc, type Hit } from '../../core/rag/rag';
+import { bm25, buildContext, checkCitations, chunkDoc, fingerprint, ragSystemPrompt, vectorSearch, type Chunk, type Hit } from '../../core/rag/rag';
 import { useSession } from '../../core/security/keystore';
 import { toPlain } from '../../core/security/sanitize';
 import { Field, Table } from '../../app/ui';
 import { ChatProfileForm, EmbedProfileForm } from '../genai-playground/ProfileForm';
 
-const MAX_DOCS = 10, MAX_CHUNKS = 1000, BATCH = 16;
+const MAX_CHUNKS = 1000, BATCH = 16;
 
 export function RagLab() {
   const s = useSession();
-  const [docs, setDocs] = useState<Doc[]>([]);
+  const [{ docs, message: msg }, dispatch] = useReducer(documentReducer, { docs: [], message: null });
+  const setMsg = (message: string | null) => dispatch({ type: 'message', message });
   const [paste, setPaste] = useState('');
   const [size, setSize] = useState(500);
   const [overlap, setOverlap] = useState(80);
   const [topK, setTopK] = useState(3);
   const [mode, setMode] = useState<'bm25' | 'vector'>('bm25');
   const [query, setQuery] = useState('');
-  const [msg, setMsg] = useState<string | null>(null);
   const [vectors, setVectors] = useState<{ fp: string; v: Map<string, number[]> } | null>(null);
   const [embProgress, setEmbProgress] = useState<string | null>(null);
   const [hits, setHits] = useState<Hit[] | null>(null);
@@ -30,26 +32,40 @@ export function RagLab() {
   const [open, setOpen] = useState<Chunk | null>(null);
   const [ocrNeed, setOcrNeed] = useState<File | null>(null);
   const [ocrProg, setOcrProg] = useState<OcrProgress | null>(null);
-  const ocrCtl = useRef<AbortController | null>(null);
-  const ctl = useRef<AbortController | null>(null);
+  const ocrTask = useLatestTask(), fileTask = useLatestTask();
+  const indexTask = useLatestTask(), searchTask = useLatestTask(), chatTask = useLatestTask();
 
   const chunks = useMemo(() => docs.flatMap((d, i) => chunkDoc(d, i + 1, size, overlap)), [docs, size, overlap]);
   const fp = fingerprint([docs.map((d) => d.id + d.text.length).join(','), size, overlap, s.embed.model, s.embed.baseUrl]);
   const vecOk = vectors?.fp === fp; // đổi tài liệu/chunking/embedding thì chỉ mục cũ không dùng lại
+  useEffect(() => { indexTask.cancel(); setEmbProgress(null); }, [fp, s.embed.apiKey, indexTask]);
+  useEffect(() => {
+    if (okEmbed) return;
+    indexTask.cancel(); searchTask.cancel(); setEmbProgress(null);
+  }, [okEmbed, indexTask, searchTask]);
+  useEffect(() => {
+    if (okChat) return;
+    chatTask.cancel();
+    setAnswer(answer => answer?.busy ? { ...answer, busy: false, error: 'Đã dừng sau khi bỏ đồng ý gửi context.' } : answer);
+  }, [okChat, chatTask]);
+  useEffect(() => {
+    searchTask.cancel(); chatTask.cancel(); setHits(null); setAnswer(null); setOpen(null);
+  }, [chunks, query, topK, mode, fp, searchTask, chatTask]);
+  useEffect(() => { chatTask.cancel(); setAnswer(null); }, [s.chatA, chatTask]);
 
-  const addDoc = (name: string, text: string, paged = false) => {
-    if (docs.length >= MAX_DOCS) return setMsg(`Tối đa ${MAX_DOCS} tài liệu.`);
-    if (!text.trim()) return setMsg('Văn bản rỗng.');
-    setDocs([...docs, { id: crypto.randomUUID(), name, text, paged }]); setHits(null); setMsg(null);
+  const addDoc = (name: string, text: string, paged = false, note?: string) => {
+    dispatch({ type: 'add', doc: { id: crypto.randomUUID(), name, text, paged }, note });
   };
   const onFile = async (f?: File) => {
     if (!f) return;
+    const signal = fileTask.start();
+    ocrTask.cancel(); setOcrNeed(null); setOcrProg(null);
     try {
       setMsg('Đang đọc tệp…');
-      const r = await readFileText(f); // đọc cục bộ, không tải lên đâu cả
-      addDoc(f.name, r.text, r.paged);
-      if (r.note) setMsg(r.note);
+      const r = await readFileText(f, signal); // đọc cục bộ, không tải lên đâu cả
+      if (fileTask.isCurrent(signal)) addDoc(f.name, r.text, r.paged, r.note);
     } catch (e) {
+      if (!fileTask.isCurrent(signal)) return;
       if (e instanceof NeedsOcr) { setOcrNeed(f); setMsg(e.message); return; }
       setMsg(e instanceof Error ? e.message : 'Không đọc được tệp.');
     }
@@ -57,54 +73,59 @@ export function RagLab() {
 
   const runOcr = async () => {
     if (!ocrNeed) return;
-    ocrCtl.current = new AbortController();
+    const signal = ocrTask.start();
     setOcrProg({ page: 0, pages: 0, pct: 0, status: 'Đang chuẩn bị' });
     try {
-      const r = await ocrFile(ocrNeed, setOcrProg, ocrCtl.current.signal);
-      addDoc(`${ocrNeed.name} (OCR)`, r.text, r.paged);
-      setMsg(`OCR xong, độ tin cậy trung bình ${r.confidence.toFixed(0)}%. Hãy mở các đoạn để kiểm tra lỗi nhận dạng trước khi dùng.`);
+      const r = await ocrFile(ocrNeed, progress => { if (ocrTask.isCurrent(signal)) setOcrProg(progress); }, signal);
+      if (!ocrTask.isCurrent(signal)) return;
+      addDoc(`${ocrNeed.name} (OCR)`, r.text, r.paged, `OCR xong, độ tin cậy trung bình ${r.confidence.toFixed(0)}%. Hãy mở các đoạn để kiểm tra lỗi nhận dạng trước khi dùng.`);
       setOcrNeed(null);
-    } catch (e) { setMsg((e as Error).name === 'AbortError' ? 'Đã hủy OCR.' : `OCR lỗi: ${(e as Error).message}`); }
-    setOcrProg(null);
+    } catch (e) { if (ocrTask.isCurrent(signal)) setMsg(`OCR lỗi: ${(e as Error).message}`); }
+    if (ocrTask.isCurrent(signal)) setOcrProg(null);
   };
 
   const buildIndex = async () => {
     if (chunks.length > MAX_CHUNKS) return setMsg(`Quá ${MAX_CHUNKS} đoạn; tăng kích thước đoạn hoặc bớt tài liệu.`);
-    ctl.current = new AbortController();
+    if (!okEmbed || !chunks.length) return;
+    const signal = indexTask.start();
     const v = new Map<string, number[]>();
     try {
       for (let i = 0; i < chunks.length; i += BATCH) {
         setEmbProgress(`${Math.min(i + BATCH, chunks.length)}/${chunks.length}`);
         const part = chunks.slice(i, i + BATCH);
-        const out = await embed(s.embed, part.map((c) => c.text), ctl.current.signal);
+        const out = await embed(s.embed, part.map((c) => c.text), signal);
+        if (!indexTask.isCurrent(signal)) return;
+        if (v.size && out[0].length !== v.values().next().value!.length) throw new ProviderError('format', 'Số chiều embedding thay đổi giữa các lô; chưa thay chỉ mục đang dùng.');
         part.forEach((c, j) => v.set(c.id, out[j]));
       }
       setVectors({ fp, v }); setMsg(`Đã lập chỉ mục ${chunks.length} đoạn (${[...v.values()][0]?.length ?? 0} chiều).`);
-    } catch (e) { setMsg(e instanceof ProviderError ? e.message : 'Lỗi embedding.'); }
-    setEmbProgress(null);
+    } catch (e) { if (indexTask.isCurrent(signal)) setMsg(e instanceof ProviderError ? e.message : 'Lỗi embedding.'); }
+    if (indexTask.isCurrent(signal)) setEmbProgress(null);
   };
 
   const search = async () => {
+    const signal = searchTask.start();
+    chatTask.cancel();
     setAnswer(null);
     if (mode === 'bm25') return setHits(bm25(chunks, query, topK));
     if (!vecOk) return setMsg('Chỉ mục vector chưa có hoặc đã lỗi thời; hãy lập lại chỉ mục.');
+    if (!okEmbed) return setMsg('Cần đồng ý gửi câu hỏi tới endpoint embedding trước khi tìm ngữ nghĩa.');
     try {
-      ctl.current = new AbortController();
-      const [qv] = await embed(s.embed, [query], ctl.current.signal);
-      setHits(vectorSearch(chunks, vectors!.v, qv, topK));
-    } catch (e) { setMsg(e instanceof ProviderError ? e.message : 'Lỗi embedding câu hỏi.'); }
+      const [qv] = await embed(s.embed, [query], signal);
+      if (searchTask.isCurrent(signal)) setHits(vectorSearch(chunks, vectors!.v, qv, topK));
+    } catch (e) { if (searchTask.isCurrent(signal)) setMsg(e instanceof ProviderError ? e.message : 'Lỗi embedding câu hỏi hoặc số chiều không khớp chỉ mục.'); }
   };
 
   const ask = async () => {
-    if (!hits) return;
-    ctl.current = new AbortController();
+    if (!hits?.length || !okChat) return;
+    const signal = chatTask.start();
     setAnswer({ text: '', busy: true });
     let acc = '';
     try {
       await chat(s.chatA, [{ role: 'system', content: ragSystemPrompt() }, { role: 'user', content: `NGỮ CẢNH:\n${buildContext(hits)}\n\nCÂU HỎI: ${query}` }],
-        (d) => { acc += d; setAnswer({ text: acc, busy: true }); }, ctl.current.signal);
-      setAnswer({ text: acc, busy: false });
-    } catch (e) { setAnswer({ text: acc, busy: false, error: e instanceof ProviderError ? e.message : 'Lỗi.' }); }
+        (d) => { acc += d; if (chatTask.isCurrent(signal)) setAnswer({ text: acc, busy: true }); }, signal);
+      if (chatTask.isCurrent(signal)) setAnswer({ text: acc, busy: false });
+    } catch (e) { if (chatTask.isCurrent(signal)) setAnswer({ text: acc, busy: false, error: e instanceof ProviderError ? e.message : 'Lỗi.' }); }
   };
   const cites = hits && answer && !answer.busy ? checkCitations(answer.text, hits) : null;
   const hitTable = hits && { columns: ['Mã đoạn', 'Tài liệu', 'Điểm', 'Trích đoạn'], rows: hits.map((h) => [h.chunk.id, h.chunk.docName + (h.chunk.page ? ` (tr. ${h.chunk.page})` : ''), h.score.toFixed(4), h.chunk.text.slice(0, 160)]) };
@@ -117,7 +138,7 @@ export function RagLab() {
           <label className="btn">Chọn TXT, MD, CSV, DOCX, PDF, ảnh<input type="file" accept=".txt,.md,.markdown,.csv,.docx,.pdf,.png,.jpg,.jpeg,.webp" hidden onChange={(e) => { void onFile(e.target.files?.[0]); e.target.value = ''; }} /></label>
           <Field label="Hoặc dán văn bản"><textarea rows={4} value={paste} onChange={(e) => setPaste(e.target.value)} /></Field>
           <button onClick={() => { addDoc(`Văn bản dán ${docs.length + 1}`, paste); setPaste(''); }}>Thêm văn bản</button>
-          <ul>{docs.map((d, i) => <li key={d.id}>D{i + 1}: {d.name} ({d.text.length} ký tự) <button onClick={() => { setDocs(docs.filter((x) => x.id !== d.id)); setHits(null); }}>Xóa</button></li>)}</ul>
+          <ul>{docs.map((d, i) => <li key={d.id}>D{i + 1}: {d.name} ({d.text.length} ký tự) <button onClick={() => dispatch({ type: 'remove', id: d.id })}>Xóa</button></li>)}</ul>
         </div>
         <div className="box">
           <strong>2. Chia đoạn</strong>
@@ -138,7 +159,7 @@ export function RagLab() {
               <>
                 <div className="ocr-bar"><span style={{ width: `${Math.round(100 * ((Math.max(0, ocrProg.page - 1) + ocrProg.pct) / Math.max(1, ocrProg.pages)))}%` }} /></div>
                 <p className="muted">Trang {ocrProg.page}/{ocrProg.pages || '…'} · {ocrProg.status}</p>
-                <button onClick={() => ocrCtl.current?.abort()}>Hủy</button>
+                <button onClick={() => { ocrTask.cancel(); setOcrProg(null); setMsg('Đã hủy OCR.'); }}>Hủy</button>
               </>
             ) : <div className="row"><button className="primary" onClick={runOcr}>Chạy OCR</button><button onClick={() => { setOcrNeed(null); setMsg(null); }}>Bỏ qua</button></div>}
           </div>
@@ -162,12 +183,13 @@ export function RagLab() {
             <label className="check"><input type="checkbox" checked={okEmbed} onChange={(e) => setOkEmbed(e.target.checked)} /> Tôi đồng ý gửi nội dung các đoạn ra ngoài.</label>
             <div className="row">
               <button disabled={!okEmbed || chunks.length === 0 || embProgress !== null} onClick={buildIndex}>{embProgress ? `Đang lập chỉ mục ${embProgress}` : 'Lập chỉ mục vector'}</button>
-              {embProgress && <button onClick={() => ctl.current?.abort()}>Hủy</button>}
+              {embProgress && <button onClick={() => { indexTask.cancel(); setEmbProgress(null); setMsg('Đã hủy lập chỉ mục.'); }}>Hủy</button>}
               <span className="muted">{vecOk ? 'Chỉ mục khớp cấu hình hiện tại.' : vectors ? 'Chỉ mục đã lỗi thời (đổi tài liệu/chunk/embedding) — cần lập lại.' : 'Chưa có chỉ mục.'}</span>
             </div>
           </div>
         )}
         <Field label="Câu hỏi"><input value={query} onChange={(e) => setQuery(e.target.value)} /></Field>
+        {mode === 'vector' && <p className="muted">Tìm ngữ nghĩa gửi cả câu hỏi tới endpoint embedding; cần đồng ý gửi dữ liệu ở trên.</p>}
         <button className="primary" disabled={!query.trim() || chunks.length === 0} onClick={search}>Tìm top-{topK}</button>
         {hitTable && (hits!.length ? <Table data={hitTable} caption="Các đoạn được truy xuất" /> : <p className="muted">Không có đoạn nào khớp — nên nói rõ là không đủ bằng chứng.</p>)}
 
@@ -176,7 +198,7 @@ export function RagLab() {
             <h3>4. Ghép context và hỏi mô hình</h3>
             <details><summary>Context cuối sẽ gửi</summary><pre className="node" style={{ whiteSpace: 'pre-wrap' }}>{buildContext(hits)}</pre></details>
             <label className="check"><input type="checkbox" checked={okChat} onChange={(e) => setOkChat(e.target.checked)} /> Tôi đồng ý gửi câu hỏi và context này tới endpoint sinh văn bản (có thể phát sinh phí).</label>
-            <div className="row"><button className="primary" disabled={!okChat || answer?.busy} onClick={ask}>Hỏi</button><button disabled={!answer?.busy} onClick={() => ctl.current?.abort()}>Dừng</button></div>
+            <div className="row"><button className="primary" disabled={!okChat || answer?.busy} onClick={ask}>Hỏi</button><button disabled={!answer?.busy} onClick={() => { chatTask.cancel(); setAnswer(a => a && { ...a, busy: false, error: 'Đã dừng. Nhà cung cấp có thể vẫn tính phí phần đã xử lý.' }); }}>Dừng</button></div>
           </>
         )}
         {answer && (

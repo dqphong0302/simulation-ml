@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { GROUPS, LESSONS, orderLessons, type Group } from '../lessons';
 import { Icon } from './icons';
 import { ModeBadge } from './ui';
@@ -24,6 +24,7 @@ export function Home() {
         <p>{LESSONS.length} bài học · {GROUPS.length} chuyên đề · Bài giảng, lý thuyết và Python trên Colab.</p>
       </header>
       <LibraryTabs active="library" />
+      <aside className="station-home-entry" aria-label="Trạm giảng dạy bộ môn"><div><b>Trạm Tin học Y khoa</b><p>Học theo nhóm năng lực · Soạn buổi học · Phiếu thực hành nhóm</p></div><a id="home-open-station" className="btn" href="#/station">Mở trạm giảng dạy →</a></aside>
       <LearningPath compact />
 
       <section className="lesson-catalog" aria-labelledby="catalog-title">
@@ -77,14 +78,16 @@ export function Home() {
               <span className="group-count">{items.length} bài học</span>
             </header>
             <div className="lesson-list sleek-list">
-          {orderLessons(items).map((l) => (
-            <article className="lesson-row" key={l.id}>
+          {orderLessons(items).map((l, i, ordered) => (
+            <Fragment key={l.id}>
+            {l.exploration && !ordered[i - 1]?.exploration && <div id="explore-dl" className="catalog-explore-heading" role="heading" aria-level={4}><b>Khám phá thêm</b><p>VAE, GAN và Diffusion · Không bắt buộc với sinh viên năm nhất. Học các bài ứng dụng trước.</p></div>}
+            <article className="lesson-row" data-exploration={l.exploration || undefined}>
               <a className="lesson-thumbnail" href={`#${l.path}`} aria-label={`Xem bài ${l.title}`}>
                 <LessonVisual group={l.group} lessonId={l.id} label={l.title.split(':')[0]} />
               </a>
               <div className="lesson-meta">
                 <ModeBadge mode={l.mode} short />
-                <span className="lesson-level">{String(orderLessons(LESSONS.filter(x => x.group === l.group)).findIndex(x => x.id === l.id) + 1).padStart(2, '0')} · {CORE_LESSONS.includes(l.id) ? 'Cơ bản' : 'Mở rộng · Tùy chọn'}</span>
+                <span className="lesson-level">{String(orderLessons(LESSONS.filter(x => x.group === l.group)).findIndex(x => x.id === l.id) + 1).padStart(2, '0')} · {l.exploration ? 'Khám phá thêm · Không bắt buộc' : CORE_LESSONS.includes(l.id) ? 'Cơ bản' : ['BOOST', 'TRANSFER', 'SEG'].includes(l.id) ? 'Ứng dụng · Có hướng dẫn' : 'Mở rộng · Tùy chọn'}</span>
               </div>
               <div className="lesson-row-copy">
                 <h4>
@@ -125,6 +128,7 @@ export function Home() {
                 </a>
               </div>
             </article>
+            </Fragment>
           ))}
             </div>
           </section>;

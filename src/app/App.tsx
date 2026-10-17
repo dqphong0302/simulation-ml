@@ -1,25 +1,7 @@
-import { Fragment, Suspense, lazy, useEffect, useState, type ReactNode } from 'react';
-import { AutoencoderLab, DiffusionLab, GanLab, VaeLab } from '../features/dl-lab/GenLabs';
-import { SvmLab, ForestLab, KmeansLab, PcaLab, RegressionLab } from '../features/ml-lab/ExtraLabs';
-import { CompareLab } from '../features/ml-lab/CompareLab';
-import { DataLab } from '../features/data-lab/DataLab';
-import { DlLab } from '../features/dl-lab/DlLab';
-import { TransformerLab } from '../features/dl-lab/TransformerLab';
-import { AttentionLab } from '../features/dl-lab/AttentionLab';
-import { CnnLab } from '../features/dl-lab/CnnLab';
-import { Concepts } from '../features/genai-playground/Concepts';
-import { Playground } from '../features/genai-playground/Playground';
-import { RagLab } from '../features/rag-lab/RagLab';
-import { NarratedLogistic } from '../features/narrated-lessons/NarratedLogistic';
-import { NarratedTree } from '../features/narrated-lessons/NarratedTree';
-import { NarratedKnn } from '../features/narrated-lessons/NarratedKnn';
-import { KnnLab } from '../features/ml-lab/KnnLab';
-import { LogisticLab } from '../features/ml-lab/LogisticLab';
-import { TreeLab } from '../features/ml-lab/TreeLab';
+import { Suspense, lazy, useEffect, useState, type ReactNode } from 'react';
 import { SettingsPage } from '../features/settings/SettingsPage';
 import { GROUPS, LESSONS, orderLessons } from '../lessons';
-import { SlideLecture } from '../features/narrated-lessons/SlideLecture';
-import { DataGate } from './DataGate';
+import { LabRouter } from './LabRouter';
 import { Icon } from './icons';
 import { ModeBadge, Toasts } from './ui';
 import { Home } from './Home';
@@ -29,9 +11,16 @@ import { LessonPrimer, LessonLearning } from '../learning/LessonLearning';
 import { LearningPath } from '../learning/LearningPath';
 import { Introduction, Capstone } from '../learning/StudyPages';
 import { ExperimentBrief, Warmup } from '../learning/Warmup';
+import '../teaching/teaching.css';
+const NarratedLogistic = lazy(() => import('../features/narrated-lessons/NarratedLogistic').then(m => ({ default: m.NarratedLogistic })));
+const NarratedTree = lazy(() => import('../features/narrated-lessons/NarratedTree').then(m => ({ default: m.NarratedTree })));
+const NarratedKnn = lazy(() => import('../features/narrated-lessons/NarratedKnn').then(m => ({ default: m.NarratedKnn })));
+const SlideLecture = lazy(() => import('../features/narrated-lessons/SlideLecture').then(m => ({ default: m.SlideLecture })));
+const PythonGuide = lazy(() => import('../learning/PythonGuide').then(m => ({ default: m.PythonGuide })));
+const Station = lazy(() => import('../teaching/Station').then(m => ({ default: m.Station })));
+const TeachingDesk = lazy(() => import('../teaching/TeachingDesk').then(m => ({ default: m.TeachingDesk })));
+const StudentWorkshop = lazy(() => import('../teaching/StudentWorkshop').then(m => ({ default: m.StudentWorkshop })));
 const TheoryDoc = lazy(() => import('../features/narrated-lessons/TheoryDoc').then(m => ({ default: m.TheoryDoc })));
-const EdaLab = lazy(() => import('../features/eda/EdaLab').then(m => ({ default: m.EdaLab })));
-const TeachableLab = lazy(() => import('../features/teachable-lab/TeachableLab').then(m => ({ default: m.TeachableLab })));
 
 
 function useHashPath(): string {
@@ -49,38 +38,6 @@ function useHashPath(): string {
   return p;
 }
 
-
-const gate = (key: string, f: (d: Parameters<Parameters<typeof DataGate>[0]['render']>[0]) => ReactNode) =>
-  <DataGate render={(d) => <Fragment key={key + d.source + d.ds.featureNames.join()}>{f(d)}</Fragment>} />;
-
-function labFor(path: string): ReactNode {
-  switch (path) {
-    case '/eda': return <Suspense fallback={<p className="loading">Đang mở trang thống kê…</p>}><EdaLab /></Suspense>;
-    case '/data': return gate(path, (d) => <DataLab d={d} />);
-    case '/ml/knn': return gate(path, (d) => <KnnLab d={d} />);
-    case '/ml/tree': return gate(path, (d) => <TreeLab d={d} />);
-    case '/ml/logistic': return gate(path, (d) => <LogisticLab d={d} />);
-    case '/ml/kmeans': return gate(path, (d) => <KmeansLab d={d} />);
-    case '/ml/pca': return gate(path, (d) => <PcaLab d={d} />);
-    case '/ml/regression': return gate(path, (d) => <RegressionLab d={d} />);
-    case '/ml/forest': return gate(path, (d) => <ForestLab d={d} />);
-    case '/ml/svm': return gate(path, (d) => <SvmLab d={d} />);
-    case '/ml/compare': return gate(path, (d) => <CompareLab d={d} />);
-    case '/ml/teachable': return <Suspense fallback={<p className="loading">Đang mở phòng nhận diện ảnh…</p>}><TeachableLab /></Suspense>;
-    case '/dl/mlp': return gate(path, (d) => <DlLab d={d} />);
-    case '/dl/autoencoder': return gate(path, (d) => <AutoencoderLab d={d} />);
-    case '/dl/vae': return gate(path, (d) => <VaeLab d={d} />);
-    case '/dl/cnn': return <CnnLab />;
-    case '/dl/attention': return <AttentionLab />;
-    case '/dl/transformer': return <TransformerLab />;
-    case '/dl/gan': return <GanLab />;
-    case '/dl/diffusion': return <DiffusionLab />;
-    case '/genai/concepts': return <Concepts />;
-    case '/genai': return <Playground />;
-    case '/rag': return <RagLab />;
-    default: return null;
-  }
-}
 
 function lectureFor(id: string, toLab: () => void): ReactNode {
   if (id === 'KNN') return <NarratedKnn />;
@@ -103,8 +60,8 @@ export function App() {
         {tab !== 'lecture' && <LessonPrimer lessonId={lesson.id} />}
         {tab === 'lab' && <ExperimentBrief lessonId={lesson.id} />}
         {tab === 'lab' && <Warmup lessonId={lesson.id} mode="lab" />}
-        {tab === 'lab' && <div className="lab-anim" id={`lab-${lesson.id}`}>{labFor(path)}</div>}
-        {tab === 'lecture' && lectureFor(lesson.id, toLab)}
+        {tab === 'lab' && <div className="lab-anim" id={`lab-${lesson.id}`}><LabRouter path={path} /></div>}
+        {tab === 'lecture' && <Suspense fallback={<p className="loading">Đang mở bài giảng…</p>}>{lectureFor(lesson.id, toLab)}</Suspense>}
         {tab === 'lecture' && <LessonPrimer lessonId={lesson.id} />}
         {tab === 'lecture' && <Warmup lessonId={lesson.id} mode="lecture" />}
         {tab === 'theory' && <Suspense fallback={<p className="loading">Đang mở tài liệu lý thuyết…</p>}><TheoryDoc lessonId={lesson.id} title={lesson.title} group={lesson.group} /></Suspense>}
@@ -112,9 +69,13 @@ export function App() {
       </div>
     );
   } else if (path === '/intro') page = <Introduction />;
+  else if (path === '/station') page = <Suspense fallback={<p className="loading">Đang mở trạm giảng dạy…</p>}><Station groupId={new URLSearchParams(query ?? '').get('group')} /></Suspense>;
+  else if (path === '/teaching') page = <Suspense fallback={<p className="loading">Đang mở bàn giảng viên…</p>}><TeachingDesk key={query ?? ''} groupId={new URLSearchParams(query ?? '').get('group')} topic={new URLSearchParams(query ?? '').get('topic')} /></Suspense>;
+  else if (path === '/workshop') page = <Suspense fallback={<p className="loading">Đang mở xưởng thực hành…</p>}><StudentWorkshop key={query ?? ''} topic={new URLSearchParams(query ?? '').get('topic') ?? 'EDA'} /></Suspense>;
   else if (path === '/learning') page = <LearningPath />;
   else if (path === '/project') page = <Capstone />;
   else if (path === '/datasets') page = <DataWorkspace />;
+  else if (path === '/python') page = <Suspense fallback={<p className="loading">Đang mở Python & Colab…</p>}><PythonGuide /></Suspense>;
   else if (path === '/settings') page = <SettingsPage />;
   else page = <Home />;
   return <Shell path={path} tab={tab} lesson={lesson}>{page}</Shell>;
@@ -172,7 +133,11 @@ function Shell({ path, tab, lesson, children }: { path: string; tab: string; les
       <aside id="lesson-sidebar" className="sidebar" aria-label="Bài học" inert={mobile && !open} onClick={e => { if ((e.target as HTMLElement).closest('a')) setOpen(false); }} onKeyDown={e => { if (e.key === 'Escape') { setOpen(false); document.getElementById('menu-toggle')?.focus(); } }}>
         <label className="search"><Icon name="search" size={15} /><input placeholder="Tìm bài…" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Tìm bài" /></label>
         {link('/', 'Trang chủ', 'home')}
+        {link('/station', 'Trạm Tin học Y khoa', 'cpu')}
+        {link('/teaching', 'Bàn giảng viên', 'clipboard')}
+        {link('/workshop', 'Xưởng thực hành nhóm', 'chart')}
         {link('/learning', 'Lộ trình học tập', 'file')}
+        {link('/python', 'Python & Colab', 'file')}
         {link('/datasets', 'Nhập dữ liệu', 'database')}
         {GROUPS.map((g) => {
           const items = orderLessons(LESSONS.filter((l) => l.group === g.id && matchesLesson(l, q)));
@@ -192,7 +157,9 @@ function Shell({ path, tab, lesson, children }: { path: string; tab: string; les
                 <Icon name="chevron" size={14} className="chev" />
               </button>
               <div className={`nav-items${shut ? ' shut' : ''}`}>
-                {items.map((l) => link(l.path, l.title.split(':')[0]))}
+                {items.filter(l => !l.exploration).map((l) => link(l.path, l.title.split(':')[0]))}
+                {items.some(l => l.exploration) && <p className="nav-exploration">Khám phá thêm · Không bắt buộc</p>}
+                {items.filter(l => l.exploration).map((l) => link(l.path, l.title.split(':')[0]))}
               </div>
             </div>
           );
@@ -207,7 +174,7 @@ function Shell({ path, tab, lesson, children }: { path: string; tab: string; les
             <header className="lesson-head">
               <div className="lh-row">
                 <div className="lh-title">
-                  <p className="eyebrow">{group?.title}</p>
+                  <p className="eyebrow">{group?.title}{lesson.exploration ? ' · Khám phá thêm · Không bắt buộc' : ''}</p>
                   <h1>{lesson.title}</h1>
                   <p className="lead" title={lesson.goal}>{lesson.goal}</p>
                 </div>

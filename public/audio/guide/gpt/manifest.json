@@ -4,9 +4,9 @@
   "scenes": [
     {
       "id": "s1",
-      "audio": "/audio/guide/gpt/s1.mp3",
-      "duration": 11.28,
-      "caption": "Ở bài này, bạn tự huấn luyện một khối Transformer rất nhỏ. Mỗi âm tiết thành một vector, cộng thông tin vị trí, đi qua attention và mạng truyền thẳng để dự đoán âm tiết tiếp theo.",
+      "audio": "/audio/lectures-v2/gpt/46d1e8444e2155ea.mp3",
+      "duration": 16.48,
+      "caption": "Bạn huấn luyện một Transformer rất nhỏ. Web tách token theo khoảng trắng, còn notebook mẫu dùng ký tự. Token thành vector, kết hợp vị trí rồi qua attention và mạng truyền thẳng để dự đoán token tiếp theo. Các mô hình lớn có thể dùng tokenizer khác.",
       "preset": {
         "title": "Một Transformer nhỏ xíu",
         "bullets": [
@@ -18,28 +18,29 @@
     },
     {
       "id": "s2",
-      "audio": "/audio/guide/gpt/s2.mp3",
-      "duration": 9.12,
-      "caption": "Khi huấn luyện, loss giảm dần vì mô hình nhớ được các mẫu câu trong corpus. Bạn có thể thay corpus, chiều ẩn và learning rate để so sánh.",
+      "audio": "/audio/lectures-v2/gpt/9f6016d840a085eb.mp3",
+      "duration": 14.02,
+      "caption": "Huấn luyện tối ưu dự đoán token tiếp theo trên corpus. Loss có thể dao động, không bảo đảm giảm đều. Loss thấp có thể chỉ là ghi nhớ; cần dữ liệu giữ riêng để đánh giá khả năng tiếp nối ngoài tập học.",
       "preset": {
-        "title": "Học dự đoán âm tiết tiếp theo",
+        "title": "Học dự đoán token tiếp theo",
         "bullets": [
-          "Loss giảm khi mô hình nhớ được mẫu câu",
-          "Thử thay corpus và learning rate"
+          "Loss đo độ khớp nhiệm vụ dự đoán token",
+          "Loss không bảo đảm giảm đều hoặc chứng minh hiểu nội dung"
         ],
         "icon": "📉"
       }
     },
     {
       "id": "s3",
-      "audio": "/audio/guide/gpt/s3.mp3",
-      "duration": 11.12,
-      "caption": "Khi sinh văn bản, temperature thấp cho kết quả ổn định, temperature cao cho kết quả đa dạng hơn. Hãy nhớ mô hình này chỉ học vài câu, nó không hiểu y khoa như một mô hình lớn.",
+      "audio": "/audio/lectures-v2/gpt/894ae76303a1ab97.mp3",
+      "duration": 16.1,
+      "caption": "Temperature thấp làm phân phối lấy mẫu tập trung hơn, cao thường cho lựa chọn đa dạng hơn. Không mức nào bảo đảm câu trả lời đúng hoặc an toàn. Có thể thử temperature trong notebook; mô hình nhỏ hay lớn đều cần kiểm chứng nội dung y khoa.",
       "preset": {
         "title": "Sinh văn bản và temperature",
         "bullets": [
-          "Temperature thấp an toàn, cao đa dạng",
-          "Mô hình nhỏ không hiểu y khoa"
+          "Temperature đổi độ nhọn phân phối lấy mẫu",
+          "Temperature thấp không bảo đảm đúng hoặc an toàn",
+          "Không suy ra năng lực y khoa từ độ trôi chảy"
         ],
         "icon": "✍️"
       }

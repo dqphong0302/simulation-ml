@@ -2,6 +2,7 @@ import { gaussian, makeRng } from '../../core/algorithms/rng';
 import { buildTree, treeProba, type TreeNode } from '../../core/algorithms/tree';
 import { logisticProba, trainLogistic } from '../../core/algorithms/logistic';
 import type { Sample } from '../../core/algorithms/dataset';
+import { fitBoosting, boostProba } from '../../core/algorithms/boosting';
 
 /**
  * Mô hình cho mô phỏng "dữ liệu đổ vào ít hay nhiều".
@@ -11,7 +12,7 @@ import type { Sample } from '../../core/algorithms/dataset';
  */
 
 export type Family = 'classify' | 'regress' | 'density' | 'cluster' | 'pca' | 'stats' | 'retrieve';
-export type Learner = 'knn' | 'knn1' | 'tree' | 'forest' | 'logistic' | 'poly';
+export type Learner = 'knn' | 'knn1' | 'tree' | 'forest' | 'boost' | 'logistic' | 'poly';
 export type V3 = [number, number, number];
 /** y: nhãn (classify), giá trị đích (regress), cụm/chủ đề thật (cluster, retrieve). */
 export interface Pt { x: V3; y: number }
@@ -33,9 +34,12 @@ export const LESSON_CFG: Record<string, Cfg> = {
   KMEANS: C('cluster', 'K-means, k = 3', '3 cụm thật trong không gian 3 biến.'),
   PCA: C('pca', 'PCA trên ma trận hiệp phương sai mẫu', 'Đám mây 3 biến tương quan; trục chính thật là đường đứt.'),
   FOREST: C('classify', 'Random Forest 15 cây so với 1 cây', CLS, ['forest', 'tree']),
+  BOOST: C('classify', 'Boosting gradient 30 stump, learning rate 0,2', CLS, ['boost']),
   SVM: C('classify', 'Ranh giới cong kiểu kernel (minh họa: đặc trưng đa thức bậc 3)', CLS, ['poly', 'logistic']),
   MLP: C('classify', 'Mạng linh hoạt (minh họa: đặc trưng đa thức) so với tuyến tính', CLS, ['poly', 'logistic']),
   CNN: C('classify', 'Mô hình nhiều tham số (minh họa: ghi nhớ 1 láng giềng)', 'Ảnh giả lập đã nén thành 2 đặc trưng.', ['knn1', 'knn']),
+  TRANSFER: C('classify', 'Bộ phân loại KNN trên 2 đặc trưng giả, không fine-tune CNN', 'Mô phỏng riêng tác động cỡ mẫu trên đặc trưng giả; không phải phiên học chuyển giao.', ['knn']),
+  SEG: C('stats', 'Ước lượng cường độ vùng giả, không huấn luyện U-Net hoặc tính Dice', 'Mô phỏng thống kê ba chỉ số giả theo cỡ mẫu, không phải tập ảnh phân đoạn.'),
   ATTN: C('classify', 'Mô hình nhiều tham số (minh họa: ghi nhớ 1 láng giềng)', 'Câu giả lập đã nén thành 2 đặc trưng.', ['knn1', 'knn']),
   GPT: C('density', 'Ước lượng phân phối (minh họa: KDE)', 'Như kho văn bản: mô hình ngôn ngữ học phân phối từ mẫu đã thấy.'),
   AE: C('density', 'Ước lượng phân phối (minh họa: KDE)', GEN),
@@ -47,7 +51,7 @@ export const LESSON_CFG: Record<string, Cfg> = {
   RAG: C('retrieve', 'Truy hồi top-3 theo cosine', 'Mỗi chấm là một đoạn tài liệu trong không gian embedding (6 chủ đề).'),
 };
 
-export const LEARNER_NAME: Record<Learner, string> = { knn: 'KNN k=5', knn1: '1-NN', tree: 'Tree', forest: 'Forest', logistic: 'Logistic', poly: 'Đa thức' };
+export const LEARNER_NAME: Record<Learner, string> = { knn: 'KNN k=5', knn1: '1-NN', tree: 'Tree', forest: 'Forest', boost: 'Boosting', logistic: 'Logistic', poly: 'Đa thức' };
 
 export const MAX_N = 1200;
 const N_TEST = 400;
@@ -127,6 +131,7 @@ export function fitClassifier(tr: Pt[], learner: Learner, seed: number): Prob {
   if (learner === 'knn') return knnFit(tr, 5);
   if (learner === 'knn1') return knnFit(tr, 1);
   const S = toSamples(tr);
+  if (learner === 'boost') { const m = fitBoosting(S, 30, .2); return (a, b) => boostProba(m, [a, b]); }
   if (learner === 'tree') { const t = buildTree(S, 6, 'gini', 2); return (a, b) => treeProba(t, [a, b]); }
   if (learner === 'forest') {
     const r = makeRng(seed + 5), trees: TreeNode[] = [];

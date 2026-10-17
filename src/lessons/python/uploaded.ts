@@ -119,6 +119,7 @@ print("Train/test:", len(train_idx), len(test_idx))
     TREE: 'from sklearn.tree import DecisionTreeClassifier\nestimator = DecisionTreeClassifier(max_depth=3, random_state=SEED)',
     LOGREG: 'from sklearn.linear_model import LogisticRegression\nestimator = LogisticRegression(max_iter=1000)',
     FOREST: 'from sklearn.ensemble import RandomForestClassifier\nestimator = RandomForestClassifier(n_estimators=50, max_depth=5, random_state=SEED)',
+    BOOST: 'from sklearn.ensemble import GradientBoostingClassifier\nestimator = GradientBoostingClassifier(n_estimators=60, max_depth=1, learning_rate=0.1, random_state=SEED)',
     SVM: 'from sklearn.svm import SVC\nestimator = SVC(kernel="rbf", probability=True, random_state=SEED)',
     MLP: 'from sklearn.neural_network import MLPClassifier\nestimator = MLPClassifier(hidden_layer_sizes=(16,), max_iter=500, random_state=SEED)',
     LINREG: 'from sklearn.linear_model import LinearRegression\nestimator = LinearRegression()',

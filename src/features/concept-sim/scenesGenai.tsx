@@ -32,12 +32,12 @@ const GENCON: Scene = {
 };
 
 /* ---------- GENAI ---------- */
-const WORDS = 'Theo tài liệu [1], HbA1c ≥ 6,5% là một tiêu chí; kết luận cần bác sĩ xác nhận.'.split(' ');
+const WORDS = 'Theo đoạn giả lập [1], nhóm A có 20 mẫu. Cần mở nguồn để kiểm tra lại.'.split(' ');
 const GENAI: Scene = {
   steps: [['System prompt', 'Chỉ dẫn vai trò và giới hạn: ví dụ "chỉ trả lời từ tài liệu, nói rõ khi không biết".'],
     ['Ngữ cảnh tùy chỉnh', 'Tài liệu bạn dán vào chiếm chỗ trong cửa sổ ngữ cảnh có giới hạn.'],
     ['Câu hỏi', 'Câu hỏi đi sau cùng; phải còn chỗ cho câu trả lời.'],
-    ['Sinh câu trả lời', 'Mô hình sinh từng token. Nếu ngữ cảnh tràn, phần đầu có thể bị cắt mà không báo.']],
+    ['Sinh câu trả lời', 'Mô hình sinh từng token. Hình minh họa giả định cắt phần đầu khi tràn; dịch vụ thực có thể báo lỗi hoặc xử lý khác.']],
   param: { label: 'Độ dài tài liệu (% cửa sổ)', min: 10, max: 90, step: 5, value: 45, fmt: v => `${v}%` },
   predict: 'Tài liệu chiếm 90% cửa sổ: phần nào sẽ bị cắt, và câu trả lời còn dựa được vào [1] không?',
   draw: (f) => {
@@ -55,7 +55,7 @@ const GENAI: Scene = {
       {shift > 0 && <g><Bx x={36} y={top - shift} w={88} h={shift} c={C.bad} o={.12} r={2} /><Ln x1={30} y1={top} x2={130} y2={top} c={C.bad} w={2} />
         <Tx x={80} y={top - shift - 5} s={10} w={700} c={C.bad}>tràn {Math.round(shift / Hh * 100)}% → bị cắt</Tx></g>}
       <Bx x={164} y={40} w={186} h={150} c={C.surf} stroke={C.line} />
-      {f.s >= 2 && <Tx x={172} y={60} a="start" s={10} c={C.b} w={700}>Hỏi: ngưỡng HbA1c cho ĐTĐ?</Tx>}
+      {f.s >= 2 && <Tx x={172} y={60} a="start" s={10} c={C.b} w={700}>Hỏi: nhóm A có bao nhiêu mẫu?</Tx>}
       {lines.map((l, i) => <Tx key={i} x={172} y={84 + i * 16} a="start" s={10} c={C.ink}>{l}</Tx>)}
       {f.s === 3 && nW < WORDS.length && <Bx x={174 + (lines[lines.length - 1]?.length ?? 0) * 5.2} y={74 + Math.max(0, lines.length - 1) * 16} w={6} h={13} c={C.c} o={(Math.sin(f.t * 10) + 1) / 2} r={1} />}
       {f.s === 3 && shift > 0 && f.p > .9 && <Tx x={172} y={180} a="start" s={9} c={C.bad} w={700}>⚠ system prompt có thể đã bị cắt</Tx>}
@@ -69,8 +69,8 @@ const QP = { x: 238, y: 98 };
 const RANK = CH.map(([x, y], i) => ({ i, d: Math.hypot(x - QP.x, y - QP.y) })).sort((a, b) => a.d - b.d);
 const RAG: Scene = {
   steps: [['Chia nhỏ tài liệu', 'Mỗi tài liệu được cắt thành các đoạn (chunk) có đánh dấu nguồn.'],
-    ['Nhúng vector', 'Mỗi chunk thành một vector; chunk cùng chủ đề nằm gần nhau.'],
-    ['Truy xuất top-k', 'Câu hỏi cũng được nhúng; lấy k chunk gần nhất.'],
+    ['Nhúng vector (minh họa)', 'Hình dùng tọa độ đồ chơi, không phải embedding đã học. Lab thật cho chọn BM25 cục bộ hoặc embedding qua API.'],
+    ['Truy xuất top-k', 'Ví dụ vector lấy k chunk gần câu hỏi. BM25 xếp theo từ khóa, không dùng khoảng cách 2D này. Gần không bảo đảm đúng ý.'],
     ['Sinh có dẫn nguồn', 'Chỉ các chunk truy xuất được đưa vào prompt. Kiểm tra trích dẫn có thật sự hỗ trợ câu trả lời.']],
   param: { label: 'Số chunk truy xuất k', min: 1, max: 4, step: 1, value: 2 },
   predict: 'k = 4 đưa thêm chunk xa chủ đề vào prompt — câu trả lời chắc chắn hơn hay dễ lạc hơn?',

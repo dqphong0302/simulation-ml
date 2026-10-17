@@ -20,28 +20,28 @@
     },
     {
       "id": "s1",
-      "audio": "/audio/guide/svm/s1.mp3",
-      "duration": 9.52,
-      "caption": "SVM tìm đường phân cách sao cho khoảng trống giữa hai nhóm là rộng nhất. Những điểm nằm sát lề gọi là support vector, chúng quyết định ranh giới.",
+      "audio": "/audio/lectures-v2/svm/829595cc93719514.mp3",
+      "duration": 13.68,
+      "caption": "SVM biên mềm cân bằng độ rộng lề với mức phạt các điểm vi phạm lề. Support vector góp phần xác định nghiệm, có thể nằm trên lề hoặc bên trong lề, kể cả phía phân loại sai. Lề không phải khoảng an toàn y khoa.",
       "preset": {
-        "title": "Đường phân cách có lề rộng nhất",
+        "title": "Lề và các điểm hỗ trợ",
         "bullets": [
-          "SVM tìm ranh giới cách xa hai nhóm nhất",
-          "Support vector là các điểm nằm sát lề"
+          "Biên mềm cân bằng lề và phạt vi phạm",
+          "Support vector có thể ở trên hoặc bên trong lề"
         ],
         "icon": "🛣️"
       }
     },
     {
       "id": "s2",
-      "audio": "/audio/guide/svm/s2.mp3",
-      "duration": 10,
-      "caption": "Tham số C điều chỉnh mức phạt khi phân loại sai. C lớn cố phân loại đúng mọi điểm nên dễ khớp nhiễu. C nhỏ chấp nhận vài lỗi để có lề rộng hơn.",
+      "audio": "/audio/lectures-v2/svm/ad9d4f23af16c4f3.mp3",
+      "duration": 12,
+      "caption": "C điều khiển mức phạt vi phạm lề, không chỉ điểm phân loại sai. C lớn phạt mạnh hơn nhưng không bảo đảm phân loại đúng mọi điểm. Chọn C bằng validation cùng với scaling và kernel.",
       "preset": {
         "title": "Tham số C",
         "bullets": [
-          "C lớn phạt nặng điểm sai",
-          "C nhỏ cho lề rộng hơn, chấp nhận vài lỗi"
+          "C điều khiển mức phạt vi phạm lề",
+          "Chọn bằng validation, không có C tốt cho mọi bảng"
         ],
         "icon": "🎚️"
       }

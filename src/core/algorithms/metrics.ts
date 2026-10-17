@@ -11,9 +11,11 @@ export interface Metrics {
 }
 
 const div = (a: number, b: number): number | null => (b === 0 ? null : a / b);
+const binary = (values: Label[]) => values.every(value => value === 0 || value === 1);
 
 /** Lớp dương là nhãn 1. Mẫu số bằng 0 trả về null thay vì số giả. */
 export function confusion(yTrue: Label[], yPred: Label[]): Confusion {
+  if (yTrue.length !== yPred.length || !binary(yTrue) || !binary(yPred)) throw new Error('Nhãn thật/dự đoán cần cùng số mẫu và chỉ gồm 0/1.');
   const c = { tp: 0, fp: 0, tn: 0, fn: 0 };
   yTrue.forEach((t, i) => {
     const p = yPred[i];
@@ -28,8 +30,8 @@ export function confusion(yTrue: Label[], yPred: Label[]): Confusion {
 export function metricsFrom(c: Confusion): Metrics {
   const precision = div(c.tp, c.tp + c.fp);
   const recall = div(c.tp, c.tp + c.fn);
-  const f1 = precision === null || recall === null || precision + recall === 0
-    ? null : (2 * precision * recall) / (precision + recall);
+  // The count form remains defined when precision or recall individually is not.
+  const f1 = div(2 * c.tp, 2 * c.tp + c.fp + c.fn);
   return {
     confusion: c,
     accuracy: div(c.tp + c.tn, c.tp + c.tn + c.fp + c.fn),
@@ -47,17 +49,18 @@ export interface RocPoint { threshold: number; fpr: number; tpr: number }
 
 /** ROC từ điểm số liên tục. Trả về null nếu chỉ có một lớp (không xác định). */
 export function roc(yTrue: Label[], scores: number[]): { points: RocPoint[]; auc: number } | null {
+  if (yTrue.length !== scores.length || !binary(yTrue) || scores.some(s => !Number.isFinite(s))) throw new Error('ROC cần nhãn 0/1 và điểm số hữu hạn cho đúng từng mẫu.');
   const pos = yTrue.filter((y) => y === 1).length;
   const neg = yTrue.length - pos;
   if (pos === 0 || neg === 0) return null;
-  const thresholds = Array.from(new Set(scores)).sort((a, b) => b - a);
+  const ranked = scores.map((score, i) => ({ score, label: yTrue[i] })).sort((a, b) => b.score - a.score);
   const points: RocPoint[] = [{ threshold: Infinity, fpr: 0, tpr: 0 }];
-  for (const th of thresholds) {
-    let tp = 0, fp = 0;
-    scores.forEach((s, i) => {
-      if (s >= th) { if (yTrue[i] === 1) tp++; else fp++; }
-    });
-    points.push({ threshold: th, fpr: fp / neg, tpr: tp / pos });
+  let tp = 0, fp = 0;
+  for (let i = 0; i < ranked.length; i++) {
+    if (ranked[i].label === 1) tp++; else fp++;
+    // Equal scores enter together: their arbitrary order must not alter AUC.
+    if (ranked[i + 1]?.score === ranked[i].score) continue;
+    points.push({ threshold: ranked[i].score, fpr: fp / neg, tpr: tp / pos });
   }
   let auc = 0;
   for (let i = 1; i < points.length; i++) {

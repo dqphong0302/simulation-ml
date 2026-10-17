@@ -20,47 +20,68 @@ async function makeWorker(onLog: (p: number, s: string) => void) {
   });
 }
 
-async function pdfPagesToCanvas(file: File, scale: number, maxPages: number): Promise<HTMLCanvasElement[]> {
+/** Render/recognize one page at a time; never retain all full-size page canvases. */
+async function* imagesFromFile(file: File, signal: AbortSignal) {
+  signal.throwIfAborted();
+  if (!/\.pdf$/i.test(file.name)) { yield { image: file, page: 1, pages: 1 }; return; }
   const pdfjs = await import('pdfjs-dist');
   pdfjs.GlobalWorkerOptions.workerSrc = (await import('pdfjs-dist/build/pdf.worker.min.mjs?url')).default;
-  const pdf = await pdfjs.getDocument({ data: new Uint8Array(await file.arrayBuffer()), enableXfa: false }).promise;
-  if (pdf.numPages > maxPages) throw new Error(`PDF có ${pdf.numPages} trang; OCR trên máy giới hạn ${maxPages} trang.`);
-  const out: HTMLCanvasElement[] = [];
-  for (let i = 1; i <= pdf.numPages; i++) {
-    const page = await pdf.getPage(i);
-    const vp = page.getViewport({ scale });
-    const c = document.createElement('canvas');
-    c.width = Math.ceil(vp.width); c.height = Math.ceil(vp.height);
-    // intent 'print' không phụ thuộc requestAnimationFrame, nên vẫn chạy khi người học chuyển sang tab khác.
-    await page.render({ canvas: c, viewport: vp, intent: 'print' }).promise;
-    out.push(c);
+  signal.throwIfAborted();
+  const task = pdfjs.getDocument({ data: new Uint8Array(await file.arrayBuffer()), enableXfa: false });
+  const abort = () => { void task.destroy().catch(() => {}); };
+  signal.addEventListener('abort', abort, { once: true });
+  try {
+    signal.throwIfAborted();
+    const pdf = await task.promise;
+    if (pdf.numPages > OCR_LIMITS.pages) throw new Error(`PDF có ${pdf.numPages} trang; OCR trên máy giới hạn ${OCR_LIMITS.pages} trang.`);
+    for (let i = 1; i <= pdf.numPages; i++) {
+      signal.throwIfAborted();
+      const page = await pdf.getPage(i);
+      const vp = page.getViewport({ scale: 2 });
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.ceil(vp.width); canvas.height = Math.ceil(vp.height);
+      try {
+        // 'print' also works when the browser tab is not visible.
+        await page.render({ canvas, viewport: vp, intent: 'print' }).promise;
+        signal.throwIfAborted();
+        yield { image: canvas, page: i, pages: pdf.numPages };
+      } finally { canvas.width = 0; canvas.height = 0; }
+    }
+  } finally {
+    signal.removeEventListener('abort', abort);
+    await task.destroy();
   }
-  void pdf.cleanup();
-  return out;
 }
 
 /** Nhận dạng chữ từ PDF scan hoặc ảnh; trả văn bản, các trang ngăn bởi \f (giữ số trang cho dẫn nguồn). */
 export async function ocrFile(file: File, onProgress: (p: OcrProgress) => void, signal: AbortSignal): Promise<{ text: string; paged: boolean; confidence: number }> {
+  signal.throwIfAborted();
   const isPdf = /\.pdf$/i.test(file.name);
   if (!isPdf && file.size > OCR_LIMITS.imageBytes) throw new Error('Ảnh quá lớn cho OCR (tối đa 15 MB).');
-  const images: (HTMLCanvasElement | File)[] = isPdf ? await pdfPagesToCanvas(file, 2, OCR_LIMITS.pages) : [file];
-  let page = 0;
-  const worker = await makeWorker((p, s) => onProgress({ page: page + 1, pages: images.length, pct: p, status: s }));
-  const abort = () => { void worker.terminate(); };
-  signal.addEventListener('abort', abort);
+  let page = 0, pages = 0;
+  let worker: Awaited<ReturnType<typeof makeWorker>> | null = null;
+  let termination: Promise<unknown> | undefined;
+  const terminate = () => termination ??= worker ? worker.terminate() : Promise.resolve();
+  const abort = () => { void terminate().catch(() => {}); };
   try {
     const texts: string[] = [];
     let conf = 0;
-    for (page = 0; page < images.length; page++) {
-      if (signal.aborted) throw new DOMException('Đã hủy', 'AbortError');
-      const r = await worker.recognize(images[page]);
+    for await (const item of imagesFromFile(file, signal)) {
+      page = item.page; pages = item.pages;
+      if (!worker) {
+        worker = await makeWorker((p, s) => onProgress({ page, pages, pct: p, status: s }));
+        signal.addEventListener('abort', abort, { once: true });
+      }
+      // Covers cancellation while the worker was still being initialized.
+      signal.throwIfAborted();
+      const r = await worker.recognize(item.image);
+      signal.throwIfAborted();
       texts.push(r.data.text.trim());
       conf += r.data.confidence;
     }
-    return { text: texts.join('\f'), paged: isPdf, confidence: conf / Math.max(1, images.length) };
+    return { text: texts.join('\f'), paged: isPdf, confidence: conf / Math.max(1, pages) };
   } finally {
     signal.removeEventListener('abort', abort);
-    images.forEach((c) => { if (c instanceof HTMLCanvasElement) { c.width = 0; c.height = 0; } }); // giải phóng bộ nhớ
-    if (!signal.aborted) await worker.terminate();
+    await terminate().catch(() => {});
   }
 }

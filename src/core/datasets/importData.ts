@@ -5,7 +5,7 @@ export const EXPLORE_ROWS = 20_000;
 export const TRAIN_ROWS = 2_000;
 export const TRAIN_COLUMNS = 32;
 export function modelLimitsFor(path: string) {
-  if (path === '/ml/forest') return { rows: 500, columns: 8 };
+  if (path === '/ml/forest' || path === '/ml/boosting') return { rows: 500, columns: 8 };
   if (path === '/ml/svm') return { rows: 500, columns: 16 };
   if (path === '/ml/tree') return { rows: 1000, columns: 16 };
   return { rows: TRAIN_ROWS, columns: TRAIN_COLUMNS };
@@ -104,8 +104,8 @@ export function detectDelimiter(text: string) {
   return best;
 }
 
-export function parseCsvText(text: string): FreeTable {
-  const delimiter = detectDelimiter(text), builder = new TableBuilder();
+export function parseCsvText(text: string, delimiter = detectDelimiter(text)): FreeTable {
+  const builder = new TableBuilder();
   const p = new CsvStreamParser(delimiter, row => builder.add(row));
   p.feed(text); p.end();
   return builder.table(delimiter);

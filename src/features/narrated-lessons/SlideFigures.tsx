@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { pearson } from '../../core/algorithms/dataset';
 
 /**
  * Hình minh họa riêng cho từng slide (khóa theo tiêu đề slide). Vẽ SVG 360×240, cùng một bảng màu:
@@ -77,11 +78,11 @@ const FIG: Record<string, () => ReactNode> = {
   'Thử, quan sát và kể lại': () => <>
     <T x={95} y={32} s={11} w={650} c={C.mute}>Trước</T><T x={265} y={32} s={11} w={650} c={C.mute}>Sau</T>
     <Hist x={30} y={44} w={130} h={100} v={[0.1, 0.25, 0.6, 1, 0.8, 0.45, 0.25, 0.12, 0.06, 0.04, 0.02, 0.05]} c={C.b} />
-    <Hist x={200} y={44} w={130} h={100} v={[0.08, 0.2, 0.5, 0.85, 1, 0.8, 0.5, 0.25, 0.1]} />
+    <Hist x={200} y={44} w={130} h={100} v={[0.1, 0.25, 0.6, 1, 0.8, 0.45, 0.25, 0.12, 0.06, 0.04, 0.02, 0.05]} />
     <Arrow x1={164} y1={95} x2={196} y2={95} c={C.a} />
-    <T x={95} y={162} s={10} c={C.mute}>0–846 µU/mL</T><T x={265} y={162} s={10} c={C.mute}>−2 … 2</T>
+    <T x={95} y={162} s={10} c={C.mute}>Thang đo gốc (minh họa)</T><T x={265} y={162} s={10} c={C.mute}>Z-score, không đơn vị</T>
     <rect x={70} y={182} width={220} height={36} rx="8" fill={C.bg} stroke={C.line} />
-    <T x={180} y={205} s={11.5} c={C.ink}>✍ Hình dạng đổi ra sao? Ghi lại.</T>
+    <T x={180} y={205} s={11} c={C.ink}>Z-score đổi thang, không tự làm hết lệch</T>
   </>,
   'Thí nghiệm: trước và sau xử lý': () => {
     const steps = [['Chia', 'cùng seed', C.mute], ['Xử lý', 'đổi 1 thứ', C.b], ['Mô hình', 'giữ nguyên', C.mute], ['So sánh', 'trên val', C.a]] as const;
@@ -124,30 +125,30 @@ const FIG: Record<string, () => ReactNode> = {
     {[['n', '768'], ['Trung bình', '120,9'], ['Median', '117'], ['Độ lệch chuẩn', '32,0'], ['Min – Max', '0 – 199']].map(([k, v], i) => <g key={k}>
       <rect x={170} y={36 + i * 32} width={168} height={26} rx="6" fill={i % 2 ? '#fff' : C.soft} stroke={C.line} />
       <T x={180} y={53 + i * 32} s={11} a="start" c={C.mute}>{k}</T><T x={328} y={53 + i * 32} s={12} a="end" w={700}>{v}</T></g>)}
-    <T x={180} y={218} s={11} c={C.mute}>Vài con số tóm tắt hàng trăm giá trị</T>
+    <T x={180} y={218} s={10.5} c={C.mute}>Ví dụ Pima thô, không phải tệp đang tải</T>
   </>,
   'Trung tâm: trung bình và median': () => <>
     <Hist x={30} y={40} w={300} h={130} v={[0.55, 1, 0.85, 0.6, 0.4, 0.28, 0.18, 0.12, 0.08, 0.06, 0.04, 0.03, 0.05, 0.02]} />
     <line x1={102} x2={102} y1={34} y2={172} stroke={C.ink} strokeWidth="2.5" /><T x={102} y={28} s={11} w={700}>median</T>
     <line x1={134} x2={134} y1={44} y2={172} stroke={C.bad} strokeWidth="2.5" strokeDasharray="6 4" /><T x={150} y={42} s={11} w={700} c={C.bad} a="start">trung bình</T>
     <Arrow x1={210} y1={130} x2={300} y2={130} c={C.b} /><T x={256} y={122} s={10} c={C.b}>đuôi dài kéo trung bình</T>
-    <T x={180} y={200} s={11.5} w={650}>Lệch phải: trung bình &gt; median</T>
+    <T x={180} y={200} s={11.5} w={650}>Ví dụ này: trung bình &gt; median</T>
     <T x={180} y={218} s={10.5} c={C.mute}>Median bền với ngoại lai hơn trung bình</T>
   </>,
   'Độ phân tán: độ lệch chuẩn và IQR': () => {
     const X = (v: number) => 40 + v * 2.8;
     return <>
-      <line x1={X(5)} x2={X(30)} y1={100} y2={100} stroke={C.mute} strokeWidth="2" /><line x1={X(70)} x2={X(88)} y1={100} y2={100} stroke={C.mute} strokeWidth="2" />
-      <line x1={X(5)} x2={X(5)} y1={88} y2={112} stroke={C.mute} strokeWidth="2" /><line x1={X(88)} x2={X(88)} y1={88} y2={112} stroke={C.mute} strokeWidth="2" />
-      <rect x={X(30)} y={76} width={X(70) - X(30)} height={48} fill={C.soft} stroke={C.a} strokeWidth="2" rx="3" />
-      <line x1={X(46)} x2={X(46)} y1={76} y2={124} stroke={C.ink} strokeWidth="3" />
+      <line x1={X(5)} x2={X(30)} y1={100} y2={100} stroke={C.mute} strokeWidth="2" /><line x1={X(50)} x2={X(78)} y1={100} y2={100} stroke={C.mute} strokeWidth="2" />
+      <line x1={X(5)} x2={X(5)} y1={88} y2={112} stroke={C.mute} strokeWidth="2" /><line x1={X(78)} x2={X(78)} y1={88} y2={112} stroke={C.mute} strokeWidth="2" />
+      <rect x={X(30)} y={76} width={X(50) - X(30)} height={48} fill={C.soft} stroke={C.a} strokeWidth="2" rx="3" />
+      <line x1={X(40)} x2={X(40)} y1={76} y2={124} stroke={C.ink} strokeWidth="3" />
       <circle cx={X(96)} cy={100} r={5} fill={C.b} /><circle cx={X(99)} cy={100} r={5} fill={C.b} />
-      <T x={X(30)} y={66} s={10.5} w={650}>Q1</T><T x={X(46)} y={66} s={10.5} w={650}>median</T><T x={X(70)} y={66} s={10.5} w={650}>Q3</T>
+      <T x={X(30)} y={66} s={10.5} w={650}>Q1</T><T x={X(40)} y={48} s={10.5} w={650}>median</T><T x={X(50)} y={66} s={10.5} w={650}>Q3</T>
       <T x={X(97)} y={86} s={10} c={C.b} w={650}>ngoại lai</T>
-      <line x1={X(30)} x2={X(70)} y1={140} y2={140} stroke={C.a} strokeWidth="2" /><line x1={X(30)} x2={X(30)} y1={134} y2={146} stroke={C.a} strokeWidth="2" /><line x1={X(70)} x2={X(70)} y1={134} y2={146} stroke={C.a} strokeWidth="2" />
-      <T x={X(50)} y={160} s={11} w={700} c={C.a2}>IQR = Q3 − Q1 (50% ở giữa)</T>
+      <line x1={X(30)} x2={X(50)} y1={140} y2={140} stroke={C.a} strokeWidth="2" /><line x1={X(30)} x2={X(30)} y1={134} y2={146} stroke={C.a} strokeWidth="2" /><line x1={X(50)} x2={X(50)} y1={134} y2={146} stroke={C.a} strokeWidth="2" />
+      <T x={X(50)} y={160} s={11} w={700} c={C.a2}>IQR = Q3 − Q1 (độ rộng trung tâm)</T>
       <T x={180} y={200} s={11} c={C.mute}>Râu: tới giá trị xa nhất trong 1,5·IQR</T>
-      <T x={180} y={218} s={11} c={C.mute}>σ: khoảng cách trung bình tới trung bình</T>
+      <T x={180} y={218} s={11} c={C.mute}>s = √[Σ(x − x̄)² / (n − 1)]</T>
     </>;
   },
   'Hình dạng phân bố': () => <>
@@ -155,11 +156,11 @@ const FIG: Record<string, () => ReactNode> = {
       <rect x={10 + i * 116} y={40} width={108} height={130} rx="10" fill={C.bg} stroke={C.line} />
       <Hist x={20 + i * 116} y={56} w={88} h={80} v={v as number[]} c={i === 2 ? C.b : C.a} />
       <T x={64 + i * 116} y={156} s={11.5} w={700}>{t as string}</T></g>)}
-    <T x={180} y={200} s={11} c={C.mute}>Hai đỉnh thường gợi ý hai nhóm khác nhau</T>
-    <T x={180} y={218} s={11} c={C.mute}>Lệch mạnh: cân nhắc biến đổi log</T>
+    <T x={180} y={200} s={10.5} c={C.mute}>Nhiều đỉnh: kiểm tra nhóm, đơn vị và bins</T>
+    <T x={180} y={218} s={10.5} c={C.mute}>Log chỉ phù hợp miền giá trị và mục tiêu nhất định</T>
   </>,
   'Biến phân loại: đếm tần suất': () => <>
-    {[['Nam', 0.9], ['Nữ', 0.75], ['Khác', 0.12]].map(([t, v], i) => <g key={t as string}>
+    {[['Nhóm A', 412 / 768], ['Nhóm B', 340 / 768], ['Nhóm C', 16 / 768]].map(([t, v], i) => <g key={t as string}>
       <T x={70} y={74 + i * 46} s={12} a="end" w={650}>{t as string}</T>
       <rect x={80} y={58 + i * 46} width={(v as number) * 180} height={24} rx="5" fill={[C.a, C.b, C.mute][i]} />
       <T x={86 + (v as number) * 180} y={75 + i * 46} s={11} a="start" c={C.mute}>{[412, 340, 16][i]} · {[54, 44, 2][i]}%</T></g>)}
@@ -173,7 +174,7 @@ const FIG: Record<string, () => ReactNode> = {
       return <g key={t as string}>
         <rect x={10 + i * 116} y={40} width={108} height={120} rx="10" fill={C.bg} stroke={C.line} />
         {pts.map(([u, v], k) => <circle key={k} cx={22 + i * 116 + u * 84} cy={146 - Math.max(0, Math.min(1, v)) * 92} r={3.5} fill={C.a} />)}
-        <T x={64 + i * 116} y={182} s={12} w={700}>{t as string}</T></g>;
+        <T x={64 + i * 116} y={182} s={12} w={700}>r = {pearson(pts.map(p => p[0]), pts.map(p => p[1]))?.toFixed(2).replace('.', ',')}</T></g>;
     })}
     <T x={180} y={218} s={11} c={C.mute}>Tương quan đo quan hệ tuyến tính — không phải nhân quả</T>
   </>,
@@ -182,7 +183,7 @@ const FIG: Record<string, () => ReactNode> = {
     <Hist x={30} y={40} w={300} h={120} v={bell(14, 0.62, 0.15, 0.75)} c={C.b} o={0.55} />
     <rect x={40} y={176} width={12} height={12} fill={C.a} /><T x={58} y={186} s={11} a="start">Outcome = 0</T>
     <rect x={160} y={176} width={12} height={12} fill={C.b} /><T x={178} y={186} s={11} a="start">Outcome = 1</T>
-    <T x={180} y={216} s={11} c={C.mute}>Hai phân bố tách nhau → biến có ích cho phân loại</T>
+    <T x={180} y={216} s={10.5} c={C.mute}>Khác biệt trong mẫu chưa chứng minh dự đoán ngoài mẫu</T>
   </>,
   'Kiểm tra chất lượng dữ liệu': () => <>
     {[['Ô thiếu', '0,0%', C.ok], ['Dòng trùng lặp', '0', C.ok], ['Cột giống mã ID', 'không', C.ok], ['0 nghi là thiếu', '5 cột', C.b], ['Lệch mạnh', 'Insulin', C.b]].map(([k, v, c], i) => <g key={k}>

@@ -6,7 +6,7 @@ export function Introduction() {
     <LessonPrimer lessonId="INTRO" />
     <section className="intro-examples" aria-label="Ba cách tiếp cận">
       <article><h2>Quy tắc cố định</h2><p>Đầu vào: số đo giả lập. Đầu ra: thông báo theo một quy tắc do người viết. Hệ thống không tự học từ ví dụ.</p></article>
-      <article><h2>Học máy</h2><p>Đầu vào: bảng hoặc ảnh có nhãn. Huấn luyện tìm quy luật; suy luận dùng quy luật đó cho mẫu mới. Cần kiểm tra sai sót ngoài tập đã học.</p></article>
+      <article><h2>Học máy</h2><p>Đầu vào có thể là bảng, ảnh hoặc dạng dữ liệu khác. Học có giám sát dùng nhãn; học không giám sát tìm cấu trúc mà không cần nhãn đích. Huấn luyện tìm quy luật; suy luận áp dụng cho mẫu mới. Cần kiểm tra ngoài tập đã học.</p></article>
       <article><h2>AI tạo sinh</h2><p>Đầu vào: câu hỏi và ngữ cảnh. Đầu ra: nội dung mới. Văn bản nghe hợp lý vẫn có thể sai hoặc bịa nguồn; không coi đó là y lệnh.</p></article>
     </section>
     <LessonLearning lessonId="INTRO" />

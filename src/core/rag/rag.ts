@@ -63,6 +63,7 @@ export function bm25(chunks: Chunk[], query: string, topK: number, k1 = 1.5, b =
 }
 
 export function cosine(a: number[], b: number[]): number {
+  if (!a.length || a.length !== b.length || [...a, ...b].some(n => !Number.isFinite(n))) throw new Error('Vector cần cùng số chiều và chỉ chứa số hữu hạn.');
   let d = 0, na = 0, nb = 0;
   for (let i = 0; i < a.length; i++) { d += a[i] * b[i]; na += a[i] * a[i]; nb += b[i] * b[i]; }
   return na === 0 || nb === 0 ? 0 : d / Math.sqrt(na * nb);

@@ -13,23 +13,41 @@
 
 ---
 
+## Trạm giảng dạy Tin học Y khoa
+
+- `#/station`: sáu nhóm học tập, kết nối học liệu/lab hiện có và ghi rõ điều kiện API/Internet.
+- `#/teaching`: 31 mẫu theo từng học liệu trong sáu nhóm hiện tại; sửa nhiệm vụ, thời gian, học liệu và sản phẩm; dẫn buổi học bằng đồng hồ; xuất riêng giáo án giảng viên và phiếu sinh viên (Markdown/JSON).
+- `#/workshop?topic=TREE`: phiếu thực hành theo chủ đề, mở lab ở tab riêng, ghi bằng chứng và tự rà soát. Nhập phiếu JSON giảng viên, tải bản làm JSON để mở lại hoặc báo cáo Markdown để chia sẻ. Không tự lưu ghi chép; có cảnh báo trước khi rời bằng liên kết trong trạm hoặc đóng trang. Phiếu sinh viên không chứa ghi chú riêng của giảng viên.
+- Giáo án lưu trên trình duyệt, có sao lưu/nhập JSON thêm bản mới, không ghi đè buổi cũ. Không quản lý tài khoản, danh sách sinh viên, thu bài hoặc đồng bộ điểm.
+- Giữ sáu nhóm theo phạm vi bộ môn đã chọn, không thêm học phần mới. Mẫu mới thích nghi với bảng đang tải lên khi bài hỗ trợ; phiếu tùy chỉnh đã nhập không bị tự viết lại. Không hứa mọi định dạng đều dùng được cho mọi lab. Xem [phạm vi và nghiệm thu](docs/teaching-station.md).
+- Kiểm thử thêm: `pnpm test:teaching`, `pnpm test:workshop` với dev server tại cổng 5175 hoặc biến `BASE_URL` tương ứng.
+
 ## 🌟 Điểm nổi bật (Key Features)
 
-- **23 Bài học & Thực hành Chuyên sâu**: Phủ khắp 4 trục kiến thức từ Nền tảng Dữ liệu, Machine Learning cổ điển, Deep Learning đến Generative AI / RAG.
-- **Client-Side First & Bảo mật Dữ liệu**: Toàn bộ thuật toán huấn luyện, tiền xử lý và suy luận chạy 100% tại trình duyệt của người dùng thông qua **Web Workers** đa luồng. Không gửi dữ liệu người dùng về máy chủ.
+- **26 Bài học & Thực hành**: 4 trục kiến thức từ Nền tảng Dữ liệu, Machine Learning cổ điển, Deep Learning đến Generative AI / RAG; có thêm Python & Colab và công cụ giảng viên riêng.
+- **Client-Side First**: Các lab xử lý dữ liệu và mô hình nhỏ trên thiết bị, một số dùng Web Workers. Khi dùng GenAI/API, nội dung được chọn gửi trực tiếp tới API đã cấu hình; không gửi thông tin nhạy cảm. Không bảo đảm mọi luồng hoạt động offline.
 - **Xử lý Dữ liệu Lớn (Worker-powered Ingestion)**: Hỗ trợ tệp CSV/TSV/TXT lên đến 100 MiB (đọc streaming theo khối), Excel (XLSX/XLS) & JSON lên đến 30 MiB với giới hạn an toàn 200.000 dòng / 2.000.000 ô dữ liệu.
-- **Đa phương tiện Đồng bộ**: Toàn bộ 23 bài học đều tích hợp khung bài giảng chuẩn 16:9, hình minh họa trực quan và thuyết minh âm thanh giọng đọc tiếng Việt chất lượng cao (neural TTS).
-- **RAG Lab & OCR Tài liệu**: Cho phép tải lên tệp TXT, Markdown, CSV, DOCX và PDF (có lớp văn bản hoặc ảnh scan qua client-side Tesseract.js), thực hiện chunking, truy xuất lai (BM25 + Semantic Embedding) và kiểm toán dẫn nguồn (citation check).
+- **Đa phương tiện Đồng bộ**: 26 bài có slide, hình minh họa và thuyết minh tiếng Việt. Bố cục co giãn theo nội dung và màn hình, không ép chữ vào khung 16:9.
+- **RAG Lab & OCR Tài liệu**: Cho phép tải lên tệp TXT, Markdown, CSV, DOCX và PDF (có lớp văn bản hoặc ảnh scan qua client-side Tesseract.js), thực hiện chunking, truy xuất BM25 hoặc Semantic Embedding và kiểm tra mã dẫn nguồn (citation check, không chứng minh nội dung đúng).
+
+## Kiểm tra và bảo trì
+
+- `pnpm check`: unit tests, TypeScript và production build.
+- Chạy dev server (`pnpm dev --port 5175`), rồi `pnpm test:browser` để kiểm tra toàn bộ luồng trình duyệt. Dùng `BASE_URL` khi kiểm tra server/cổng khác; các suite dùng chung cấu hình.
+- `pnpm test:providers`: contract/API UI với endpoint mock và đọc DOCX/PDF, OCR ảnh thật tại thiết bị; không gọi API có phí.
+- Chi tiết lỗi đã sửa, cấu trúc refactor và giới hạn kiểm chứng: [báo cáo rà soát code](docs/code-quality-review.md).
 
 ---
 
-## 📚 Danh mục 23 Bài Thực hành (Curriculum Matrix)
+## 📚 Danh mục bài thực hành (26 bài)
+
+Ba bài bổ sung: Gradient Boosting (`#/ml/boosting`), học chuyển giao (`#/dl/transfer`), phân đoạn ảnh (`#/dl/segmentation`); xem [phạm vi và kiểm chứng](docs/application-lessons.md). Các bảng dưới đây liệt kê 23 bài gốc.
 
 ### 📊 1. Nền tảng Dữ liệu (Data Foundation)
 | Mã | Bài học | Đường dẫn | Chế độ | Mục tiêu cốt lõi |
 |---|---|---|---|---|
-| `EDA` | **Khám phá dữ liệu (EDA)** | `#/eda` | Huấn luyện thật | Tải bảng dữ liệu bất kỳ, thống kê mô tả, histogram phân tầng, boxplot, ma trận tương quan và cảnh báo chất lượng dữ liệu. |
-| `DATA` | **Tiền xử lý dữ liệu** | `#/data` | Huấn luyện thật | Xử lý giá trị khuyết thiếu (imputation), lọc ngoại lai (outliers), chuẩn hóa (Scaler) và nguyên tắc fit độc quyền trên tập Train. |
+| `EDA` | **Khám phá dữ liệu (EDA)** | `#/eda` | Mô phỏng nguyên lý / tính thống kê | Nhận bảng theo định dạng/giới hạn hỗ trợ, thống kê mô tả, histogram phân tầng, boxplot, tương quan và cảnh báo chất lượng. Không hiểu được mọi cấu trúc tệp. |
+| `DATA` | **Tiền xử lý dữ liệu** | `#/data` | Mô phỏng nguyên lý | Điền thiếu, lọc ngoại lai, chuẩn hóa và nguyên tắc fit trên Train; không phải một mô hình dự đoán bệnh. |
 
 ### 🧠 2. Machine Learning Cổ điển
 | Mã | Bài học | Đường dẫn | Chế độ | Mục tiêu cốt lõi |
@@ -99,7 +117,7 @@ simulation-ml/
 
 ### Yêu cầu môi trường
 - **Node.js**: Phiên bản 20.x trở lên
-- **pnpm**: Đề xuất dùng `pnpm` (hoặc `npm`)
+- **pnpm**: Trình quản lý gói dùng trong dự án.
 
 ### 1. Cài đặt thư viện phụ thuộc
 ```bash

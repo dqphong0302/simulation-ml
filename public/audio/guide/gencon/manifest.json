@@ -18,28 +18,28 @@
     },
     {
       "id": "s2",
-      "audio": "/audio/guide/gencon/s2.mp3",
-      "duration": 13.76,
-      "caption": "Mô hình cho mỗi token một điểm, softmax biến thành xác suất. Temperature thấp làm phân phối nhọn, ổn định. Temperature cao làm phân phối phẳng, đa dạng. Top-p chỉ giữ nhóm token có xác suất cao.",
+      "audio": "/audio/lectures-v2/gencon/8d64d8b9e0da3034.mp3",
+      "duration": 17.71,
+      "caption": "Softmax biến logits thành xác suất token. Temperature thấp làm phân phối nhọn hơn. Top p giữ tập nhỏ nhất theo thứ tự xác suất giảm dần có tổng đạt ngưỡng, gồm cả token làm vượt ngưỡng, rồi chuẩn hóa lại. Đây không phải xác suất câu trả lời đúng.",
       "preset": {
         "title": "Temperature và top-p",
         "bullets": [
-          "Temperature thấp nhọn, cao phẳng",
-          "Top-p chỉ giữ nhóm token xác suất cao"
+          "Temperature điều chỉnh phân phối lấy mẫu",
+          "Top-p giữ tập đạt ngưỡng xác suất tích lũy, rồi chuẩn hóa lại"
         ],
         "icon": "🌡️"
       }
     },
     {
       "id": "s3",
-      "audio": "/audio/guide/gencon/s3.mp3",
-      "duration": 9.76,
-      "caption": "Embedding biến văn bản thành vector. Những ý gần nghĩa có vector gần hướng nhau, nên độ tương tự cosine cao. Đây là nền tảng của tìm kiếm ngữ nghĩa trong RAG.",
+      "audio": "/audio/lectures-v2/gencon/a24508976b8cabd8.mp3",
+      "duration": 15.79,
+      "caption": "Embedding biểu diễn nội dung thành vector. Cosine cao cho biết hướng vector gần nhau theo mô hình, không bảo đảm đồng nghĩa hay đúng ý. Hai câu có và không có một triệu chứng vẫn có thể gần nhau. Hình ở đây chỉ là vector minh họa.",
       "preset": {
         "title": "Embedding và độ tương tự",
         "bullets": [
-          "Ý gần nghĩa thì vector gần hướng",
-          "Cosine cao nghĩa là giống nhau"
+          "Embedding biểu diễn nội dung bằng vector",
+          "Cosine đo góc, không chứng minh đồng nghĩa hoặc đúng sự thật"
         ],
         "icon": "🧲"
       }

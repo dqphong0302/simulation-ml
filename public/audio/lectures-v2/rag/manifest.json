@@ -34,14 +34,14 @@
     },
     {
       "id": "s2",
-      "audio": "/audio/guide/rag/s2.mp3",
-      "duration": 10.64,
-      "caption": "Có hai cách tìm. BM25 so khớp từ khóa và chạy ngay trên máy. Tìm theo embedding hiểu ý nghĩa tốt hơn, nhưng nội dung các đoạn sẽ được gửi tới dịch vụ embedding.",
+      "audio": "/audio/lectures-v2/rag/4a95e63aeadef054.mp3",
+      "duration": 15.46,
+      "caption": "BM25 truy xuất theo từ khóa và chạy cục bộ. Embedding dùng biểu diễn vector, có thể tìm quan hệ ngữ nghĩa nhưng không mặc định tốt hơn BM25 ở mọi câu hỏi. Chọn embedding sẽ gửi nội dung đoạn tới dịch vụ đã cấu hình.",
       "preset": {
         "title": "Hai cách tìm kiếm",
         "bullets": [
-          "BM25 theo từ khóa, chạy ngay trên máy",
-          "Embedding theo ý nghĩa, cần API"
+          "BM25 theo từ khóa, chạy cục bộ",
+          "Embedding theo vector qua API, không mặc định tốt hơn"
         ],
         "icon": "🔎"
       }

@@ -63,9 +63,9 @@
     },
     {
       "id": "s3",
-      "audio": "/audio/guide/mlp/s3.mp3",
-      "duration": 11.36,
-      "caption": "Không có lớp ẩn, mạng chỉ vẽ được ranh giới thẳng. Hãy thử dữ liệu hai vòng tròn, và theo dõi khi nào loss train giảm nhưng validation tăng, đó là overfitting.",
+      "audio": "/audio/lectures-v2/mlp/765bbb05c94aae9c.mp3",
+      "duration": 15.3,
+      "caption": "Trong mạng feedforward này, lớp ẩn có phi tuyến giúp tạo ranh giới cong. Train loss giảm còn validation loss tăng gợi ý overfitting, nhưng cũng cần xem dao động và khác biệt dữ liệu. Không suy ra nguyên nhân chắc chắn từ một vài bước.",
       "preset": {
         "title": "Lớp ẩn tạo ranh giới cong",
         "bullets": [

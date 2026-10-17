@@ -1,0 +1,97 @@
+{
+  "lessonId": "BOOST",
+  "voice": "clone-duyenhamy",
+  "version": "2026.10-applications",
+  "scenes": [
+    {
+      "id": "s1",
+      "audio": "/audio/lectures-v2/boost/0bb91887492b9e48.mp3",
+      "duration": 12.42,
+      "caption": "Gradient Boosting học bổ sung từng cây nhỏ. Mỗi cây phụ thuộc điểm của mô hình trước, khác cách Forest tổng hợp cây bootstrap. Đây là cách học từ dữ liệu, không phải quy tắc chẩn đoán.",
+      "teaching": true,
+      "preset": {
+        "title": "Một cây chưa phải cả lời giải",
+        "bullets": [
+          "Boosting cộng cây nhỏ theo chuỗi",
+          "Mỗi cây phụ thuộc mô hình trước",
+          "Không mặc định tốt hơn Forest"
+        ]
+      }
+    },
+    {
+      "id": "s2",
+      "audio": "/audio/lectures-v2/boost/9f08f38b4391de35.mp3",
+      "duration": 14.42,
+      "caption": "Với log loss nhị phân, gradient âm theo điểm là nhãn trừ xác suất. Cây học cập nhật cho điểm, không chỉ tìm những dòng sai nhãn. Sau khi cộng cập nhật, sigmoid mới đổi điểm thành xác suất mô hình.",
+      "teaching": true,
+      "preset": {
+        "title": "Gradient còn lại, không chỉ điểm sai",
+        "bullets": [
+          "Log-loss nhị phân: gradient âm là y trừ p",
+          "Cây trả cập nhật điểm F",
+          "Sigmoid đổi điểm thành p"
+        ]
+      }
+    },
+    {
+      "id": "s3",
+      "audio": "/audio/lectures-v2/boost/ba25485a4c019a49.mp3",
+      "duration": 12.98,
+      "caption": "Learning rate điều khiển độ lớn mỗi cập nhật. Bước nhỏ có thể cần nhiều cây hơn nhưng không tự ngăn overfitting. Theo dõi cả train và validation, không giả định thêm cây luôn tốt hơn.",
+      "teaching": true,
+      "preset": {
+        "title": "Learning rate và số cây",
+        "bullets": [
+          "Learning rate nhân mỗi cập nhật",
+          "Nhỏ hơn có thể cần nhiều cây",
+          "Validation không bảo đảm giảm đều"
+        ]
+      }
+    },
+    {
+      "id": "s4",
+      "audio": "/audio/lectures-v2/boost/992ec0fd61ba0634.mp3",
+      "duration": 12.42,
+      "caption": "So Forest và Boosting trên cùng dữ liệu và cách chia. Cần công bố độ sâu, số cây và ngân sách chọn cấu hình. Lab so sánh chỉ minh họa, không chứng minh một họ mô hình luôn tốt nhất.",
+      "teaching": true,
+      "preset": {
+        "title": "So cùng dữ liệu, cùng phép chia",
+        "bullets": [
+          "Forest và Boosting dùng chung split",
+          "Công bố độ sâu và ngân sách chọn",
+          "Không chọn bằng test"
+        ]
+      }
+    },
+    {
+      "id": "s5",
+      "audio": "/audio/lectures-v2/boost/e9dee5d3ad162715.mp3",
+      "duration": 11.61,
+      "caption": "Với bảng y khoa, kiểm tra thời điểm có thông tin và giữ cùng bệnh nhân trong một tập khi đánh giá người mới. Log loss thấp chưa chứng minh xác suất đã hiệu chỉnh hay mang lại lợi ích điều trị.",
+      "teaching": true,
+      "preset": {
+        "title": "Bảng y khoa cần kiểm tra trước",
+        "bullets": [
+          "Đặc trưng có trước mốc dự đoán",
+          "Tách bệnh nhân khi có lần khám lặp",
+          "Loss thấp không là lợi ích điều trị"
+        ]
+      }
+    },
+    {
+      "id": "s6",
+      "audio": "/audio/lectures-v2/boost/cbac6bf81d38f952.mp3",
+      "duration": 14.34,
+      "caption": "Trong lab, giữ seed và learning rate rồi đổi số cây. Ghi loss train và validation, quan sát cây đang bổ sung. Notebook Colab dùng scikit learn nên chi tiết cập nhật không giống hệt bản minh họa trên web.",
+      "teaching": true,
+      "preset": {
+        "title": "Thử từng cây và ghi nhận xét",
+        "bullets": [
+          "Giữ seed và learning rate",
+          "Đổi số cây, ghi train và validation",
+          "Colab có ví dụ scikit-learn"
+        ]
+      }
+    }
+  ]
+}
